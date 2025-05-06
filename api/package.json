@@ -1,0 +1,22 @@
+{
+	"name": "api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "bun ./index.js",
+		"dev": "bun --watch ./index.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"argon2": "^0.43.0",
+		"connect-mongo": "^5.1.0",
+		"cors": "^2.8.5",
+		"express": "^5.1.0",
+		"express-session": "^1.18.1",
+		"mongoose": "^8.14.1"
+	}
+}
