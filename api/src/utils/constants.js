@@ -5,5 +5,6 @@ dotenv.config()
 export const CONSTANTS = {
     PORT: process.env.PORT,
     MONGO_URI: process.env.MONGO_URI,
-    SESSION_SECRET: process.env.SESSION_SECRET
+    SESSION_SECRET: process.env.SESSION_SECRET,
+    CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
 }
