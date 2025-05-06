@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMeetings } from "@/contexts/MeetingContext";
+// import { useMeetings } from "@/contexts/MeetingContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,7 +39,7 @@ const executives = [
 ];
 
 export const MeetingRequestForm = () => {
-  const { createMeeting } = useMeetings();
+  // const { createMeeting } = useMeetings();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const form = useForm<FormValues>({
@@ -56,13 +56,13 @@ export const MeetingRequestForm = () => {
     setIsSubmitting(true);
     
     // Create meeting request
-    createMeeting({
-      visitorName: data.visitorName,
-      visitorEmail: data.visitorEmail,
-      reason: data.reason,
-      date: data.date,
-      assignedTo: data.assignedTo,
-    });
+    // createMeeting({
+    //   visitorName: data.visitorName,
+    //   visitorEmail: data.visitorEmail,
+    //   reason: data.reason,
+    //   date: data.date,
+    //   assignedTo: data.assignedTo,
+    // });
     
     // Reset form
     form.reset();
