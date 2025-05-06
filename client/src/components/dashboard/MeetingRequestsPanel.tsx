@@ -1,6 +1,9 @@
 
 import { useState } from "react";
-import { Meeting, MeetingStatus, useMeetings } from "@/contexts/MeetingContext";
+// import {  MeetingStatus, useMeetings } from "@/contexts/MeetingContext";
+import { useMeetings } from "@/contexts/MeetingContext";
+import type { Meeting ,  MeetingStatus } from "@/contexts/MeetingContext";
+// import type { Meeting } from "@/contexts/MeetingContext";
 import { MeetingCard } from "@/components/shared/MeetingCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +20,7 @@ export const MeetingRequestsPanel = ({ userId }: MeetingRequestsPanelProps) => {
   
   // Get meetings assigned to the current user
   const userMeetings = getEmployeeMeetings(userId);
+  
   
   // Filter meetings based on active tab
   const filteredMeetings = userMeetings.filter((meeting) => 

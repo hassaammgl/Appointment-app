@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sun, Moon } from "lucide-react";
-import { UserRole } from "@/contexts/AuthContext";
+import type { UserRole } from "@/contexts/AuthContext";
 
 export const SignupPage = () => {
   const [name, setName] = useState("");

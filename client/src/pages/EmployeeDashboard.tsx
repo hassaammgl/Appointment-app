@@ -12,7 +12,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { MeetingStatus } from "@/contexts/MeetingContext";
+// import { MeetingStatus } from "@/contexts/MeetingContext";
+import type { MeetingStatus } from "@/contexts/MeetingContext";
+
 
 export const EmployeeDashboard = () => {
   const { user } = useAuth();
