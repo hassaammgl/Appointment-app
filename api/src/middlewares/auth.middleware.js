@@ -1,14 +1,17 @@
+import { AuthenticationError, AuthorizationError } from '../utils/AppError.js';
+
 export const isAuthenticated = (req, res, next) => {
-    if (!req.session?.user) return res.status(401).json({ message: 'Not logged in 🪵' });
+    if (!req.session?.user) {
+        throw new AuthenticationError('Please log in to access this resource 🪵');
+    }
     next();
 };
 
 export const authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.session?.user?.role)) {
-            return res.status(403).json({ message: 'No access 🔐' });
+            throw new AuthorizationError('You do not have permission to perform this action 🔐');
         }
         next();
     };
 };
-  

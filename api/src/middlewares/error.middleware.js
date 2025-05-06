@@ -1,3 +1,5 @@
+import { NotFoundError } from '../utils/AppError.js';
+
 /**
  * Global error handling middleware
  */
@@ -5,43 +7,53 @@ export const errorHandler = (err, req, res, next) => {
     // Log error for debugging
     console.error(err);
 
-    // Default error status and message
-    let statusCode = 500;
-    let message = 'Internal Server Error';
+    // Set default error values
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
 
-    // Handle specific error types
-    if (err.name === 'ValidationError') {
-        statusCode = 400;
-        message = err.message;
-    } else if (err.name === 'UnauthorizedError') {
-        statusCode = 401;
-        message = 'Unauthorized';
-    } else if (err.name === 'ForbiddenError') {
-        statusCode = 403;
-        message = 'Forbidden';
-    } else if (err.name === 'NotFoundError') {
-        statusCode = 404;
-        message = 'Resource not found';
+    // Handle Mongoose validation errors
+    if (err.name === 'ValidationError' && err.errors) {
+        err.statusCode = 400;
+        err.message = Object.values(err.errors)
+            .map(error => error.message)
+            .join(', ');
     }
 
-    // If error has custom status code and message, use those
-    statusCode = err.statusCode || statusCode;
-    message = err.message || message;
+    // Handle Mongoose duplicate key errors
+    if (err.code === 11000) {
+        err.statusCode = 400;
+        err.message = `Duplicate value for: ${Object.keys(err.keyValue).join(
+            ', '
+        )}. Please choose another value.`;
+    }
 
-    // Send error response
-    res.status(statusCode).json({
-        status: 'error',
-        message,
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    // Handle JWT errors
+    if (err.name === 'JsonWebTokenError') {
+        err.statusCode = 401;
+        err.message = 'Invalid token. Please log in again.';
+    }
+
+    // Development error response (with stack trace)
+    if (process.env.NODE_ENV === 'development') {
+        return res.status(err.statusCode).json({
+            status: err.status,
+            message: err.message,
+            stack: err.stack,
+            error: err
+        });
+    }
+
+    // Production error response (no error details)
+    return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
     });
 };
 
 /**
  * Handle 404 errors for undefined routes
  */
-export const notFound = (req, res) => {
-    res.status(404).json({
-        status: 'error',
-        message: `Route ${req.originalUrl} not found`
-    });
+export const notFound = (req, res, next) => {
+    const error = new NotFoundError(`Route ${req.originalUrl} not found`);
+    next(error);
 };

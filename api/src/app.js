@@ -9,7 +9,7 @@ import { errorHandler, notFound } from './middlewares/error.middleware.js';
 const app = express();
 
 app.use(cors({
-    origin: CONSTANTS.CLIENT_ORIGIN || 'http://localhost:5173',
+    origin: CONSTANTS.CLIENT_ORIGIN || 'http://localhost:5173', 
     credentials: true
 }));
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use(sessionMiddleware);
 app.use('/auth', authRoutes);
 app.use('/protected', protectedRoutes);
 
-app.use(notFound);
+app.use(notFound); 
 app.use(errorHandler);
 
 export default app;
