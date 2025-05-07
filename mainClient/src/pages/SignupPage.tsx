@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { NavLink } from "react-router";
 import { useAuth } from "@/store/auth.ts";
+import { useToast } from "@/components/ui/toast";
 
 const SignupPage = () => {
 	const [name, setName] = useState("");
@@ -26,15 +27,21 @@ const SignupPage = () => {
 	const [password, setPassword] = useState("");
 	const [role, setRole] = useState("receptionist");
 
+	const { promise } = useToast();
 	const { signup, isLoading } = useAuth();
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(email, password, name, role);
 
-		await signup(email, password, name, role);
+		await promise(signup(email, password, name, role), {
+			loading: "Creating your account...",
+			success: () => "You're in! 🎉",
+			error: (err: any) =>
+				err?.response?.data?.message ||
+				err?.message ||
+				"Signup failed 😵",
+		});
 	};
-
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-md w-full space-y-8">
