@@ -8,13 +8,5 @@ export const useToast = () => {
 		warning: (msg: string) => toast.warning(msg),
 		message: (msg: string, description?: string) =>
 			toast.message(msg, { description }),
-		promise: <T,>(
-			promise: Promise<T>,
-			messages: {
-				loading: string;
-				success: (data: T) => string;
-				error: string;
-			}
-		) => toast.promise(promise, messages),
 	};
 };

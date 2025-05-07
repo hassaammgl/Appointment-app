@@ -25,4 +25,11 @@ app.use('/protected', protectedRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Hello world"
+    })
+})
+
 export default app;

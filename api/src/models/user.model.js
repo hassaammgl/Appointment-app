@@ -11,4 +11,21 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+userSchema.pre('save', async function (next) {
+    if (this.role === 'ceo') {
+        const existingCEO = await mongoose.models.User.findOne({ role: 'ceo' });
+
+        // If another CEO exists and it's not this user
+        if (existingCEO && existingCEO._id.toString() !== this._id.toString()) {
+            const error = new Error('A CEO already exists in the system');
+            // @ts-ignore
+            error.statusCode = 400;
+            return next(error);
+        }
+    }
+
+    next();
+});
+
+
 export default mongoose.model('User', userSchema);

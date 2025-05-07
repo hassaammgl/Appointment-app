@@ -20,6 +20,8 @@ import {
 import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
+import { ModeToggle } from "@/components/mode-toogle";
+import { AxiosError } from "axios";
 
 const SignupPage = () => {
 	const [name, setName] = useState("");
@@ -28,24 +30,29 @@ const SignupPage = () => {
 	const [role, setRole] = useState("receptionist");
 
 	const navigate = useNavigate();
-	const { promise } = useToast();
+	const { error, success } = useToast();
 	const { signup, isLoading } = useAuth();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
-		await promise(signup(email, password, name, role), {
-			loading: "Creating your account...",
-			success: () => "You're in! 🎉",
-			error: (err: any) =>
-				err?.response?.data?.message ||
-				err?.message ||
-				"Signup failed 😵",
-		});
-		navigate("/login");
+		try {
+			await signup(email, password, name, role);
+			success("Account created successfully! 🎉");
+			navigate("/login");
+		} catch (err) {
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Signup failed 😵";
+			error(message);
+		}
 	};
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
+			<div className="fixed top-6 right-6">
+				<ModeToggle />
+			</div>
 			<div className="max-w-md w-full space-y-8">
 				<div className="text-center">
 					<h1 className="text-3xl font-bold">

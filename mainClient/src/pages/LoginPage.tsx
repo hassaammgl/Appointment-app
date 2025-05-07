@@ -13,30 +13,37 @@ import { Input } from "@/components/ui/input";
 import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
+import { ModeToggle } from "@/components/mode-toogle";
+import { AxiosError } from "axios";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
-	const { promise } = useToast();
+	const { error, success } = useToast();
 	const { login, isLoading } = useAuth();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
-		await promise(login(email, password), {
-			loading: "Loging in your account...",
-			success: () => "You're in! 🎉",
-			error: (err: any) =>
-				err?.response?.data?.message ||
-				err?.message ||
-				"Login failed 😵",
-		});
-		navigate("/profile");
+		try {
+			await login(email, password);
+			success("You're in! 🎉");
+			navigate("/profile");
+		} catch (err) {
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Login failed 😵";
+			error(message);
+		}
 	};
 
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
+			<div className="fixed top-6 right-6">
+				<ModeToggle />
+			</div>
 			<div className="max-w-md w-full space-y-8">
 				<div className="text-center">
 					<h1 className="text-3xl font-bold">

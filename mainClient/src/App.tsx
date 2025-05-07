@@ -1,5 +1,4 @@
 import { ThemeProvider } from "@/components/theme-provider";
-// import { ModeToggle } from "./components/mode-toogle";
 import { RouterProvider, createBrowserRouter } from "react-router";
 import routes from "@/routes";
 import { Toaster } from "sonner";
