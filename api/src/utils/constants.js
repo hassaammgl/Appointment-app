@@ -7,4 +7,5 @@ export const CONSTANTS = {
     MONGO_URI: process.env.MONGO_URI,
     SESSION_SECRET: process.env.SESSION_SECRET,
     CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
+    NODE_ENV: process.env.NODE_ENV,
 }

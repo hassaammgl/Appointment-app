@@ -9,7 +9,7 @@ export const sessionMiddleware = session({
     store: MongoStore.create({ mongoUrl: CONSTANTS.MONGO_URI }),
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: CONSTANTS.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 });

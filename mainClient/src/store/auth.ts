@@ -59,13 +59,15 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
-			signup: async (email, password, username) => {
+			signup: async (email, password, username, role) => {
 				try {
 					set({ isLoading: true, error: null });
 					const { data } = await axiosInstance.post(
 						"/auth/register",
-						{ email, password, username }
+						{ email, password, username, role }
 					);
+
+					console.log(data);
 
 					axiosInstance.defaults.headers.common[
 						"Authorization"

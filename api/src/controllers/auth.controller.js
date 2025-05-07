@@ -6,7 +6,9 @@ export const register = async (req, res, next) => {
     try {
         // Validate the request body
         const { error } = validateRegister(req.body);
+        console.log(error);
         if (error) {
+            console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
 
