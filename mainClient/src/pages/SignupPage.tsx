@@ -17,7 +17,7 @@ import {
 	SelectItem,
 	SelectContent,
 } from "@/components/ui/select";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
 
@@ -27,6 +27,7 @@ const SignupPage = () => {
 	const [password, setPassword] = useState("");
 	const [role, setRole] = useState("receptionist");
 
+	const navigate = useNavigate();
 	const { promise } = useToast();
 	const { signup, isLoading } = useAuth();
 
@@ -41,6 +42,7 @@ const SignupPage = () => {
 				err?.message ||
 				"Signup failed 😵",
 		});
+		navigate("/login");
 	};
 	return (
 		<div className="min-h-screen w-full flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">

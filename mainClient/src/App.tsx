@@ -10,7 +10,7 @@ function App() {
 	return (
 		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
 			<RouterProvider router={router} />
-			<Toaster position="top-center" />
+			<Toaster position="top-center" richColors />
 		</ThemeProvider>
 	);
 }

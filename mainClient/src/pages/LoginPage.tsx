@@ -10,22 +10,29 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-// import {
-// 	Select,
-// 	SelectTrigger,
-// 	SelectValue,
-// 	SelectItem,
-// 	SelectContent,
-// } from "@/components/ui/select";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { useAuth } from "@/store/auth.ts";
+import { useToast } from "@/components/ui/toast";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate();
+	const { promise } = useToast();
+	const { login, isLoading } = useAuth();
 
-	const handleSubmit = () => {
-		setIsLoading(true);
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		await promise(login(email, password), {
+			loading: "Loging in your account...",
+			success: () => "You're in! 🎉",
+			error: (err: any) =>
+				err?.response?.data?.message ||
+				err?.message ||
+				"Login failed 😵",
+		});
+		navigate("/profile");
 	};
 
 	return (
