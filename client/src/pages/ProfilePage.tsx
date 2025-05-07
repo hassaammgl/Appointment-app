@@ -1,5 +1,14 @@
+import { useAuth } from "@/store/auth";
+
 const ProfilePage = () => {
-	return <div>Profile</div>;
+	const { user } = useAuth();
+	console.log(user);
+
+	return (
+		<div>
+			<span className="text-8xl">Role: {user?.role}</span>
+		</div>
+	);
 };
 
 export default ProfilePage;
