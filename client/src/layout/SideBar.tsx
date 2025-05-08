@@ -47,7 +47,9 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 						!isOpen && "hidden"
 					)}
 				>
-					<span className="text-green-primary">Green</span> Meetings
+					<h1 className="text-3xl font-bold">
+						<span className="text-green-500">Hikari</span> Hub
+					</h1>
 				</h1>
 				<button
 					onClick={toggleSidebar}

@@ -1,10 +1,6 @@
 import { AppLayout } from "@/layout/Applayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-	Avatar,
-	AvatarFallback,
-	// AvatarImage
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/store/auth";
 
 const ProfilePage = () => {
@@ -29,10 +25,6 @@ const ProfilePage = () => {
 					<CardContent className="space-y-6">
 						<div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
 							<Avatar className="h-24 w-24">
-								{/* <AvatarImage
-									src={user?.avatar}
-									alt={user?.username}
-								/> */}
 								<AvatarFallback className="text-4xl">
 									{user?.username?.charAt(0) || "U"}
 								</AvatarFallback>
@@ -40,22 +32,30 @@ const ProfilePage = () => {
 
 							<div className="space-y-4 text-center sm:text-left">
 								<div>
-									<h3 className="font-medium">Name</h3>
-									<p className="text-muted-foreground">
+									<h3 className="font-medium uppercase">
+										<span className="text-green-500">
+											Name:{" "}
+										</span>
 										{user?.username}
-									</p>
+									</h3>
 								</div>
 								<div>
-									<h3 className="font-medium">Email</h3>
-									<p className="text-muted-foreground">
+									<h3 className="font-medium">
+										<span className="text-green-500 uppercase">
+											Email:{" "}
+										</span>
 										{user?.email}
-									</p>
+									</h3>
 								</div>
 								<div>
-									<h3 className="font-medium">Role</h3>
-									<p className="text-muted-foreground capitalize">
-										{user?.role}
-									</p>
+									<h3 className="font-medium uppercase">
+										<span className="text-green-500">
+											Role:{" "}
+										</span>
+										{user?.role === "gm"
+											? "general manager"
+											: user?.role}
+									</h3>
 								</div>
 							</div>
 						</div>

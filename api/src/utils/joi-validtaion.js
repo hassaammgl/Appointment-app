@@ -35,10 +35,10 @@ export const validateRegister = (body) => {
 
         role: Joi.string()
             .required()
-            .valid('receptionist', 'ceo', 'cto', 'cfo', 'manager')
+            .valid('receptionist', 'ceo', 'cto', 'cfo', 'gm')
             .messages({
                 'string.empty': 'Role is required',
-                'any.only': 'Role must be one of: receptionist, ceo, cto, cfo, or manager'
+                'any.only': 'Role must be one of: receptionist, ceo, cto, cfo, or gm'
             })
     });
 

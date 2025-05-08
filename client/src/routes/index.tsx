@@ -4,6 +4,9 @@ import SignupPage from "@/pages/SignupPage";
 import ProfilePage from "@/pages/ProfilePage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import CEODashBoard from "@/pages/CEODashBoard";
+import CTODashBoard from "@/pages/CTODashBoard";
+import CFODashBoard from "@/pages/CFODashBoard";
+import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
 
 const routes = [
 	{
@@ -25,6 +28,18 @@ const routes = [
 	{
 		path: "/ceo-dashboard",
 		element: <CEODashBoard />,
+	},
+	{
+		path: "/cto-dashboard",
+		element: <CTODashBoard />,
+	},
+	{
+		path: "/cfo-dashboard",
+		element: <CFODashBoard />,
+	},
+	{
+		path: "/receptionist-dashboard",
+		element: <ReceptionistDashBoard />,
 	},
 	{
 		path: "*",
