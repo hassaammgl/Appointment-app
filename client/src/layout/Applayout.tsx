@@ -41,6 +41,7 @@ export const AppLayout = ({ children, allowedRoles = [] }: AppLayoutProps) => {
 				case "receptionist":
 					navigate("/receptionist-dashboard");
 					break;
+
 				default:
 					navigate("/login");
 			}

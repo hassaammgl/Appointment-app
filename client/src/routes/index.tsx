@@ -7,6 +7,7 @@ import CEODashBoard from "@/pages/CEODashBoard";
 import CTODashBoard from "@/pages/CTODashBoard";
 import CFODashBoard from "@/pages/CFODashBoard";
 import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
+import GMDashBoard from "@/pages/GMDashBoard";
 
 const routes = [
 	{
@@ -40,6 +41,10 @@ const routes = [
 	{
 		path: "/receptionist-dashboard",
 		element: <ReceptionistDashBoard />,
+	},
+	{
+		path: "/gm-dashboard",
+		element: <GMDashBoard />,
 	},
 	{
 		path: "*",

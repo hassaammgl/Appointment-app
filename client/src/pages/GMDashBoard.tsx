@@ -1,25 +1,28 @@
 import { AppLayout } from "@/layout/Applayout";
 import { useAuth } from "@/store/auth";
 
-const ReceptionistDashBoard = () => {
+const GMDashBoard = () => {
 	const { user } = useAuth();
 	console.log(user);
 
 	return (
-		<AppLayout allowedRoles={["receptionist"]}>
+		<AppLayout allowedRoles={["gm"]}>
 			<div className="space-y-8">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
-						Receptionist Dashboard
+						General Manager Dashboard
 					</h1>
 					<p className="text-muted-foreground">
-						Manage visitors and meeting schedules
+						Operations and management dashboard for overseeing daily
+						business activities, team performance, and departmental
+						coordination
 					</p>
 				</div>
+
 				{/* {user && <MeetingRequestsPanel userId={user.id} />} */}
 			</div>
 		</AppLayout>
 	);
 };
 
-export default ReceptionistDashBoard;
+export default GMDashBoard;
