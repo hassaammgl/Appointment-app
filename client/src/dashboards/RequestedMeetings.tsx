@@ -1,4 +1,6 @@
-const RequestedMeetings = ({ userId }: { userId: string }) => {
+const RequestedMeetings = ({ userId }: { userId: string | undefined }) => {
+	console.log(userId);
+
 	return <div>RequestedMeetings {userId}</div>;
 };
 

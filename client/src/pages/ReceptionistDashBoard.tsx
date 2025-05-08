@@ -29,10 +29,10 @@ const ReceptionistDashBoard = () => {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="requests">
-						<RequestMeetings userId={user?._id} />
+						<RequestMeetings userId={user?.id} />
 					</TabsContent>
 					<TabsContent value="schedule">
-						<ScheduleMeetings userId={user?._id} />
+						<ScheduleMeetings userId={user?.id} />
 					</TabsContent>
 				</Tabs>
 			</div>

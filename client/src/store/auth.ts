@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 });
 
 interface User {
-	_id: string;
+	id: string;
 	email: string;
 	username: string;
 	role: string;
