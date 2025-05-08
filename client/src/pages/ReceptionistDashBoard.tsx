@@ -1,5 +1,8 @@
 import { AppLayout } from "@/layout/Applayout";
 import { useAuth } from "@/store/auth";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RequestMeetings from "@/dashboards/RequestedMeetings";
+import ScheduleMeetings from "@/dashboards/ScheduleMeetings";
 
 const ReceptionistDashBoard = () => {
 	const { user } = useAuth();
@@ -16,7 +19,22 @@ const ReceptionistDashBoard = () => {
 						Manage visitors and meeting schedules
 					</p>
 				</div>
-				{/* {user && <MeetingRequestsPanel userId={user.id} />} */}
+				<Tabs defaultValue="requests" className="w-full">
+					<TabsList>
+						<TabsTrigger value="requests">
+							Meeting Requests
+						</TabsTrigger>
+						<TabsTrigger value="schedule">
+							Schedule Meetings
+						</TabsTrigger>
+					</TabsList>
+					<TabsContent value="requests">
+						<RequestMeetings userId={user?._id} />
+					</TabsContent>
+					<TabsContent value="schedule">
+						<ScheduleMeetings userId={user?._id} />
+					</TabsContent>
+				</Tabs>
 			</div>
 		</AppLayout>
 	);
