@@ -3,11 +3,9 @@ import mongoose from 'mongoose'
 const appointmentSchema = new mongoose.Schema(
     {
         visitorName: { type: String, required: true, trim: true, },
+        visitorNo: { type: String, required: true, },
+        visitorCnic: { type: String, required: true, },
         purpose: { type: String, required: true },
-        // scheduledTime: {
-        //     type: Date,
-        //     required: true,
-        // },
         status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending', },
         priority: {
             type: Number,
@@ -15,20 +13,26 @@ const appointmentSchema = new mongoose.Schema(
         },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User', // receptionist user reference
+            ref: 'User',
             required: true,
         },
         approvedBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User', // CEO user reference
+            ref: 'User',
             default: null,
         },
         notes: {
-            type: String, // optional internal notes
+            type: String,
             default: '',
         },
     },
-    { timestamps: true } // auto adds createdAt and updatedAt
+    { timestamps: true }
 );
 
 export default mongoose.model('Appointment', appointmentSchema);
+
+
+// scheduledTime: {
+//     type: Date,
+//     required: true,
+// },

@@ -66,3 +66,44 @@ export const validateLogin = (body) => {
 
     return loginValidate.validate(body, { abortEarly: false });
 }
+
+export const validateReqMeeting = (body) => {
+    const reqMeetingSchema = Joi.object({
+        visitorName: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Visitor name is required',
+            }),
+        visitorNo: Joi.string()
+            .pattern(/^[0-9]+$/)
+            .required()
+            .messages({
+                'string.empty': 'Visitor number is required',
+                'string.pattern.base': 'Visitor number must be numeric',
+            }),
+        visitorCnic: Joi.string()
+            .pattern(/^\d{5}-\d{7}-\d{1}$/)
+            .required()
+            .messages({
+                'string.empty': 'CNIC is required',
+                'string.pattern.base': 'CNIC must be in the format 12345-1234567-1',
+            }),
+        purpose: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Purpose is required',
+            }),
+        createdBy: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Created by field is required',
+            }),
+        notes: Joi.string()
+            .allow('', null)
+            .messages({
+                'string.base': 'Notes must be a string',
+            }),
+    });
+
+    return reqMeetingSchema.validate(body, { abortEarly: false });
+};
