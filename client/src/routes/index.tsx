@@ -3,6 +3,7 @@ import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import ProfilePage from "@/pages/ProfilePage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import CEODashBoard from "@/pages/CEODashBoard";
 
 const routes = [
 	{
@@ -17,10 +18,13 @@ const routes = [
 		path: "/signup",
 		element: <SignupPage />,
 	},
-
 	{
 		path: "/profile",
 		element: <ProfilePage />,
+	},
+	{
+		path: "/ceo-dashboard",
+		element: <CEODashBoard />,
 	},
 	{
 		path: "*",
