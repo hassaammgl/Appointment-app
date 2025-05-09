@@ -23,7 +23,7 @@ export interface Appointment {
 }
 
 interface User {
-	id: string;
+	_id: string;
 	email: string;
 	username: string;
 	role: string;
@@ -36,6 +36,7 @@ interface MeetingState {
 	error: string | null;
 	getAllRoles: () => Promise<void>;
 	createMeetingReq: (formData: Partial<Appointment>) => Promise<void>;
+	fetchAllReq: () => Promise<void>;
 	clearError: () => void;
 }
 
@@ -68,7 +69,23 @@ export const useMeetings = create<MeetingState>()(
 							formData
 						);
 
-						set({ meetings: data?.meetings });
+						set({ meetings: [data?.meeting] });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				fetchAllReq: async () => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.post(
+							"/protected/get-all-reqs"
+						);
+
+						set({ meetings: [data?.allMettings] });
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);
 						set({ error: errorMessage });

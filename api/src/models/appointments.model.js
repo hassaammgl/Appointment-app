@@ -8,7 +8,7 @@ const appointmentSchema = new mongoose.Schema(
         purpose: { type: String, required: true },
         status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending', },
         priority: {
-            type: Number,
+            type: Number, 
             default: 0, // 0 = normal, 1 = high, 2 = urgent, etc. Use CEO UI to sort based on this
         },
         createdBy: {
@@ -16,7 +16,7 @@ const appointmentSchema = new mongoose.Schema(
             ref: 'User',
             required: true,
         },
-        approvedBy: {
+        to: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             default: null,

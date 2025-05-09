@@ -1,6 +1,6 @@
 import { AppError, ValidationError } from '../utils/AppError.js';
 import { validateReqMeeting } from "../utils/joi-validtaion.js"
-import { getRoles, createMettings } from "../services/metting.service.js"
+import { getRoles, createMettings, getAllMettings } from "../services/metting.service.js"
 
 export const createMettingReq = async (req, res, next) => {
     try {
@@ -14,10 +14,10 @@ export const createMettingReq = async (req, res, next) => {
 
         try {
             const metting = await createMettings(req.body);
-            res.status(201).json({ message: 'User created 🎉', metting });
+            res.status(201).json({ message: 'Appointment created 🎉', metting });
         } catch (dbError) {
             if (dbError.code === 11000) {
-                throw new ValidationError('User with this email or username already exists');
+                throw new ValidationError('Something happened in database but try to change their values');
             } else if (dbError.name === 'MongoError') {
                 throw new AppError('Database error occurred', 500);
             }
@@ -48,3 +48,21 @@ export const getAllRoles = async (req, res, next) => {
         next(err);
     }
 }
+
+export const getAllMeetingsReq = async (req, res, next) => {
+    try {
+        try {
+            const allMettings = await getAllMettings();
+            res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
+        } catch (dbError) {
+            if (dbError.code === 11000) {
+                throw new ValidationError('Something happened in database but try to change their values');
+            } else if (dbError.name === 'MongoError') {
+                throw new AppError('Database error occurred', 500);
+            }
+            throw dbError;
+        }
+    } catch (err) {
+        next(err);
+    }
+};

@@ -40,6 +40,7 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
 	useEffect(() => {
 		getAllRoles();
+		console.table(allRoles);
 	}, [getAllRoles]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -82,7 +83,7 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
 	return (
 		<div>
-			<Card className="w-full md:w-1/2 mx-auto">
+			<Card className="w-full xl:w-1/2 mx-auto">
 				<CardHeader>
 					<CardTitle>Schedule Appointment</CardTitle>
 					<CardDescription>
@@ -140,7 +141,7 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 							<Label htmlFor="to">To:</Label>
 							<Select
 								value={to}
-								defaultValue={allRoles[0]?.username}
+								defaultValue={`${allRoles[0]?.username}-${allRoles[0]?.id}`}
 								onValueChange={setTo}
 							>
 								<SelectTrigger className="w-[200px]">
@@ -151,7 +152,7 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 										allRoles.map((r, i) => (
 											<SelectItem
 												key={r.id ?? i}
-												value={r.username}
+												value={`${r.username}-${r._id}`}
 											>
 												({r.role}) - {r.username}
 											</SelectItem>

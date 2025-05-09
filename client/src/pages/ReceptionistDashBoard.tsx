@@ -20,7 +20,7 @@ const ReceptionistDashBoard = () => {
 					</p>
 				</div>
 				<Tabs defaultValue="requests" className="w-full">
-					<TabsList>
+					<TabsList className="mx-auto">
 						<TabsTrigger value="requests">
 							Meeting Requests
 						</TabsTrigger>
