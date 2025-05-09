@@ -1,6 +1,6 @@
-import { AppError, ValidationError, AuthenticationError } from '../utils/AppError.js';
+import { AppError, ValidationError } from '../utils/AppError.js';
 import { validateReqMeeting } from "../utils/joi-validtaion.js"
-import { createMettings } from "../services/metting.service.js"
+import { getRoles, createMettings } from "../services/metting.service.js"
 
 export const createMettingReq = async (req, res, next) => {
     try {
@@ -26,3 +26,25 @@ export const createMettingReq = async (req, res, next) => {
         next(err);
     }
 };
+
+export const getAllRoles = async (req, res, next) => {
+    try {
+        try {
+            const roles = await getRoles()
+            res.status(200).json({
+                message: "User created 🎉",
+                roles
+            })
+        } catch (dbError) {
+            if (dbError.code === 11000) {
+                throw new ValidationError('Something happened in database');
+            } else if (dbError.name === 'MongoError') {
+                throw new AppError('Database error occurred', 500);
+            }
+            throw dbError;
+        }
+    } catch (err) {
+        next(err);
+    }
+
+}

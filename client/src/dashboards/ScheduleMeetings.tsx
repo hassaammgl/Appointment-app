@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Card,
 	CardHeader,
@@ -12,34 +12,69 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMeetings } from "@/store/mettings";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/toast";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
 const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
-	console.log(userId);
+	const { isLoading, getAllRoles, allRoles } = useMeetings();
+	const { error } = useToast();
 
-	const { isLoading } = useMeetings();
+	const [visitorName, setVisitorName] = useState<string>("");
+	const [visitorNo, setVisitorNo] = useState<string>("");
+	const [visitorCNIC, setVisitorCNIC] = useState<string>("");
+	const [purpose, setPurpose] = useState<string>("");
+	const [notes, setNotes] = useState<string>("");
+	const [to, setTo] = useState<string>("");
 
-	const [visitorName, setVisitorName] = useState("");
-	const [visitorNo, setVisitorNo] = useState("");
-	const [visitorCNIC, setVisitorCNIC] = useState("");
-	const [purpose, setPurpose] = useState("");
-	const [notes, setNotes] = useState("");
+	useEffect(() => {
+		getAllRoles();
+	}, []);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
 		const cnicPattern = /^\d{5}-\d{7}-\d$/;
 		if (!cnicPattern.test(visitorCNIC)) {
-			alert("Invalid CNIC format!");
+			error("Invalid CNIC format!");
+			return;
+		}
+		const phonePattern = /^\d{4}-\d{7}$/;
+		if (!phonePattern.test(visitorNo)) {
+			error("Invalid phone number format!");
+			return;
+		}
+		if (!to) {
+			error("Please select a recipient.");
 			return;
 		}
 
-		console.log({ visitorName, visitorNo, visitorCNIC, purpose, notes });
-		// Trigger the actual API/mutation here
+		// await createMeeting({
+		// 	visitorName,
+		// 	visitorNo,
+		// 	visitorCNIC,
+		// 	purpose,
+		// 	notes,
+		// 	receptionist: userId,
+		// 	to,
+		// });
+
+		// optional reset
+		setVisitorName("");
+		setVisitorNo("");
+		setVisitorCNIC("");
+		setPurpose("");
+		setNotes("");
+		setTo("");
 	};
 
 	return (
 		<div>
-			<Card>
+			<Card className="w-1/2">
 				<CardHeader>
 					<CardTitle>Schedule Appointment</CardTitle>
 					<CardDescription>
@@ -93,6 +128,21 @@ const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
 								onChange={(e) => setNotes(e.target.value)}
 							/>
 						</div>
+						<div className="space-y-2">
+							<Label htmlFor="to">To:</Label>
+							<Select value={to} onValueChange={setTo}>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Select recipient" />
+								</SelectTrigger>
+								<SelectContent>
+									{allRoles.map((r, i) => (
+										<SelectItem key={i} value={r.id}>
+											{r.role} {r.username}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
 					</CardContent>
 					<CardFooter className="flex flex-col space-y-4">
 						<Button
@@ -109,6 +159,7 @@ const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
 	);
 };
 
+// 📞 Format CNIC
 const formatCNIC = (value: string) => {
 	const digits = value.replace(/\D/g, "").slice(0, 13);
 	if (digits.length <= 5) return digits;
@@ -146,6 +197,7 @@ const CNICInput = ({
 	);
 };
 
+// 📱 Format Phone
 const formatPhoneNumber = (value: string) => {
 	const digits = value.replace(/\D/g, "").slice(0, 11);
 	if (digits.length <= 4) return digits;

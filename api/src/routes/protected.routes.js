@@ -1,8 +1,13 @@
 import { Router } from 'express';
 import { isAuthenticated, authorize } from '../middlewares/auth.middleware.js';
-import { createMettingReq } from "../controllers/mettings.controllers.js"
+import { createMettingReq, getAllRoles } from "../controllers/mettings.controllers.js"
 
 const router = Router();
+
+router.get("/roles", isAuthenticated, authorize('receptionist'), getAllRoles)
+router.post("/met-req", isAuthenticated, authorize('receptionist'), createMettingReq)
+
+export default router;
 
 // router.get('/dashboard', isAuthenticated, (req, res) => {
 //     res.json({ message: `Hello ${req.session.user.role}` });
@@ -15,7 +20,3 @@ const router = Router();
 // router.get('/reception', isAuthenticated, authorize('receptionist'), (req, res) => {
 //     res.json({ message: 'Reception area ☎️' });
 // });
-
-router.post("/met-req", isAuthenticated, authorize('receptionist'), createMettingReq)
-
-export default router;

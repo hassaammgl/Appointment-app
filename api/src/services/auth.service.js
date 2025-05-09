@@ -12,3 +12,4 @@ export const loginUser = async (email, password) => {
     if (!user || !(await argon2.verify(user.password, password))) return null;
     return user;
 };
+ 
