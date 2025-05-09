@@ -54,7 +54,7 @@ export const useMeetings = create<MeetingState>()(
 					set({ isLoading: true, error: null });
 					const { data } = await axiosInstance.get("/appointments");
 					set({ meetings: data.appointments });
-				} catch (err: ) {
+				} catch (err:AxiosError) {
 					const msg = getErrorMessage(err);
 					set({ error: msg });
 				} finally {

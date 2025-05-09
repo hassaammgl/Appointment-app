@@ -11,12 +11,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router";
+import { useMeetings } from "@/store/mettings";
 
 const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
 	console.log(userId);
 
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const { isLoading } = useMeetings();
+
+	const [visitorName, setVisitorName] = useState("");
+	const [visitorNo, setVisitorNo] = useState("");
 
 	const handleSubmit = () => {};
 
@@ -25,31 +28,32 @@ const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
 			ScheduleMeetings
 			<Card>
 				<CardHeader>
-					<CardTitle>Login</CardTitle>
+					<CardTitle>Schedule Appointment</CardTitle>
 					<CardDescription>
-						Enter your information to log in your account
+						Schedule all the appointments from here
 					</CardDescription>
 				</CardHeader>
 				<form onSubmit={handleSubmit}>
 					<CardContent className="space-y-4 mb-4">
 						<div className="space-y-2">
-							<Label htmlFor="email">Email</Label>
+							<Label htmlFor="">Vistor Name:</Label>
 							<Input
-								id="email"
-								type="email"
-								placeholder="your-email@example.com"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
+								id="name"
+								type="text"
+								placeholder="John doe ..."
+								value={visitorName}
+								onChange={(e) => setVisitorName(e.target.value)}
 								required
 							/>
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="password">Password</Label>
+							<Label htmlFor="">Vistor No:</Label>
 							<Input
-								id="password"
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
+								id="phoneNum"
+								type="number"
+								placeholder="03123456789"
+								value={visitorNo}
+								onChange={(e) => setVisitorNo(e.target.value)}
 								required
 							/>
 						</div>
@@ -62,15 +66,6 @@ const ScheduleMeetings = ({ userId }: { userId: string | undefined }) => {
 						>
 							{isLoading ? "Loging in account..." : "Login"}
 						</Button>
-						<p className="text-center text-sm text-muted-foreground">
-							Don't have an account?{" "}
-							<NavLink
-								to="/signup"
-								className="text-green-500 hover:underline"
-							>
-								Sign In
-							</NavLink>
-						</p>
 					</CardFooter>
 				</form>
 			</Card>
