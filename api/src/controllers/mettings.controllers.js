@@ -32,7 +32,7 @@ export const getAllRoles = async (req, res, next) => {
         try {
             const roles = await getRoles()
             res.status(200).json({
-                message: "User created 🎉",
+                message: "Users getting successfully 🎉",
                 roles
             })
         } catch (dbError) {
@@ -46,5 +46,4 @@ export const getAllRoles = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-
 }
