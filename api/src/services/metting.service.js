@@ -22,5 +22,7 @@ export const getRoles = async () => {
     return roles;
 }
 
-export const createMettings = async ({ }) => {
+export const createMettings = async (data) => {
+    console.log(data + "in controller");
+
 };

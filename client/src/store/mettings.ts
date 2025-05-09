@@ -11,14 +11,14 @@ export interface Appointment {
 	_id: string;
 	visitorName: string;
 	visitorNo: string;
-	visitorCNIC: string;
+	visitorCnic: string;
 	notes: string;
 	purpose: string;
-	status: "pending" | "approved" | "rejected";
-	priority: number;
+	status?: "pending" | "approved" | "rejected";
+	priority?: number;
 	createdAt: string;
 	updatedAt: string;
-	receptionist: string;
+	createdBy: string;
 	to: string;
 }
 
@@ -35,13 +35,14 @@ interface MeetingState {
 	isLoading: boolean;
 	error: string | null;
 	getAllRoles: () => Promise<void>;
+	createMeetingReq: (formData: Partial<Appointment>) => Promise<void>;
 	clearError: () => void;
 }
 
 export const useMeetings = create<MeetingState>()(
 	devtools(
 		persist(
-			(set, get) => ({
+			(set) => ({
 				allRoles: [],
 				meetings: [],
 				isLoading: false,
@@ -59,58 +60,23 @@ export const useMeetings = create<MeetingState>()(
 						set({ error: msg });
 					}
 				},
+				createMeetingReq: async (formData) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.post(
+							"/protected/met-req",
+							formData
+						);
 
-				// fetchMeetings: async () => {
-				// 	try {
-				// 		set({ isLoading: true, error: null });
-				// 		const { data } = await axiosInstance.get("/appointments");
-				// 		set({ meetings: data.appointments });
-				// 	} catch (err) {
-				// 		const msg = getErrorMessage(err);
-				// 		set({ error: msg });
-				// 	} finally {
-				// 		set({ isLoading: false });
-				// 	}
-				// },
-
-				// createMeeting: async (data) => {
-				// 	try {
-				// 		set({ isLoading: true, error: null });
-				// 		const res = await axiosInstance.post("/appointments", data); // UNCOMMENT THIS
-				// 		set((state) => ({
-				// 			meetings: [res.data.appointment, ...state.meetings],
-				// 		}));
-				// 	} catch (err) {
-				// 		const msg = getErrorMessage(err);
-				// 		set({ error: msg });
-				// 	} finally {
-				// 		set({ isLoading: false });
-				// 	}
-				// },
-
-				// updateStatus: async (id, status, priority) => {
-				// 	try {
-				// 		set({ isLoading: true });
-				// 		const res = await axiosInstance.patch(
-				// 			`/appointments/${id}`,
-				// 			{
-				// 				status,
-				// 				priority,
-				// 			}
-				// 		);
-
-				// 		set((state) => ({
-				// 			meetings: state.meetings.map((appt) =>
-				// 				appt._id === id ? res.data.appointment : appt
-				// 			),
-				// 		}));
-				// 	} catch (err) {
-				// 		const msg = getErrorMessage(err);
-				// 		set({ error: msg });
-				// 	} finally {
-				// 		set({ isLoading: false });
-				// 	}
-				// },
+						set({ meetings: data?.meetings });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
 
 				clearError: () => set({ error: null }),
 			}),
@@ -131,11 +97,3 @@ const getErrorMessage = (err: AxiosError): string => {
 		"Something went wrong. Try again."
 	);
 };
-
-// fetchMeetings: () => Promise<void>;
-// createMeeting: (data: Partial<Appointment>) => Promise<void>;
-// updateStatus: (
-// 	id: string,
-// 	status: "approved" | "rejected",
-// 	priority?: number
-// ) => Promise<void>;

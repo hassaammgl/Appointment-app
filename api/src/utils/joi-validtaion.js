@@ -75,7 +75,7 @@ export const validateReqMeeting = (body) => {
                 'string.empty': 'Visitor name is required',
             }),
         visitorNo: Joi.string()
-            .pattern(/^[0-9]+$/)
+            .pattern(/^\d{4}-\d{7}$/)
             .required()
             .messages({
                 'string.empty': 'Visitor number is required',
@@ -102,6 +102,11 @@ export const validateReqMeeting = (body) => {
             .allow('', null)
             .messages({
                 'string.base': 'Notes must be a string',
+            }),
+        to: Joi.string()
+            .required()
+            .messages({
+                'string.empty': '{to} field is required',
             }),
     });
 

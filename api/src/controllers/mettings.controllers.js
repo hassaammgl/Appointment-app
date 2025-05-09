@@ -4,8 +4,9 @@ import { getRoles, createMettings } from "../services/metting.service.js"
 
 export const createMettingReq = async (req, res, next) => {
     try {
+        console.log(req.body);
+
         const { error } = validateReqMeeting(req.body);
-        console.log(error);
         if (error) {
             console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
