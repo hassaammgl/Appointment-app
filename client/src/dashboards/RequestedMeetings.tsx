@@ -84,46 +84,160 @@ const RequestedMeetings = ({ userId }: { userId: string | undefined }) => {
 
 export default RequestedMeetings;
 
-const MeetingCardList = ({ meeting }: { meeting: Meeting }) => {
-	return (
-		<Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4">
-			<div>
-				<CardTitle>{meeting?.purpose}</CardTitle>
-				<CardDescription>
-					{meeting?.notes || "No description"}
-				</CardDescription>
-				<CardContent className="text-sm text-muted-foreground mt-1">
-					{new Date(meeting?.createdAt).toLocaleString()}
-				</CardContent>
-			</div>
-		</Card>
-	);
-};
-
 const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
+	const [showDetails, setShowDetails] = useState(false);
+	const priorityColors = {
+		0: "bg-green-100 text-green-800 border-green-300",
+		1: "bg-orange-100 text-orange-800 border-orange-300",
+		2: "bg-red-100 text-red-800 border-red-300",
+	};
+
+	const statusColors = {
+		pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
+		approved: "bg-green-100 text-green-800 border-green-300",
+		rejected: "bg-red-100 text-red-800 border-red-300",
+	};
+
+	const maskCnic = (cnic: string) => {
+		return `${cnic.slice(0, 3)}*****${cnic.slice(-3)}`;
+	};
+
+	const maskPhone = (phone: string) => {
+		return `${phone.slice(0, 3)}****${phone.slice(-3)}`;
+	};
+
 	return (
-		<Card>
-			<CardHeader className="flex">
-				<CardTitle>{meeting?.purpose}</CardTitle>
+		<Card className="h-full flex flex-col">
+			<CardHeader className="flex flex-row items-start gap-4">
+				<div className="flex-1">
+					<CardTitle>{meeting.purpose}</CardTitle>
+					<CardDescription className="mt-1">
+						Visitor: {meeting.visitorName}
+					</CardDescription>
+				</div>
 				<Badge
-					className={`border-[1px] rounded-full bg-red-900 ml-auto`}
-					variant={"secondary"}
+					className={`${
+						priorityColors[meeting.priority]
+					} border-[1px] rounded-full`}
 				>
 					{meeting.priority === 0
 						? "Normal"
 						: meeting.priority === 1
 						? "Medium"
-						: meeting.priority === 2
-						? "High"
-						: "Unknown"}
+						: "High"}
 				</Badge>
 			</CardHeader>
-			<CardContent className="text-sm text-muted-foreground">
-				<CardDescription>
-					{meeting?.notes || "No description"}
-				</CardDescription>
-				{new Date(meeting?.createdAt).toLocaleString()}
+			<CardContent className="flex-1 space-y-2">
+				<div className="flex items-center gap-2">
+					<Badge
+						className={`${
+							statusColors[meeting.status]
+						} border-[1px] rounded-full`}
+					>
+						{meeting.status.charAt(0).toUpperCase() +
+							meeting.status.slice(1)}
+					</Badge>
+				</div>
+				<div className="text-sm space-y-1">
+					<p>
+						<strong>CNIC:</strong>{" "}
+						{showDetails
+							? meeting.visitorCnic
+							: maskCnic(meeting.visitorCnic)}
+					</p>
+					<p>
+						<strong>Contact:</strong>{" "}
+						{showDetails
+							? meeting.visitorNo
+							: maskPhone(meeting.visitorNo)}
+					</p>
+				</div>
+				<Button
+					variant="link"
+					size="sm"
+					className="h-4 p-0 text-muted-foreground"
+					onClick={() => setShowDetails(!showDetails)}
+				>
+					{showDetails ? "Hide details" : "Show details"}
+				</Button>
+				{meeting.notes && (
+					<div className="pt-2">
+						<p className="text-sm font-medium">Notes:</p>
+						<p className="text-sm text-muted-foreground">
+							{meeting.notes}
+						</p>
+					</div>
+				)}
 			</CardContent>
+			<CardFooter className="text-sm text-muted-foreground">
+				{new Date(meeting.createdAt).toLocaleString()}
+			</CardFooter>
+		</Card>
+	);
+};
+
+const MeetingCardList = ({ meeting }: { meeting: Meeting }) => {
+	const [showDetails, setShowDetails] = useState(false);
+	const statusColors = {
+		pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
+		approved: "bg-green-100 text-green-800 border-green-300",
+		rejected: "bg-red-100 text-red-800 border-red-300",
+	};
+
+	const maskCnic = (cnic: string) => {
+		return `${cnic.slice(0, 3)}*****${cnic.slice(-3)}`;
+	};
+
+	const maskPhone = (phone: string) => {
+		return `${phone.slice(0, 3)}****${phone.slice(-3)}`;
+	};
+
+	return (
+		<Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 gap-4">
+			<div className="flex-1 space-y-1">
+				<CardTitle>{meeting.purpose}</CardTitle>
+				<div className="text-sm">
+					<p>
+						<strong>{meeting.visitorName}</strong> (
+						{showDetails
+							? meeting.visitorCnic
+							: maskCnic(meeting.visitorCnic)}
+						)
+					</p>
+					<p>
+						Contact:{" "}
+						{showDetails
+							? meeting.visitorNo
+							: maskPhone(meeting.visitorNo)}
+					</p>
+				</div>
+				<Button
+					variant="link"
+					size="sm"
+					className="h-4 p-0 text-muted-foreground"
+					onClick={() => setShowDetails(!showDetails)}
+				>
+					{showDetails ? "Hide details" : "Show details"}
+				</Button>
+				{meeting.notes && (
+					<p className="text-sm text-muted-foreground">
+						{meeting.notes}
+					</p>
+				)}
+			</div>
+			<div className="flex flex-col items-end gap-2">
+				<Badge
+					className={`${
+						statusColors[meeting.status]
+					} border-[1px] rounded-full`}
+				>
+					{meeting.status.charAt(0).toUpperCase() +
+						meeting.status.slice(1)}
+				</Badge>
+				<p className="text-sm text-muted-foreground">
+					{new Date(meeting.createdAt).toLocaleString()}
+				</p>
+			</div>
 		</Card>
 	);
 };
