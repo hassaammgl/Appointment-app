@@ -81,10 +81,9 @@ export const useMeetings = create<MeetingState>()(
 				fetchAllReq: async () => {
 					try {
 						set({ isLoading: true, error: null });
-						const { data } = await axiosInstance.post(
+						const { data } = await axiosInstance.get(
 							"/protected/get-all-reqs"
 						);
-
 						set({ meetings: [data?.allMettings] });
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);

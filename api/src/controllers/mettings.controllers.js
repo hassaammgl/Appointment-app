@@ -53,6 +53,8 @@ export const getAllMeetingsReq = async (req, res, next) => {
     try {
         try {
             const allMettings = await getAllMettings();
+            console.log(allMettings);
+            
             res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
         } catch (dbError) {
             if (dbError.code === 11000) {
