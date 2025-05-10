@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMeetings } from "@/store/mettings";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -126,18 +126,16 @@ const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 						? "Medium"
 						: "High"}
 				</Badge>
+				<Badge
+					className={`${
+						statusColors[meeting.status]
+					} border-[1px] rounded-full`}
+				>
+					{meeting.status.charAt(0).toUpperCase() +
+						meeting.status.slice(1)}
+				</Badge>
 			</CardHeader>
 			<CardContent className="flex-1 space-y-2">
-				<div className="flex items-center gap-2">
-					<Badge
-						className={`${
-							statusColors[meeting.status]
-						} border-[1px] rounded-full`}
-					>
-						{meeting.status.charAt(0).toUpperCase() +
-							meeting.status.slice(1)}
-					</Badge>
-				</div>
 				<div className="text-sm space-y-1">
 					<p>
 						<strong>CNIC:</strong>{" "}
