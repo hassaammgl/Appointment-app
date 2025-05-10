@@ -105,8 +105,17 @@ const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 		<Card>
 			<CardHeader className="flex">
 				<CardTitle>{meeting?.purpose}</CardTitle>
-				<Badge  variant={"secondary"} >
-					
+				<Badge
+					className={`border-[1px] rounded-full bg-red-900 ml-auto`}
+					variant={"secondary"}
+				>
+					{meeting.priority === 0
+						? "Normal"
+						: meeting.priority === 1
+						? "Medium"
+						: meeting.priority === 2
+						? "High"
+						: "Unknown"}
 				</Badge>
 			</CardHeader>
 			<CardContent className="text-sm text-muted-foreground">
