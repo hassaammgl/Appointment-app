@@ -33,10 +33,12 @@ interface MeetingState {
 	allRoles: User[];
 	meetings: Appointment[];
 	isLoading: boolean;
+	message: string | null;
 	error: string | null;
 	getAllRoles: () => Promise<void>;
 	createMeetingReq: (formData: Partial<Appointment>) => Promise<void>;
 	fetchAllReq: () => Promise<void>;
+	cancelMeetingReq: (reqId: string) => Promise<void>;
 	clearError: () => void;
 }
 
@@ -47,6 +49,7 @@ export const useMeetings = create<MeetingState>()(
 				allRoles: [],
 				meetings: [],
 				isLoading: false,
+				message: null,
 				error: null,
 				getAllRoles: async () => {
 					try {
@@ -70,6 +73,22 @@ export const useMeetings = create<MeetingState>()(
 						);
 
 						set({ meetings: [data?.meeting] });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				cancelMeetingReq: async (reqid) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.delete(
+							"/protected/cancel-req",
+							{ data: reqid }
+						);
+						set({ message: data?.message });
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);
 						set({ error: errorMessage });

@@ -54,7 +54,7 @@ export const getAllMeetingsReq = async (req, res, next) => {
         try {
             const allMettings = await getAllMettings();
             console.log(allMettings);
-            
+
             res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
         } catch (dbError) {
             if (dbError.code === 11000) {
@@ -68,3 +68,22 @@ export const getAllMeetingsReq = async (req, res, next) => {
         next(err);
     }
 };
+export const cancelMeetingReq = async (req, res, next) => {
+    try {
+        console.log("canceling meeting req");
+        try {
+
+            // res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
+        } catch (dbError) {
+            if (dbError.code === 11000) {
+                throw new ValidationError('Something happened while canceling in db');
+            } else if (dbError.name === 'MongoError') {
+                throw new AppError('Database error occurred', 500);
+            }
+            throw dbError;
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+

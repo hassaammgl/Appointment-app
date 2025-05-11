@@ -7,5 +7,6 @@ const router = Router();
 router.get("/roles", isAuthenticated, authorize('receptionist'), getAllRoles)
 router.post("/met-req", isAuthenticated, authorize('receptionist'), createMettingReq)
 router.get("/get-all-reqs", isAuthenticated, authorize('receptionist', "ceo", "cfo", "cto", "gm"), getAllMeetingsReq)
+router.delete("/cancel-req", isAuthenticated, authorize('receptionist'), getAllMeetingsReq)
 
 export default router;
