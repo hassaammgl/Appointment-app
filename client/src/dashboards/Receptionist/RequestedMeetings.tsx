@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useMeetings } from "@/store/mettings";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
 	Card,
 	CardContent,
@@ -12,8 +11,10 @@ import {
 	CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/toast";
 import { AxiosError } from "axios";
+import { EyeClosed, Eye } from "lucide-react";
 
 interface ScheduleMeetingsProps {
 	userId?: string;
@@ -42,7 +43,6 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 				Latest Requests
 			</h1>
 
-			{/* Toggle Layout */}
 			<div className="flex justify-end mb-4">
 				<span className="rounded-xl border border-accent flex overflow-hidden">
 					<Button
@@ -162,14 +162,13 @@ const MeetingCard = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 				</Badge>
 				<Badge
 					className={`${
-						statusColors[meeting.status]
-					} border-[1px] rounded-full`}
+						statusColors[meeting?.status]
+					} border-[1px] rounded-full uppercase`}
 				>
-					{meeting.status.charAt(0).toUpperCase() +
-						meeting.status.slice(1)}
+					{meeting.status}
 				</Badge>
 			</CardHeader>
-			<CardContent className="flex-1 space-y-2">
+			<CardContent className="flex-1 space-y-2 relative">
 				<div className="text-sm space-y-1">
 					<p>
 						<strong>CNIC:</strong>{" "}
@@ -183,15 +182,22 @@ const MeetingCard = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 							? meeting.visitorNo
 							: maskPhone(meeting.visitorNo)}
 					</p>
+					<Button
+						variant="link"
+						size="sm"
+						className="h-4 p-0 text-muted-foreground absolute top-0 left-50 border-accent border-[1px] size-9 rounded-full transition-colors ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
+						onClick={() => setShowDetails(!showDetails)}
+					>
+						{showDetails ? <EyeClosed /> : <Eye />}
+					</Button>
 				</div>
-				<Button
-					variant="link"
-					size="sm"
-					className="h-4 p-0 text-muted-foreground"
-					onClick={() => setShowDetails(!showDetails)}
-				>
-					{showDetails ? "Hide details" : "Show details"}
-				</Button>
+
+				<div className="text-sm space-y-1">
+					<p>
+						<b>With:</b> {meeting?.to?.username}
+					</p>
+				</div>
+
 				{meeting.notes && (
 					<div className="pt-2">
 						<p className="text-sm font-medium">Notes:</p>
@@ -217,10 +223,13 @@ interface Meeting {
 	visitorNo: string;
 	visitorCnic: string;
 	purpose: string;
-	status: "pending" | "approved" | "rejected";
+	status?: "pending" | "approved" | "rejected";
 	priority: 0 | 1 | 2;
 	createdBy: string;
-	to: string;
+	to?: {
+		_id: string;
+		username: string;
+	};
 	notes: string;
 	createdAt: string;
 	updatedAt: string;

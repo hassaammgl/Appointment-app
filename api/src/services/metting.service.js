@@ -43,8 +43,45 @@ export const createMettings = async (data) => {
 
 export const getAllMettings = async () => {
     const allMettings = await Meeting.aggregate([
+
         { $sort: { createdAt: -1 } },
+        {
+            $lookup: {
+                from: 'users', // collection name, auto-pluralized to "users"
+                localField: 'to',
+                foreignField: '_id',
+                as: 'toUser'
+            }
+        },
+        {
+            $unwind: {
+                path: '$toUser',
+                preserveNullAndEmptyArrays: true // in case some appointments don't have a `to` assigned yet
+            }
+        },
+        {
+            $project: {
+                visitorName: 1,
+                visitorNo: 1,
+                visitorCnic: 1,
+                purpose: 1,
+                notes: 1,
+                createdBy: 1,
+                status: 1,
+                priority: 1,
+                priorityIndex: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                to: {
+                    _id: '$toUser._id',
+                    username: '$toUser.username'
+                }
+            }
+        }
     ]);
+
+
+
     return allMettings
 };
 

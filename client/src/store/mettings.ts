@@ -19,7 +19,10 @@ export interface Appointment {
 	createdAt: string;
 	updatedAt: string;
 	createdBy: string;
-	to: string;
+	to: {
+		_id: string;
+		username: string;
+	};
 }
 
 interface User {
