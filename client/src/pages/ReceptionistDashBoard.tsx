@@ -1,8 +1,8 @@
 import { AppLayout } from "@/layout/Applayout";
 import { useAuth } from "@/store/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import RequestMeetings from "@/dashboards/RequestedMeetings";
-import ScheduleMeetings from "@/dashboards/ScheduleMeetings";
+import RequestMeetings from "@/dashboards/Receptionist/RequestedMeetings";
+import ScheduleMeetings from "@/dashboards/Receptionist/ScheduleMeetings";
 import { useState } from "react";
 
 const ReceptionistDashBoard = () => {
