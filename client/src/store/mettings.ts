@@ -85,8 +85,7 @@ export const useMeetings = create<MeetingState>()(
 					try {
 						set({ isLoading: true, error: null });
 						const { data } = await axiosInstance.delete(
-							"/protected/cancel-req",
-							{ data: reqid }
+							`/protected/cancel-req/${reqid}`
 						);
 						set({ message: data?.message });
 					} catch (err: any) {

@@ -112,3 +112,15 @@ export const validateReqMeeting = (body) => {
 
     return reqMeetingSchema.validate(body, { abortEarly: false });
 };
+export const validateCancelReq = (body) => {
+    const cancelReqSchema = Joi.object({
+        _id: Joi.string()
+            .required()
+            .max(24)
+            .messages({
+                'string.empty': 'Request id is required',
+            }),
+    });
+
+    return cancelReqSchema.validate(body, { abortEarly: false });
+};

@@ -1,6 +1,7 @@
 import { AppError, ValidationError } from '../utils/AppError.js';
-import { validateReqMeeting } from "../utils/joi-validtaion.js"
-import { getRoles, createMettings, getAllMettings } from "../services/metting.service.js"
+import { validateReqMeeting, validateCancelReq } from "../utils/joi-validtaion.js"
+import { getRoles, createMettings, getAllMettings, cancelMettingReq } from "../services/metting.service.js"
+import Status from "http-status-codes"
 
 export const createMettingReq = async (req, res, next) => {
     try {
@@ -71,9 +72,23 @@ export const getAllMeetingsReq = async (req, res, next) => {
 export const cancelMeetingReq = async (req, res, next) => {
     try {
         console.log("canceling meeting req");
-        try {
+        console.log(req.params.id);
 
-            // res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
+
+        const { error } = validateCancelReq({ _id: req.params.id });
+        if (error) {
+            console.log(error);
+            throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+        }
+        try {
+            const respose = await cancelMettingReq(req.params.id)
+            if (respose) {
+
+                res.status(Status.OK).json({ message: 'Request Deleted 🎉', success: true });
+            }
+            else {
+                throw new AppError("Error while deleting")
+            }
         } catch (dbError) {
             if (dbError.code === 11000) {
                 throw new ValidationError('Something happened while canceling in db');

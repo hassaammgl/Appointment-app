@@ -21,14 +21,20 @@ interface ScheduleMeetingsProps {
 }
 
 const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
-	const { fetchAllReq, meetings } = useMeetings();
+	const [isFetchAgain, setIsFetchAgain] = useState<boolean>(false);
 	const [layout, setLayout] = useState<"grid" | "list">("grid");
+
+	const { fetchAllReq, meetings } = useMeetings();
 
 	console.table(meetings[0]);
 
+	const toggleFetchAgain = () => {
+		setIsFetchAgain((prev) => !prev);
+	};
+
 	useEffect(() => {
 		if (userId) fetchAllReq();
-	}, [fetchAllReq, userId]);
+	}, [fetchAllReq, userId, isFetchAgain]);
 
 	return (
 		<div className="w-full rounded-xl border border-accent p-4">
@@ -69,9 +75,11 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 							<MeetingCardGrid
 								key={meeting?._id}
 								meeting={meeting}
+								toggleFetchAgain={toggleFetchAgain}
 							/>
 						) : (
 							<MeetingCardList
+								toggleFetchAgain={toggleFetchAgain}
 								key={meeting?._id}
 								meeting={meeting}
 							/>
@@ -91,7 +99,15 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
 export default RequestedMeetings;
 
-const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
+interface MeetingCardGridInterface {
+	meeting: Meeting;
+	toggleFetchAgain: () => void;
+}
+
+const MeetingCardGrid = ({
+	meeting,
+	toggleFetchAgain,
+}: MeetingCardGridInterface) => {
 	const [showDetails, setShowDetails] = useState(false);
 
 	const { cancelMeetingReq } = useMeetings();
@@ -123,6 +139,7 @@ const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 			await cancelMeetingReq(meeting._id);
 			removeAllToasts();
 			success("Request Removed");
+			toggleFetchAgain();
 		} catch (err) {
 			const message =
 				(err as AxiosError<{ message?: string }>)?.response?.data

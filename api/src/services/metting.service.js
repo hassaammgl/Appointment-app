@@ -48,6 +48,9 @@ export const getAllMettings = async () => {
     return allMettings
 };
 
-/*
-    { $match: { status: "pending" } }
-*/
+export const cancelMettingReq = async (_id) => {
+    console.log(_id);
+    const meeting = await Meeting.findOneAndDelete({ _id })
+    console.log(meeting);
+    return true
+}
