@@ -42,12 +42,12 @@ export const createMettings = async (data) => {
 };
 
 export const getAllMettings = async () => {
-    const allMettings = await Meeting.aggregate([
-
+    const allMeetings = await Meeting.aggregate([
         { $sort: { createdAt: -1 } },
+
         {
             $lookup: {
-                from: 'users', // collection name, auto-pluralized to "users"
+                from: 'users',
                 localField: 'to',
                 foreignField: '_id',
                 as: 'toUser'
@@ -56,9 +56,25 @@ export const getAllMettings = async () => {
         {
             $unwind: {
                 path: '$toUser',
-                preserveNullAndEmptyArrays: true // in case some appointments don't have a `to` assigned yet
+                preserveNullAndEmptyArrays: true
             }
         },
+
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdByUser'
+            }
+        },
+        {
+            $unwind: {
+                path: '$createdByUser',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+
         {
             $project: {
                 visitorName: 1,
@@ -66,7 +82,6 @@ export const getAllMettings = async () => {
                 visitorCnic: 1,
                 purpose: 1,
                 notes: 1,
-                createdBy: 1,
                 status: 1,
                 priority: 1,
                 priorityIndex: 1,
@@ -75,14 +90,16 @@ export const getAllMettings = async () => {
                 to: {
                     _id: '$toUser._id',
                     username: '$toUser.username'
+                },
+                createdBy: {
+                    _id: '$createdByUser._id',
+                    username: '$createdByUser.username'
                 }
             }
         }
     ]);
 
-
-
-    return allMettings
+    return allMeetings
 };
 
 export const cancelMettingReq = async (_id) => {

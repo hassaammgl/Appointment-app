@@ -12,17 +12,20 @@ export interface Appointment {
 	visitorName: string;
 	visitorNo: string;
 	visitorCnic: string;
-	notes: string;
 	purpose: string;
 	status?: "pending" | "approved" | "rejected";
-	priority?: number;
-	createdAt: string;
-	updatedAt: string;
-	createdBy: string;
-	to: {
+	priority: 0 | 1 | 2;
+	createdBy: {
 		_id: string;
 		username: string;
 	};
+	to?: {
+		_id: string;
+		username: string;
+	};
+	notes: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface User {

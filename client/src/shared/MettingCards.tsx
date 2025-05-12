@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
 import { AxiosError } from "axios";
 import { EyeClosed, Eye } from "lucide-react";
+import type { Appointment as Meeting } from "@/store/mettings";
 
 interface MeetingCardInterface {
 	meeting: Meeting;
@@ -139,23 +140,5 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 		</Card>
 	);
 };
-
-interface Meeting {
-	_id: string;
-	visitorName: string;
-	visitorNo: string;
-	visitorCnic: string;
-	purpose: string;
-	status?: "pending" | "approved" | "rejected";
-	priority: 0 | 1 | 2;
-	createdBy: string;
-	to?: {
-		_id: string;
-		username: string;
-	};
-	notes: string;
-	createdAt: string;
-	updatedAt: string;
-}
 
 export default MettingCards;
