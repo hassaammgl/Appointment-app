@@ -152,7 +152,7 @@ const MeetingCard = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 					variant={"outline"}
 					className={`${
 						priorityColors[meeting.priority]
-					} border-[1px] rounded-full`}
+					} border-[1px] rounded-full uppercase`}
 				>
 					{meeting.priority === 0
 						? "Normal"
