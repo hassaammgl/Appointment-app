@@ -72,7 +72,7 @@ export const useMeetings = create<MeetingState>()(
 							formData
 						);
 
-						set({ meetings: [data?.meeting] });
+						set({ message: data?.message });
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);
 						set({ error: errorMessage });

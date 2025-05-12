@@ -56,8 +56,7 @@ const SignupPage = () => {
 			<div className="max-w-md w-full space-y-8">
 				<div className="text-center">
 					<h1 className="text-3xl font-bold">
-						<span className="text-green-500">Hikari</span>{" "}
-						Hub
+						<span className="text-green-500">Smart</span> App
 					</h1>
 					<p className="mt-2 text-muted-foreground">
 						Create a new account

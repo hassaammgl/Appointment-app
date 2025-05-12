@@ -24,12 +24,13 @@ import { AxiosError } from "axios";
 
 interface ScheduleMeetingsProps {
 	userId?: string;
+	setTabValue: (data: string) => void;
 }
 
-const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
-	const { isLoading, getAllRoles, allRoles, createMeetingReq, error } =
+const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
+	const { isLoading, getAllRoles, allRoles, createMeetingReq, message } =
 		useMeetings();
-	const { error: errToast, info, success } = useToast();
+	const { error: errToast, info, success, removeAllToasts } = useToast();
 
 	const [visitorName, setVisitorName] = useState("");
 	const [visitorNo, setVisitorNo] = useState("");
@@ -70,7 +71,9 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 				createdBy: userId,
 				to,
 			});
-			success("Requesting Schedule Successed");
+			removeAllToasts();
+			success("Request Submitted");
+			setTabValue("requests");
 		} catch (err) {
 			const message =
 				(err as AxiosError<{ message?: string }>)?.response?.data
@@ -181,7 +184,6 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 	);
 };
 
-// --- 🔧 CNIC INPUT ---
 const formatCNIC = (value: string) => {
 	const digits = value.replace(/\D/g, "").slice(0, 13);
 	if (digits.length <= 5) return digits;
@@ -218,7 +220,6 @@ const CNICInput = ({
 	);
 };
 
-// --- 📞 PHONE INPUT ---
 const formatPhoneNumber = (value: string) => {
 	const digits = value.replace(/\D/g, "").slice(0, 11);
 	if (digits.length <= 4) return digits;

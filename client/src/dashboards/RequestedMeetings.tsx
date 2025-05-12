@@ -12,8 +12,15 @@ import {
 	CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/toast";
+import { AxiosError } from "axios";
 
-const RequestedMeetings = ({ userId }: { userId: string | undefined }) => {
+interface ScheduleMeetingsProps {
+	userId?: string;
+	setTabValue: (data: string) => void;
+}
+
+const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 	const { fetchAllReq, meetings } = useMeetings();
 	const [layout, setLayout] = useState<"grid" | "list">("grid");
 
@@ -86,6 +93,10 @@ export default RequestedMeetings;
 
 const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 	const [showDetails, setShowDetails] = useState(false);
+
+	const { cancelMeetingReq } = useMeetings();
+	const { info, removeAllToasts, success, error: errToast } = useToast();
+
 	const priorityColors = {
 		0: "text-green-500 border-green-500",
 		1: "text-orange-500 border-orange-500",
@@ -104,6 +115,22 @@ const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 
 	const maskPhone = (phone: string) => {
 		return `${phone.slice(0, 3)}****${phone.slice(-3)}`;
+	};
+
+	const handleCancelMeeting = async () => {
+		try {
+			info("cancelling Schedule...");
+			await cancelMeetingReq(meeting._id);
+			removeAllToasts();
+			success("Request Removed");
+		} catch (err) {
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Requesting Schedule failed 😵";
+			errToast(message);
+		}
 	};
 
 	return (
@@ -168,8 +195,11 @@ const MeetingCardGrid = ({ meeting }: { meeting: Meeting }) => {
 					</div>
 				)}
 			</CardContent>
-			<CardFooter className="text-sm text-muted-foreground">
-				{new Date(meeting.createdAt).toLocaleString()}
+			<CardFooter className="text-sm flex justify-between text-muted-foreground">
+				<span>{new Date(meeting.createdAt).toLocaleString()}</span>
+				<Button onClick={handleCancelMeeting} variant={"destructive"}>
+					Cancel Meeting
+				</Button>
 			</CardFooter>
 		</Card>
 	);

@@ -3,8 +3,10 @@ import { useAuth } from "@/store/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RequestMeetings from "@/dashboards/RequestedMeetings";
 import ScheduleMeetings from "@/dashboards/ScheduleMeetings";
+import { useState } from "react";
 
 const ReceptionistDashBoard = () => {
+	const [tabValue, setTabValue] = useState("requests");
 	const { user } = useAuth();
 	console.log(user);
 
@@ -19,7 +21,11 @@ const ReceptionistDashBoard = () => {
 						Manage visitors and meeting schedules
 					</p>
 				</div>
-				<Tabs defaultValue="requests" className="w-full">
+				<Tabs
+					value={tabValue}
+					onValueChange={setTabValue}
+					className="w-full"
+				>
 					<TabsList className="mx-auto">
 						<TabsTrigger value="requests">
 							Meeting Requests
@@ -29,10 +35,16 @@ const ReceptionistDashBoard = () => {
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="requests">
-						<RequestMeetings userId={user?.id} />
+						<RequestMeetings
+							setTabValue={setTabValue}
+							userId={user?.id}
+						/>
 					</TabsContent>
 					<TabsContent value="schedule">
-						<ScheduleMeetings userId={user?.id} />
+						<ScheduleMeetings
+							setTabValue={setTabValue}
+							userId={user?.id}
+						/>
 					</TabsContent>
 				</Tabs>
 			</div>
