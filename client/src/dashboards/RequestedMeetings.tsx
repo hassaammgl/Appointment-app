@@ -70,21 +70,13 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 							: "flex flex-col gap-4"
 					}
 				>
-					{meetings[0]?.map((meeting) =>
-						layout === "grid" ? (
-							<MeetingCardGrid
-								key={meeting?._id}
-								meeting={meeting}
-								toggleFetchAgain={toggleFetchAgain}
-							/>
-						) : (
-							<MeetingCardList
-								toggleFetchAgain={toggleFetchAgain}
-								key={meeting?._id}
-								meeting={meeting}
-							/>
-						)
-					)}
+					{meetings[0]?.map((meeting) => (
+						<MeetingCard
+							key={meeting?._id}
+							meeting={meeting}
+							toggleFetchAgain={toggleFetchAgain}
+						/>
+					))}
 				</div>
 			) : (
 				<p className="text-center text-muted-foreground py-8">
@@ -99,15 +91,12 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
 export default RequestedMeetings;
 
-interface MeetingCardGridInterface {
+interface MeetingCardInterface {
 	meeting: Meeting;
 	toggleFetchAgain: () => void;
 }
 
-const MeetingCardGrid = ({
-	meeting,
-	toggleFetchAgain,
-}: MeetingCardGridInterface) => {
+const MeetingCard = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 	const [showDetails, setShowDetails] = useState(false);
 
 	const { cancelMeetingReq } = useMeetings();
@@ -151,7 +140,7 @@ const MeetingCardGrid = ({
 	};
 
 	return (
-		<Card className="h-full flex flex-col">
+		<Card className="h-full flex flex-col w-full">
 			<CardHeader className="flex flex-row items-start gap-4">
 				<div className="flex-1">
 					<CardTitle>{meeting.purpose}</CardTitle>
@@ -218,99 +207,6 @@ const MeetingCardGrid = ({
 					Cancel Meeting
 				</Button>
 			</CardFooter>
-		</Card>
-	);
-};
-
-const MeetingCardList = ({ meeting }: { meeting: Meeting }) => {
-	const [showDetails, setShowDetails] = useState(false);
-
-	const priorityColors = {
-		0: "bg-green-100 text-green-800 border-green-300",
-		1: "bg-orange-100 text-orange-800 border-orange-300",
-		2: "bg-red-100 text-red-800 border-red-300",
-	};
-
-	const statusColors = {
-		pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
-		approved: "bg-green-100 text-green-800 border-green-300",
-		rejected: "bg-red-100 text-red-800 border-red-300",
-	};
-
-	const maskCnic = (cnic: string) =>
-		`${cnic.slice(0, 3)}*****${cnic.slice(-3)}`;
-	const maskPhone = (phone: string) =>
-		`${phone.slice(0, 3)}****${phone.slice(-3)}`;
-
-	return (
-		<Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 gap-4">
-			<div className="flex-1 space-y-1">
-				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-					<div>
-						<CardTitle>{meeting.purpose}</CardTitle>
-						<CardDescription>
-							Visitor: {meeting.visitorName}
-						</CardDescription>
-					</div>
-					<div className="flex gap-2 ">
-						<Badge
-							className={`${
-								priorityColors[meeting.priority]
-							} border-[1px] rounded-full`}
-						>
-							{meeting.priority === 0
-								? "Normal"
-								: meeting.priority === 1
-								? "High"
-								: "Urgent"}
-						</Badge>
-						<Badge
-							className={`${
-								statusColors[meeting.status]
-							} border-[1px] rounded-full`}
-						>
-							{meeting.status.charAt(0).toUpperCase() +
-								meeting.status.slice(1)}
-						</Badge>
-					</div>
-				</div>
-
-				<div className="text-sm">
-					<p>
-						<strong>CNIC:</strong>{" "}
-						{showDetails
-							? meeting.visitorCnic
-							: maskCnic(meeting.visitorCnic)}
-					</p>
-					<p>
-						<strong>Contact:</strong>{" "}
-						{showDetails
-							? meeting.visitorNo
-							: maskPhone(meeting.visitorNo)}
-					</p>
-				</div>
-
-				<Button
-					variant="link"
-					size="sm"
-					className="h-4 p-0 text-muted-foreground"
-					onClick={() => setShowDetails(!showDetails)}
-				>
-					{showDetails ? "Hide details" : "Show details"}
-				</Button>
-
-				{meeting.notes && (
-					<p className="text-sm text-muted-foreground">
-						{meeting.notes}
-					</p>
-				)}
-			</div>
-
-			<div className="flex flex-col items-end gap-2">
-				<p className="text-sm text-muted-foreground">
-					{new Date(meeting.createdAt).toLocaleString()}
-				</p>
-			</div>
 		</Card>
 	);
 };
