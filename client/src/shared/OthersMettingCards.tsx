@@ -14,19 +14,19 @@ import { useToast } from "@/components/ui/toast";
 import { AxiosError } from "axios";
 import { EyeClosed, Eye } from "lucide-react";
 import type { Appointment as Meeting } from "@/store/mettings";
-import { Separator } from "@/components/ui/separator";
-import { useSettings } from "@/store/settings";
 
 interface MeetingCardInterface {
 	meeting: Meeting;
 	toggleFetchAgain: () => void;
 }
 
-const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
+const OthersMettingCards = ({
+	meeting,
+	toggleFetchAgain,
+}: MeetingCardInterface) => {
 	const [showDetails, setShowDetails] = useState(false);
 
 	const { cancelMeetingReq } = useMeetings();
-	const { settings } = useSettings();
 	const { info, removeAllToasts, success, error: errToast } = useToast();
 
 	const priorityColors = {
@@ -69,80 +69,55 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 	return (
 		<Card className="h-full flex flex-col w-full">
 			<CardHeader className="flex flex-row items-start gap-4">
-				{settings.addPurpose && (
-					<div className="flex-1 flex w-1/2">
-						<CardTitle>{meeting.purpose}</CardTitle>
-					</div>
-				)}
-				<div
-					className={`flex flex-row justify-end ${
-						settings.addPurpose === true ? "w-1/2" : "w-full"
-					} gap-4`}
-				>
-					<Badge
-						variant={"outline"}
-						className={`${
-							priorityColors[meeting.priority]
-						} border-[1px] rounded-full uppercase`}
-					>
-						{meeting.priority === 0
-							? "Normal"
-							: meeting.priority === 1
-							? "High"
-							: "Urgent"}
-					</Badge>
-					<Badge
-						className={`${
-							statusColors[meeting?.status]
-						} border-[1px] rounded-full uppercase`}
-					>
-						{meeting.status}
-					</Badge>
+				<div className="flex-1">
+					<CardTitle>{meeting.purpose}</CardTitle>
+					<CardDescription className="mt-1">
+						Visitor: {meeting.visitorName}
+					</CardDescription>
 				</div>
+				<Badge
+					variant={"outline"}
+					className={`${
+						priorityColors[meeting.priority]
+					} border-[1px] rounded-full uppercase`}
+				>
+					{meeting.priority === 0
+						? "Normal"
+						: meeting.priority === 1
+						? "High"
+						: "Urgent"}
+				</Badge>
+				<Badge
+					className={`${
+						statusColors[meeting?.status]
+					} border-[1px] rounded-full uppercase`}
+				>
+					{meeting.status}
+				</Badge>
 			</CardHeader>
-			<Separator />
 			<CardContent className="flex-1 space-y-2 relative">
 				<div className="text-sm space-y-1">
 					<p>
-						<strong>Visitor:</strong> {meeting.visitorName}
+						<strong>CNIC:</strong>{" "}
+						{showDetails
+							? meeting.visitorCnic
+							: maskCnic(meeting.visitorCnic)}
 					</p>
-				</div>
-				<Separator />
-				<div className="text-sm space-y-1">
 					<p>
 						<strong>Contact:</strong>{" "}
 						{showDetails
 							? meeting.visitorNo
 							: maskPhone(meeting.visitorNo)}
 					</p>
-					{settings.addPersonCnic && (
-						<p>
-							<strong>CNIC:</strong>{" "}
-							{showDetails
-								? meeting.visitorCnic
-								: maskCnic(meeting.visitorCnic)}
-						</p>
-					)}
 					<Button
 						variant="link"
 						size="sm"
-						className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
+						className="h-4 p-0 text-muted-foreground absolute top-0 left-50 border-accent border-[1px] size-9 rounded-full transition-colors ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
 						onClick={() => setShowDetails(!showDetails)}
 					>
-						{showDetails ? (
-							<>
-								{"Hide "}
-								<EyeClosed />
-							</>
-						) : (
-							<>
-								{"Show "}
-								<Eye />
-							</>
-						)}
+						{showDetails ? <EyeClosed /> : <Eye />}
 					</Button>
 				</div>
-				<Separator />
 
 				<div className="text-sm space-y-1">
 					<p>
@@ -150,8 +125,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 					</p>
 				</div>
 
-				{settings.addNotes && <Separator />}
-				{settings.addNotes && meeting.notes && (
+				{meeting.notes && (
 					<div className="pt-2">
 						<p className="text-sm font-medium">Notes:</p>
 						<p className="text-sm text-muted-foreground">
@@ -160,7 +134,6 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 					</div>
 				)}
 			</CardContent>
-			<Separator />
 			<CardFooter className="text-sm flex justify-between text-muted-foreground">
 				<span>{new Date(meeting.createdAt).toLocaleString()}</span>
 				<Button onClick={handleCancelMeeting} variant={"destructive"}>
@@ -171,4 +144,4 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 	);
 };
 
-export default MettingCards;
+export default OthersMettingCards;

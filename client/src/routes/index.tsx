@@ -8,6 +8,7 @@ import CTODashBoard from "@/pages/CTODashBoard";
 import CFODashBoard from "@/pages/CFODashBoard";
 import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
 import GMDashBoard from "@/pages/GMDashBoard";
+import SettingsPage from "@/pages/SettingsPage";
 
 const routes = [
 	{
@@ -25,6 +26,10 @@ const routes = [
 	{
 		path: "/profile",
 		element: <ProfilePage />,
+	},
+	{
+		path: "/settings",
+		element: <SettingsPage />,
 	},
 	{
 		path: "/ceo-dashboard",

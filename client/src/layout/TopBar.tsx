@@ -1,8 +1,8 @@
 import { useAuth } from "@/store/auth";
 import {
-    Avatar,
-    AvatarFallback,
-    // AvatarImage
+	Avatar,
+	AvatarFallback,
+	// AvatarImage
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User, LogOut } from "lucide-react";
+import { Menu, User, LogOut, Settings2 } from "lucide-react";
+import { NavLink } from "react-router";
 
 interface TopBarProps {
 	toggleSidebar: () => void;
@@ -50,10 +51,6 @@ export const TopBar = ({ toggleSidebar }: TopBarProps) => {
 							className="relative h-9 w-9 rounded-full"
 						>
 							<Avatar>
-								{/* <AvatarImage
-									src={user?.avatar}
-									alt={user?.username}
-								/> */}
 								<AvatarFallback>
 									{user?.username?.charAt(0) || "U"}
 								</AvatarFallback>
@@ -76,10 +73,18 @@ export const TopBar = ({ toggleSidebar }: TopBarProps) => {
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<User className="mr-2 h-4 w-4" />
-							<span>Profile</span>
-						</DropdownMenuItem>
+						<NavLink to="/profile">
+							<DropdownMenuItem>
+								<User className="mr-2 h-4 w-4" />
+								<span>Profile</span>
+							</DropdownMenuItem>
+						</NavLink>
+						<NavLink to="/settings">
+							<DropdownMenuItem>
+								<Settings2 className="mr-2 h-4 w-4" />
+								<span>Settings</span>
+							</DropdownMenuItem>
+						</NavLink>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={logout}>
 							<LogOut className="mr-2 h-4 w-4" />

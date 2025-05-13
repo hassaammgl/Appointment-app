@@ -21,6 +21,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { AxiosError } from "axios";
+import { useSettings } from "@/store/settings";
 
 interface ScheduleMeetingsProps {
 	userId?: string;
@@ -31,6 +32,7 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 	const { isLoading, getAllRoles, allRoles, createMeetingReq, message } =
 		useMeetings();
 	const { error: errToast, info, success, removeAllToasts } = useToast();
+	const { settings } = useSettings();
 
 	const [visitorName, setVisitorName] = useState("");
 	const [visitorNo, setVisitorNo] = useState("");
@@ -113,33 +115,41 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 								onChange={setVisitorNo}
 							/>
 						</div>
-						<div className="space-y-2">
-							<Label htmlFor="visitor-cnic">CNIC:</Label>
-							<CNICInput
-								value={visitorCNIC}
-								onChange={setVisitorCNIC}
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="visitor-purpose">Purpose:</Label>
-							<Input
-								id="visitor-purpose"
-								type="text"
-								placeholder="e.g. Meeting with HR"
-								value={purpose}
-								onChange={(e) => setPurpose(e.target.value)}
-								required
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="visitor-notes">Notes:</Label>
-							<Textarea
-								id="visitor-notes"
-								placeholder="Optional notes or details"
-								value={notes}
-								onChange={(e) => setNotes(e.target.value)}
-							/>
-						</div>
+						{settings.addPersonCnic && (
+							<div className="space-y-2">
+								<Label htmlFor="visitor-cnic">CNIC:</Label>
+								<CNICInput
+									value={visitorCNIC}
+									onChange={setVisitorCNIC}
+								/>
+							</div>
+						)}
+						{settings.addPurpose && (
+							<div className="space-y-2">
+								<Label htmlFor="visitor-purpose">
+									Purpose:
+								</Label>
+								<Input
+									id="visitor-purpose"
+									type="text"
+									placeholder="e.g. Meeting with HR"
+									value={purpose}
+									onChange={(e) => setPurpose(e.target.value)}
+									required
+								/>
+							</div>
+						)}
+						{settings.addNotes && (
+							<div className="space-y-2">
+								<Label htmlFor="visitor-notes">Notes:</Label>
+								<Textarea
+									id="visitor-notes"
+									placeholder="Optional notes or details"
+									value={notes}
+									onChange={(e) => setNotes(e.target.value)}
+								/>
+							</div>
+						)}
 						<div className="space-y-2">
 							<Label htmlFor="to">To:</Label>
 							<Select
