@@ -83,13 +83,15 @@ export const validateReqMeeting = (body) => {
             }),
         visitorCnic: Joi.string()
             .pattern(/^\d{5}-\d{7}-\d{1}$/)
-            .required()
+            // .required()
+            .allow('', null)
             .messages({
                 'string.empty': 'CNIC is required',
                 'string.pattern.base': 'CNIC must be in the format 12345-1234567-1',
             }),
         purpose: Joi.string()
-            .required()
+            // .required()
+            .allow('', null)
             .messages({
                 'string.empty': 'Purpose is required',
             }),

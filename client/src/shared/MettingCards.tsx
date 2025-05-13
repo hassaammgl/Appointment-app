@@ -6,7 +6,6 @@ import {
 	CardContent,
 	CardHeader,
 	CardTitle,
-	CardDescription,
 	CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -69,7 +68,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 	return (
 		<Card className="h-full flex flex-col w-full">
 			<CardHeader className="flex flex-row items-start gap-4">
-				{settings.addPurpose && (
+				{settings.addPurpose && meeting.purpose && (
 					<div className="flex-1 flex w-1/2">
 						<CardTitle>{meeting.purpose}</CardTitle>
 					</div>
@@ -115,7 +114,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 							? meeting.visitorNo
 							: maskPhone(meeting.visitorNo)}
 					</p>
-					{settings.addPersonCnic && (
+					{settings.addPersonCnic && meeting.visitorCnic && (
 						<p>
 							<strong>CNIC:</strong>{" "}
 							{showDetails

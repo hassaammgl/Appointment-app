@@ -27,6 +27,20 @@ export interface Appointment {
 	createdAt: string;
 	updatedAt: string;
 }
+interface Appointment2 {
+	_id?: string;
+	visitorName?: string;
+	visitorNo?: string;
+	visitorCnic?: string;
+	purpose?: string;
+	status?: "pending" | "approved" | "rejected";
+	priority?: 0 | 1 | 2;
+	createdBy?: string;
+	to?: string;
+	notes?: string;
+	createdAt?: string;
+	updatedAt?: string;
+}
 
 interface User {
 	_id: string;
@@ -42,7 +56,7 @@ interface MeetingState {
 	message: string | null;
 	error: string | null;
 	getAllRoles: () => Promise<void>;
-	createMeetingReq: (formData: Partial<Appointment>) => Promise<void>;
+	createMeetingReq: (formData: Partial<Appointment2>) => Promise<void>;
 	fetchAllReq: () => Promise<void>;
 	cancelMeetingReq: (reqId: string) => Promise<void>;
 	clearError: () => void;

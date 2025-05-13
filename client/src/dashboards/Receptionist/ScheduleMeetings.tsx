@@ -49,7 +49,7 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const cnicPattern = /^\d{5}-\d{7}-\d$/;
-		if (!cnicPattern.test(visitorCNIC)) {
+		if (settings.addPersonCnic && !cnicPattern.test(visitorCNIC)) {
 			errToast("Invalid CNIC format!");
 			return;
 		}
