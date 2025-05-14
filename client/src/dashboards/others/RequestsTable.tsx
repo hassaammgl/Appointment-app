@@ -21,14 +21,23 @@ import { useToast } from "@/components/ui/toast";
 import { useMeetings } from "@/store/mettings";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { useSettings } from "@/store/settings";
 
 const RequestsTable = ({ requests }: { requests: Appointment[] }) => {
+	const { settings } = useSettings();
+
 	return (
 		<Table>
 			<TableHeader>
 				<TableRow>
 					<TableHead>Visitor Name</TableHead>
+					<TableHead>Visitor No</TableHead>
+					{settings.addPersonCnic && (
+						<TableHead>Visitor CNIC</TableHead>
+					)}
 					<TableHead>Date</TableHead>
+					{settings.addNotes && <TableHead>Notes</TableHead>}
+					{settings.addPurpose && <TableHead>Purpose</TableHead>}
 					<TableHead>Priority</TableHead>
 					<TableHead>Status</TableHead>
 					<TableHead>Actions</TableHead>
@@ -53,6 +62,8 @@ const RequestsTable = ({ requests }: { requests: Appointment[] }) => {
 };
 
 const T_Row = ({ data }: { data: Appointment }) => {
+	const { settings } = useSettings();
+
 	const { approveMeetingReq, rejectMeetingReq, updatePriority } =
 		useMeetings();
 	const { info, removeAllToasts, success, error: errToast } = useToast();
@@ -97,7 +108,7 @@ const T_Row = ({ data }: { data: Appointment }) => {
 			info("Updating priority...");
 			const numVal = Number(val);
 			setPriority(numVal);
-			await updatePriority(data._id, numVal); // <-- Pass it in!
+			await updatePriority(data._id, numVal);
 			removeAllToasts();
 			success("Request priority updated");
 		} catch (err) {
@@ -114,9 +125,17 @@ const T_Row = ({ data }: { data: Appointment }) => {
 	return (
 		<TableRow>
 			<TableCell className=" font-medium">{data.visitorName}</TableCell>
+			<TableCell className=" font-medium">{data.visitorNo}</TableCell>
+			{settings.addPersonCnic && (
+				<TableCell className=" font-medium">
+					{data.visitorCnic}
+				</TableCell>
+			)}
 			<TableCell>
 				{new Date(data.createdAt).toLocaleDateString()}
 			</TableCell>
+			{settings.addNotes && <TableCell>{data.notes}</TableCell>}
+			{settings.addPurpose && <TableCell>{data.purpose}</TableCell>}
 			<TableCell>
 				<Badge
 					variant={"outline"}
