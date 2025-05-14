@@ -35,7 +35,6 @@ interface Appointment2 {
 	purpose?: string;
 	status?: "pending" | "approved" | "rejected";
 	priority?: 0 | 1 | 2;
-	priorityIndex?: number;
 	createdBy?: string;
 	to?: string;
 	notes?: string;
@@ -60,6 +59,9 @@ interface MeetingState {
 	createMeetingReq: (formData: Partial<Appointment2>) => Promise<void>;
 	fetchAllReq: () => Promise<void>;
 	cancelMeetingReq: (reqId: string) => Promise<void>;
+	approveMeetingReq: (reqId: string) => Promise<void>;
+	rejectMeetingReq: (reqId: string) => Promise<void>;
+	updatePriority: (reqid: string, value: number) => Promise<void>;
 	clearError: () => void;
 }
 
@@ -107,6 +109,54 @@ export const useMeetings = create<MeetingState>()(
 						set({ isLoading: true, error: null });
 						const { data } = await axiosInstance.delete(
 							`/protected/cancel-req/${reqid}`
+						);
+						set({ message: data?.message });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				approveMeetingReq: async (reqid) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.put(
+							`/protected/approve-req/${reqid}`
+						);
+						set({ message: data?.message });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				rejectMeetingReq: async (reqid) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.put(
+							`/protected/reject-req/${reqid}`
+						);
+						set({ message: data?.message });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				updatePriority: async (reqid, value) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.put(
+							`/protected/update-priority/${reqid}`,
+							{
+								data: value,
+							}
 						);
 						set({ message: data?.message });
 					} catch (err: any) {

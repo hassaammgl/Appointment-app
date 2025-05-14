@@ -108,3 +108,27 @@ export const cancelMettingReq = async (_id) => {
     console.log(meeting);
     return true
 }
+
+
+export const approveRejectMettingReq = async (_id, type) => {
+    console.log(_id, "type " + type);
+
+    const req = await Meeting.findByIdAndUpdate({ _id }, {
+        status: type
+    })
+    console.log(req);
+
+    return true
+
+}
+
+export const updateAppointmentPriority = async (_id, value) => {
+    console.log(_id, "Value " + value);
+    const req = await Meeting.findByIdAndUpdate({ _id }, {
+        priority: value
+    })
+    console.log(req);
+    
+    return true
+
+}

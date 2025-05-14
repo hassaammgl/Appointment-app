@@ -16,6 +16,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/toast";
+import { useMeetings } from "@/store/mettings";
+import { AxiosError } from "axios";
+import { useState } from "react";
 
 const RequestsTable = ({ requests }: { requests: Appointment[] }) => {
 	return (
@@ -24,44 +29,96 @@ const RequestsTable = ({ requests }: { requests: Appointment[] }) => {
 				<TableRow>
 					<TableHead>Visitor Name</TableHead>
 					<TableHead>Date</TableHead>
-					<TableHead>Index</TableHead>
 					<TableHead>Priority</TableHead>
 					<TableHead>Status</TableHead>
 					<TableHead>Actions</TableHead>
-					<TableHead>Set Index</TableHead>
+					<TableHead>Set Priority</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{requests.map((request) => {
-					return <T_Row key={request._id} data={request} />;
-				})}
+				{requests.length > 0 ? (
+					requests.map((request) => {
+						return <T_Row key={request._id} data={request} />;
+					})
+				) : (
+					<TableRow>
+						<span className="text-center w-full">
+							No meeting requests yet 🙃
+						</span>
+					</TableRow>
+				)}
 			</TableBody>
 		</Table>
 	);
 };
 
-export default RequestsTable;
-
 const T_Row = ({ data }: { data: Appointment }) => {
-	const priorityColors = {
-		0: "text-green-500 border-green-500",
-		1: "text-orange-500 border-orange-500",
-		2: "text-red-500 border-red-500",
+	const { approveMeetingReq, rejectMeetingReq, updatePriority } =
+		useMeetings();
+	const { info, removeAllToasts, success, error: errToast } = useToast();
+
+	console.log(typeof data.priority);
+
+	const [priority, setPriority] = useState(data.priority);
+
+	const handleApprove = async () => {
+		try {
+			info("Approving Schedule...");
+			await approveMeetingReq(data._id);
+			removeAllToasts();
+			success("Request Approved");
+		} catch (err) {
+			removeAllToasts();
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Requesting Approved failed 😵";
+			errToast(message);
+		}
+	};
+	const handleReject = async () => {
+		try {
+			info("Rejecting Schedule...");
+			await rejectMeetingReq(data._id);
+			removeAllToasts();
+			success("Request Rejected");
+		} catch (err) {
+			removeAllToasts();
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Requesting Rejection failed 😵";
+			errToast(message);
+		}
 	};
 
-	const statusColors: Record<string, string> = {
-		pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
-		approved: "bg-green-100 text-green-800 border-green-300",
-		rejected: "bg-red-100 text-red-800 border-red-300",
+	const handlePriority = async (val: string) => {
+		try {
+			info("Updating priority...");
+			const numVal = Number(val);
+			setPriority(numVal);
+			await updatePriority(data._id, numVal); // <-- Pass it in!
+			removeAllToasts();
+			success("Request priority updated");
+		} catch (err) {
+			removeAllToasts();
+			const message =
+				(err as AxiosError<{ message?: string }>)?.response?.data
+					?.message ??
+				(err as Error)?.message ??
+				"Requesting Update failed 😵";
+			errToast(message);
+		}
 	};
 
 	return (
 		<TableRow>
-			<TableCell className="font-medium">{data.visitorName}</TableCell>
+			<TableCell className=" font-medium">{data.visitorName}</TableCell>
 			<TableCell>
 				{new Date(data.createdAt).toLocaleDateString()}
 			</TableCell>
-			<TableCell>{data.priorityIndex}</TableCell>
 			<TableCell>
 				<Badge
 					variant={"outline"}
@@ -88,8 +145,14 @@ const T_Row = ({ data }: { data: Appointment }) => {
 			<TableCell>
 				{data.status === "pending" ? (
 					<div className="flex gap-2">
-						<Button size="sm">Approve</Button>
-						<Button size="sm" variant="destructive">
+						<Button onClick={handleApprove} size="sm">
+							Approve
+						</Button>
+						<Button
+							onClick={handleReject}
+							size="sm"
+							variant="destructive"
+						>
 							Reject
 						</Button>
 					</div>
@@ -100,24 +163,32 @@ const T_Row = ({ data }: { data: Appointment }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				<Select>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="Index of Priority" />
+				<Select value={String(priority)} onValueChange={handlePriority}>
+					<SelectTrigger className="w-[140px]">
+						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="0">0</SelectItem>
-						<SelectItem value="1">1</SelectItem>
-						<SelectItem value="2">2</SelectItem>
-						<SelectItem value="3">3</SelectItem>
-						<SelectItem value="4">4</SelectItem>
-						<SelectItem value="5">5</SelectItem>
-						<SelectItem value="6">6</SelectItem>
-						<SelectItem value="7">7</SelectItem>
-						<SelectItem value="8">8</SelectItem>
-						<SelectItem value="9">9</SelectItem>
+						<SelectItem value="0">Normal</SelectItem>
+						<SelectItem value="1">High</SelectItem>
+						<SelectItem value="2">Urgent</SelectItem>
 					</SelectContent>
 				</Select>
 			</TableCell>
+			<Separator />
 		</TableRow>
 	);
 };
+
+const priorityColors = {
+	0: "text-green-500 border-green-500",
+	1: "text-orange-500 border-orange-500",
+	2: "text-red-500 border-red-500",
+};
+
+const statusColors: Record<string, string> = {
+	pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
+	approved: "bg-green-100 text-green-800 border-green-300",
+	rejected: "bg-red-100 text-red-800 border-red-300",
+};
+
+export default RequestsTable;

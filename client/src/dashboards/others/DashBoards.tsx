@@ -53,14 +53,15 @@ const DashBoards = () => {
 	const [mainTabValue, setMainTabValue] = useState("all");
 	const [searchQuery, setSearchQuery] = useState("");
 
-	const filteredRequests = meetings[0]?.filter((request) => {
-		const matchesStatus =
-			mainTabValue === "all" ? true : request.status === mainTabValue;
-		const matchesSearch = request.visitorName
-			.toLowerCase()
-			.includes(searchQuery.toLowerCase());
-		return matchesStatus && matchesSearch;
-	});
+	const filteredRequests =
+		meetings[0]?.filter((request) => {
+			const matchesStatus =
+				mainTabValue === "all" ? true : request.status === mainTabValue;
+			const matchesSearch = request.visitorName
+				.toLowerCase()
+				.includes(searchQuery.toLowerCase());
+			return matchesStatus && matchesSearch;
+		}) || [];
 
 	const getStatusCount = (status: string): number =>
 		meetings[0]?.filter((request) =>

@@ -11,10 +11,6 @@ const appointmentSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
-        priorityIndex: {
-            type: Number,
-            default: 0,
-        },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
@@ -24,7 +20,7 @@ const appointmentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             default: null,
-        },
+        }, 
         notes: {
             type: String,
             default: '',

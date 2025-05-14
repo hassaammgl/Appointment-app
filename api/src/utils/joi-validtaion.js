@@ -114,6 +114,7 @@ export const validateReqMeeting = (body) => {
 
     return reqMeetingSchema.validate(body, { abortEarly: false });
 };
+
 export const validateCancelReq = (body) => {
     const cancelReqSchema = Joi.object({
         _id: Joi.string()
@@ -125,4 +126,35 @@ export const validateCancelReq = (body) => {
     });
 
     return cancelReqSchema.validate(body, { abortEarly: false });
+};
+
+export const validateApproveAndRej = (body) => {
+    const approveAndRejSchema = Joi.object({
+        _id: Joi.string()
+            .required()
+            .max(24)
+            .messages({
+                'string.empty': 'Request id is required',
+            }),
+    });
+
+    return approveAndRejSchema.validate(body, { abortEarly: false });
+};
+
+export const validateUpdatePriority = (body) => {
+    const validateUpdatePrioritySchema = Joi.object({
+        _id: Joi.string()
+            .required()
+            .max(24)
+            .messages({
+                'string.empty': 'Request id is required',
+            }),
+        value: Joi.number()
+            .required()
+            .messages({
+                'number.empty': 'Priority value is required',
+            }),
+    });
+
+    return validateUpdatePrioritySchema.validate(body, { abortEarly: false });
 };
