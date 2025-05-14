@@ -1,3 +1,5 @@
+/// [TODO]: working on fetch by roles
+
 import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import { persist, devtools } from "zustand/middleware";
@@ -62,6 +64,7 @@ interface MeetingState {
 	approveMeetingReq: (reqId: string) => Promise<void>;
 	rejectMeetingReq: (reqId: string) => Promise<void>;
 	updatePriority: (reqid: string, value: number) => Promise<void>;
+	fetchAllReqsByRoles: (userId: string) => Promise<void>;
 	clearError: () => void;
 }
 
@@ -172,6 +175,21 @@ export const useMeetings = create<MeetingState>()(
 						set({ isLoading: true, error: null });
 						const { data } = await axiosInstance.get(
 							"/protected/get-all-reqs"
+						);
+						set({ meetings: [data?.allMettings] });
+					} catch (err: any) {
+						const errorMessage = getErrorMessage(err);
+						set({ error: errorMessage });
+						throw new Error(errorMessage);
+					} finally {
+						set({ isLoading: false });
+					}
+				},
+				fetchAllReqsByRoles: async (userId) => {
+					try {
+						set({ isLoading: true, error: null });
+						const { data } = await axiosInstance.get(
+							`/protected/get-reqs-by-roles/${userId}`
 						);
 						set({ meetings: [data?.allMettings] });
 					} catch (err: any) {
