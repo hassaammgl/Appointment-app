@@ -7,11 +7,35 @@ import { useState } from "react";
 import { useMeetings } from "@/store/mettings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+// ----------------- Interfaces -----------------
+
+interface Meeting {
+	_id?: string;
+	visitorName?: string;
+	visitorNo?: string;
+	visitorCnic?: string;
+	purpose?: string;
+	status?: string;
+	priority?: number;
+	createdBy?: string;
+	to?: string;
+	notes?: string;
+	createdAt?: string;
+	updatedAt?: string;
+	__v?: number;
+}
+
+interface BadgeCardsProps {
+	meetings: Meeting[]; // keep expecting an array here
+	typeFilter: string;
+}
+
+// ----------------- Dashboard Component -----------------
+
 const ReceptionistDashBoard = () => {
 	const [tabValue, setTabValue] = useState("requests");
 	const { user } = useAuth();
 	const { meetings } = useMeetings();
-	console.log(user);
 
 	return (
 		<AppLayout allowedRoles={["receptionist"]}>
@@ -26,8 +50,12 @@ const ReceptionistDashBoard = () => {
 				</div>
 
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-					{["pending", "approved", "rejected"].map((type, i) => (
-						<BadgeCards meetings={meetings[0]} typeFilter={type} />
+					{["pending", "approved", "rejected"].map((type) => (
+						<BadgeCards
+							key={type}
+							meetings={meetings[0]} // ✅ kept as requested
+							typeFilter={type}
+						/>
 					))}
 				</div>
 
@@ -64,39 +92,24 @@ const ReceptionistDashBoard = () => {
 
 export default ReceptionistDashBoard;
 
-interface Metting {
-	_id?: string;
-	visitorName?: string;
-	visitorNo?: string;
-	visitorCnic?: string;
-	purpose?: string;
-	status?: string;
-	priority?: number;
-	createdBy?: string;
-	to?: string;
-	notes?: string;
-	createdAt?: string;
-	updatedAt?: string;
-	__v?: number;
-}
+// ----------------- BadgeCards Component -----------------
 
-interface BadgeCardsInterface {
-	meetings: Metting[];
-	typeFilter: string;
-}
+const BadgeCards = ({ meetings, typeFilter }: BadgeCardsProps) => {
+	const typeTitleMap: Record<string, string> = {
+		pending: "Pending Requests",
+		approved: "Approved Requests",
+		rejected: "Rejected Requests",
+	};
 
-const BadgeCards = ({ meetings, typeFilter }: BadgeCardsInterface) => {
 	return (
 		<Card className="w-full">
 			<CardHeader>
-				<CardTitle>Rejected Requests</CardTitle>
+				<CardTitle>{typeTitleMap[typeFilter] ?? "Meetings"}</CardTitle>
 			</CardHeader>
 			<CardContent className="text-6xl flex justify-end">
-				{
-					meetings.filter((met) => {
-						return met.status === typeFilter;
-					}).length
-				}
+				{Array.isArray(meetings)
+					? meetings.filter((met) => met.status === typeFilter).length
+					: 0}
 			</CardContent>
 		</Card>
 	);

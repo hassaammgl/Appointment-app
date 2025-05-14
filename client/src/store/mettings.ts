@@ -35,6 +35,7 @@ interface Appointment2 {
 	purpose?: string;
 	status?: "pending" | "approved" | "rejected";
 	priority?: 0 | 1 | 2;
+	priorityIndex?: number;
 	createdBy?: string;
 	to?: string;
 	notes?: string;
