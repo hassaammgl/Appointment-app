@@ -57,8 +57,6 @@ const T_Row = ({ data }: { data: Appointment }) => {
 		useMeetings();
 	const { info, removeAllToasts, success, error: errToast } = useToast();
 
-	console.log(typeof data.priority);
-
 	const [priority, setPriority] = useState(data.priority);
 
 	const handleApprove = async () => {

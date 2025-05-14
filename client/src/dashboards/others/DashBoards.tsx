@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMeetings } from "@/store/mettings";
 import { useEffect, useState } from "react";
 import RequestsTable from "./RequestsTable";
-// import type { Appointment } from "@/store/mettings";
 
 interface StatsArrType {
 	title: string;
@@ -44,9 +43,16 @@ const StatsArr: StatsArrType[] = [
 
 const DashBoards = () => {
 	const { fetchAllReq, meetings } = useMeetings();
+	const [isFetchAgain, setIsFetchAgain] = useState(false);
+
 	useEffect(() => {
 		fetchAllReq();
-	}, [fetchAllReq]);
+	}, [fetchAllReq, isFetchAgain]);
+
+	setInterval(() => {
+		console.log("Fetching again");
+		setIsFetchAgain((prev) => !prev);
+	}, 1000 * 60);
 
 	console.table(meetings[0].visitorName);
 
