@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const appointmentSchema = new mongoose.Schema(
     {
         visitorName: { type: String, required: true, trim: true, },
-        visitorNo: { type: String, required: true, },
+        visitorNo: { type: String, },
         visitorCnic: { type: String, },
         purpose: { type: String, },
         status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending', },
@@ -20,7 +20,7 @@ const appointmentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             default: null,
-        }, 
+        },
         notes: {
             type: String,
             default: '',

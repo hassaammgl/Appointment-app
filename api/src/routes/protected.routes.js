@@ -20,6 +20,7 @@ router.delete("/cancel-req/:id", isAuthenticated, authorize('receptionist'), can
 router.put("/approve-req/:id", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), approveMeetingReq)
 router.put("/reject-req/:id", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), rejectMeetingReq)
 router.put("/update-priority/:id", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), updatePriorityOfReq)
-router.get("/get-reqs-by-roles/:role/:page/:limit", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), getReqsByRolesWithPagination)
+// router.get("/get-reqs-by-roles/:role/:page/:limit", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), getReqsByRolesWithPagination)
+router.get("/get-reqs-by-roles/:id", isAuthenticated, authorize("ceo", "cfo", "cto", "gm"), getReqsByRolesWithPagination)
 
 export default router;

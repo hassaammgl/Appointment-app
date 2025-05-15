@@ -15,13 +15,15 @@ export interface Appointment {
 	purpose: string;
 	status?: "pending" | "approved" | "rejected";
 	priority: 0 | 1 | 2;
-	createdBy: {
+	createdBy?: {
 		_id: string;
 		username: string;
+		role: string;
 	};
 	to?: {
 		_id: string;
 		username: string;
+		role: string;
 	};
 	notes: string;
 	createdAt: string;
@@ -53,10 +55,6 @@ interface MeetingState {
 	allRoles: User[];
 	meetings: Appointment[];
 	isLoading: boolean;
-	page: number;
-	totalMettings: number;
-	limit: number;
-	totalPages: number;
 	message: string | null;
 	error: string | null;
 	getAllRoles: () => Promise<void>;
@@ -66,11 +64,7 @@ interface MeetingState {
 	approveMeetingReq: (reqId: string) => Promise<void>;
 	rejectMeetingReq: (reqId: string) => Promise<void>;
 	updatePriority: (reqid: string, value: number) => Promise<void>;
-	fetchAllReqsByRoles: (
-		role: string,
-		page: number,
-		limit: number
-	) => Promise<void>;
+	fetchAllReqsByRoles: (role: string, userId: string) => Promise<void>;
 	clearError: () => void;
 }
 
@@ -81,10 +75,6 @@ export const useMeetings = create<MeetingState>()(
 				allRoles: [],
 				meetings: [],
 				isLoading: false,
-				page: 1,
-				limit: 2,
-				totalMettings: 0,
-				totalPages: 0,
 				message: null,
 				error: null,
 				getAllRoles: async () => {
@@ -195,15 +185,14 @@ export const useMeetings = create<MeetingState>()(
 						set({ isLoading: false });
 					}
 				},
-				fetchAllReqsByRoles: async (role, page, limit) => {
+				fetchAllReqsByRoles: async (userId) => {
 					try {
 						set({ isLoading: true, error: null });
 						const { data } = await axiosInstance.get(
-							`/protected/get-reqs-by-roles/${role}/${page}/${limit}`
+							`/protected/get-reqs-by-roles/${userId}`
 						);
 						set({
-							meetings: [data?.data],
-							totalMettings: data?.total,
+							meetings: data?.mettings,
 						});
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);

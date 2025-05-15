@@ -1,5 +1,6 @@
 import { AppLayout } from "@/layout/Applayout";
 import { useAuth } from "@/store/auth";
+import DashBoards from "@/dashboards/others/DashBoards";
 
 const CTODashBoard = () => {
 	const { user } = useAuth();
@@ -10,7 +11,9 @@ const CTODashBoard = () => {
 			<div className="space-y-8">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
-						CTO Dashboard
+						(CTO){" "}
+						<span className="text-green-500">{user?.username}</span>{" "}
+						Dashboard
 					</h1>
 					<p className="text-muted-foreground">
 						Technology strategy and innovation dashboard for
@@ -18,8 +21,7 @@ const CTODashBoard = () => {
 						development teams
 					</p>
 				</div>
-
-				{/* {user && <MeetingRequestsPanel userId={user.id} />} */}
+				<DashBoards />
 			</div>
 		</AppLayout>
 	);

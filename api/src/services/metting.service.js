@@ -1,5 +1,6 @@
 import Users from "../models/user.model"
 import Meeting from "../models/appointments.model"
+import mongoose from "mongoose";
 
 export const getRoles = async () => {
     console.log("Getting roles");
@@ -128,92 +129,19 @@ export const updateAppointmentPriority = async (_id, value) => {
     return true
 }
 
-export const getReqsWithUserRole = async (role, page = 1, limit = 10) => {
-    console.log(role, page, limit);
-    const myRole = "gm"
 
-    const pageNumber = parseInt(page) || 1;
-    const pageSize = parseInt(limit) || 10;
-    const skip = (pageNumber - 1) * pageSize;
+export const getReqsWithUserRole = async (userId) => {
 
-    const matchStage = myRole
-        ? {
-            'toUser.role': myRole
-        }
-        : {};
+    // const isUserExist = await Users.findById({ _id: userId })
 
-    const basePipeline = [
-        { $sort: { createdAt: -1 } },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'to',
-                foreignField: '_id',
-                as: 'toUser'
-            }
-        },
-        {
-            $unwind: {
-                path: '$toUser',
-                preserveNullAndEmptyArrays: true
-            }
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'createdBy',
-                foreignField: '_id',
-                as: 'createdByUser'
-            }
-        },
-        {
-            $unwind: {
-                path: '$createdByUser',
-                preserveNullAndEmptyArrays: true
-            }
-        },
-        ...(role ? [{ $match: matchStage }] : []),
-        {
-            $project: {
-                visitorName: 1,
-                visitorNo: 1,
-                visitorCnic: 1,
-                purpose: 1,
-                notes: 1,
-                status: 1,
-                priority: 1,
-                priorityIndex: 1,
-                createdAt: 1,
-                updatedAt: 1,
-                to: {
-                    _id: '$toUser._id',
-                    username: '$toUser.username',
-                    role: '$toUser.role'
-                },
-                createdBy: {
-                    _id: '$createdByUser._id',
-                    username: '$createdByUser.username'
-                }
-            }
-        }
-    ];
+    // console.log(isUserExist);
 
-    const countPipeline = [...basePipeline, { $count: 'total' }];
-    const countResult = await Meeting.aggregate(countPipeline);
-    const total = countResult[0]?.total || 0;
 
-    const paginatedPipeline = [...basePipeline, { $skip: skip }, { $limit: pageSize }];
-    const allMeetings = await Meeting.aggregate(paginatedPipeline);
-    const data = {
-        total,
-        page: pageNumber,
-        limit: pageSize,
-        totalPages: Math.ceil(total / pageSize),
-        data: allMeetings
-    }
+    const allMeetings = await Meeting.find({ to: new mongoose.Types.ObjectId(userId) }) // ✅ Corrected
+        .populate({ path: "to", select: "_id username role" })
+        .sort({ createdAt: -1 });
 
-    console.log(data)
+    console.log(allMeetings);
 
-    return data
-
-}
+    return allMeetings;
+};

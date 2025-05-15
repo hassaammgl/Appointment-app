@@ -1,5 +1,6 @@
 import { AppLayout } from "@/layout/Applayout";
 import { useAuth } from "@/store/auth";
+import DashBoards from "@/dashboards/others/DashBoards";
 
 const GMDashBoard = () => {
 	const { user } = useAuth();
@@ -10,7 +11,9 @@ const GMDashBoard = () => {
 			<div className="space-y-8">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
-						General Manager Dashboard
+						(General Manager){" "}
+						<span className="text-green-500">{user?.username}</span>{" "}
+						Dashboard
 					</h1>
 					<p className="text-muted-foreground">
 						Operations and management dashboard for overseeing daily
@@ -18,8 +21,7 @@ const GMDashBoard = () => {
 						coordination
 					</p>
 				</div>
-
-				{/* {user && <MeetingRequestsPanel userId={user.id} />} */}
+				<DashBoards />
 			</div>
 		</AppLayout>
 	);

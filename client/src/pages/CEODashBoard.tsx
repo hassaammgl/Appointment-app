@@ -1,6 +1,6 @@
 import { AppLayout } from "@/layout/Applayout";
-import DashBoards from "@/dashboards/others/DashBoards";
 import { useAuth } from "@/store/auth";
+import DashBoards from "@/dashboards/others/DashBoards";
 
 const CEODashBoard = () => {
 	const { user } = useAuth();

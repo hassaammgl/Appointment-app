@@ -215,24 +215,20 @@ export const updatePriorityOfReq = async (req, res, next) => {
 
 export const getReqsByRolesWithPagination = async (req, res, next) => {
     try {
-        console.log(req.params.role);
-        console.log(req.params.page);
-        console.log(req.params.limit);
+        console.log(req.params.id);
 
 
         const { error } = validateGetReqsByRole({
-            role: req.params.role,
-            page: req.params.page,
-            limit: req.params.limit
+            _id: req.params.id
         });
         if (error) {
             console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
-            const response = await getReqsWithUserRole(req.params.role, req.params.page, req.params.limit)
+            const response = await getReqsWithUserRole(req.params.id)
             if (response) {
-                res.status(Status.OK).json({ success: true, data: response });
+                res.status(Status.OK).json({ success: true, mettings: response });
             }
             else {
                 throw new AppError("Error while Updating")
