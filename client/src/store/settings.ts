@@ -5,6 +5,7 @@ interface Settings {
 	addNotes: boolean;
 	addPersonCnic: boolean;
 	addPurpose: boolean;
+	addPersonContact: boolean;
 }
 
 interface SettingsState {
@@ -20,6 +21,7 @@ export const useSettings = create<SettingsState>()(
 				addNotes: false,
 				addPersonCnic: false,
 				addPurpose: false,
+				addPersonContact: false,
 			},
 			updateSetting: (key, value) =>
 				set((state) => ({
@@ -34,6 +36,7 @@ export const useSettings = create<SettingsState>()(
 						addNotes: false,
 						addPersonCnic: false,
 						addPurpose: false,
+						addPersonContact: false,
 					},
 				}),
 		}),

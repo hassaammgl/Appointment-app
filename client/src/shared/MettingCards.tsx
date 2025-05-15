@@ -108,12 +108,14 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 				</div>
 				<Separator />
 				<div className="text-sm space-y-1">
-					<p>
-						<strong>Contact:</strong>{" "}
-						{showDetails
-							? meeting.visitorNo
-							: maskPhone(meeting.visitorNo)}
-					</p>
+					{settings.addPersonContact && meeting.visitorNo && (
+						<p>
+							<strong>Contact:</strong>{" "}
+							{showDetails
+								? meeting.visitorNo
+								: maskPhone(meeting.visitorNo)}
+						</p>
+					)}
 					{settings.addPersonCnic && meeting.visitorCnic && (
 						<p>
 							<strong>CNIC:</strong>{" "}
@@ -122,26 +124,32 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 								: maskCnic(meeting.visitorCnic)}
 						</p>
 					)}
-					<Button
-						variant="link"
-						size="sm"
-						className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
-						onClick={() => setShowDetails(!showDetails)}
-					>
-						{showDetails ? (
-							<>
-								{"Hide "}
-								<EyeClosed />
-							</>
-						) : (
-							<>
-								{"Show "}
-								<Eye />
-							</>
-						)}
-					</Button>
+					{((settings.addPersonContact && meeting.visitorNo) ||
+						(settings.addPersonCnic && meeting.visitorCnic)) && (
+						<Button
+							variant="link"
+							size="sm"
+							className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
+							onClick={() => setShowDetails(!showDetails)}
+						>
+							{showDetails ? (
+								<>
+									{"Hide "}
+									<EyeClosed />
+								</>
+							) : (
+								<>
+									{"Show "}
+									<Eye />
+								</>
+							)}
+						</Button>
+					)}
 				</div>
-				<Separator />
+				{((settings.addPersonContact && meeting.visitorNo) ||
+					(settings.addPersonCnic && meeting.visitorCnic)) && (
+					<Separator />
+				)}
 
 				<div className="text-sm space-y-1">
 					<p>
