@@ -48,7 +48,7 @@ const SettingsPage = () => {
 
 					{/* Toggle: Add CNIC */}
 					<div className="flex items-center justify-between p-4 rounded-xl border shadow-sm">
-						<Label htmlFor="add-cnic">Enable Id Field</Label>
+						<Label htmlFor="add-cnic">Enable ID No. Field</Label>
 						<Switch
 							id="add-cnic"
 							checked={settings.addPersonCnic}
@@ -58,9 +58,11 @@ const SettingsPage = () => {
 						/>
 					</div>
 					<div className="flex items-center justify-between p-4 rounded-xl border shadow-sm">
-						<Label htmlFor="add-cnic">Enable Contact Field</Label>
+						<Label htmlFor="add-contact">
+							Enable Contact Field
+						</Label>
 						<Switch
-							id="add-cnic"
+							id="add-contact"
 							checked={settings.addPersonContact}
 							onCheckedChange={(val) =>
 								updateSetting("addPersonContact", val)

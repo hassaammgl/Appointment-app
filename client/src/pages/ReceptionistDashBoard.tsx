@@ -53,7 +53,7 @@ const ReceptionistDashBoard = () => {
 					{["pending", "approved", "rejected"].map((type) => (
 						<BadgeCards
 							key={type}
-							meetings={meetings[0]} // ✅ kept as requested
+							meetings={meetings} // ✅ kept as requested
 							typeFilter={type}
 						/>
 					))}

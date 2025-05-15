@@ -76,21 +76,19 @@ export const validateReqMeeting = (body) => {
             }),
         visitorNo: Joi.string()
             .pattern(/^\d{4}-\d{7}$/)
-            .required()
+            .allow('', null)
             .messages({
                 'string.empty': 'Visitor number is required',
                 'string.pattern.base': 'Visitor number must be numeric',
             }),
         visitorCnic: Joi.string()
             .pattern(/^\d{5}-\d{7}-\d{1}$/)
-            // .required()
             .allow('', null)
             .messages({
                 'string.empty': 'CNIC is required',
                 'string.pattern.base': 'CNIC must be in the format 12345-1234567-1',
             }),
         purpose: Joi.string()
-            // .required()
             .allow('', null)
             .messages({
                 'string.empty': 'Purpose is required',
@@ -150,6 +148,28 @@ export const validateUpdatePriority = (body) => {
                 'string.empty': 'Request id is required',
             }),
         value: Joi.number()
+            .required()
+            .messages({
+                'number.empty': 'Priority value is required',
+            }),
+    });
+
+    return validateUpdatePrioritySchema.validate(body, { abortEarly: false });
+};
+
+export const validateGetReqsByRole = (body) => {
+    const validateUpdatePrioritySchema = Joi.object({
+        role: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Request id is required',
+            }),
+        page: Joi.number()
+            .required()
+            .messages({
+                'number.empty': 'Priority value is required',
+            }),
+        limit: Joi.number()
             .required()
             .messages({
                 'number.empty': 'Priority value is required',

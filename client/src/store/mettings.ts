@@ -1,5 +1,3 @@
-/// [TODO]: working on fetch by roles
-
 import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import { persist, devtools } from "zustand/middleware";
@@ -55,6 +53,10 @@ interface MeetingState {
 	allRoles: User[];
 	meetings: Appointment[];
 	isLoading: boolean;
+	page: number;
+	totalMettings: number;
+	limit: number;
+	totalPages: number;
 	message: string | null;
 	error: string | null;
 	getAllRoles: () => Promise<void>;
@@ -64,7 +66,11 @@ interface MeetingState {
 	approveMeetingReq: (reqId: string) => Promise<void>;
 	rejectMeetingReq: (reqId: string) => Promise<void>;
 	updatePriority: (reqid: string, value: number) => Promise<void>;
-	fetchAllReqsByRoles: (userId: string) => Promise<void>;
+	fetchAllReqsByRoles: (
+		role: string,
+		page: number,
+		limit: number
+	) => Promise<void>;
 	clearError: () => void;
 }
 
@@ -75,6 +81,10 @@ export const useMeetings = create<MeetingState>()(
 				allRoles: [],
 				meetings: [],
 				isLoading: false,
+				page: 1,
+				limit: 2,
+				totalMettings: 0,
+				totalPages: 0,
 				message: null,
 				error: null,
 				getAllRoles: async () => {
@@ -176,7 +186,7 @@ export const useMeetings = create<MeetingState>()(
 						const { data } = await axiosInstance.get(
 							"/protected/get-all-reqs"
 						);
-						set({ meetings: [data?.allMettings] });
+						set({ meetings: data?.allMettings });
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);
 						set({ error: errorMessage });
@@ -185,13 +195,16 @@ export const useMeetings = create<MeetingState>()(
 						set({ isLoading: false });
 					}
 				},
-				fetchAllReqsByRoles: async (userId) => {
+				fetchAllReqsByRoles: async (role, page, limit) => {
 					try {
 						set({ isLoading: true, error: null });
 						const { data } = await axiosInstance.get(
-							`/protected/get-reqs-by-roles/${userId}`
+							`/protected/get-reqs-by-roles/${role}/${page}/${limit}`
 						);
-						set({ meetings: [data?.allMettings] });
+						set({
+							meetings: [data?.data],
+							totalMettings: data?.total,
+						});
 					} catch (err: any) {
 						const errorMessage = getErrorMessage(err);
 						set({ error: errorMessage });

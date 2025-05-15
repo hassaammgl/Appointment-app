@@ -16,7 +16,7 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
 	const { fetchAllReq, meetings } = useMeetings();
 
-	console.table(meetings[0]);
+	console.table(meetings);
 
 	const toggleFetchAgain = () => {
 		setIsFetchAgain((prev) => !prev);
@@ -51,7 +51,7 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 			</div>
 
 			{/* Render Cards */}
-			{meetings[0]?.length > 0 ? (
+			{meetings?.length > 0 ? (
 				<div
 					className={
 						layout === "grid"
@@ -59,7 +59,7 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 							: "flex flex-col gap-4"
 					}
 				>
-					{meetings[0]?.map((meeting) => (
+					{meetings?.map((meeting) => (
 						<MettingCards
 							key={meeting?._id}
 							meeting={meeting}

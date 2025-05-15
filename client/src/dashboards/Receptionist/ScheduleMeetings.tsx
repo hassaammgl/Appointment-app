@@ -29,7 +29,7 @@ interface ScheduleMeetingsProps {
 }
 
 const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
-	const { isLoading, getAllRoles, allRoles, createMeetingReq, message } =
+	const { isLoading, getAllRoles, allRoles, createMeetingReq } =
 		useMeetings();
 	const { error: errToast, info, success, removeAllToasts } = useToast();
 	const { settings } = useSettings();
@@ -54,7 +54,7 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 			return;
 		}
 		const phonePattern = /^\d{4}-\d{7}$/;
-		if (!phonePattern.test(visitorNo)) {
+		if (settings.addPersonContact && !phonePattern.test(visitorNo)) {
 			errToast("Invalid phone number format!");
 			return;
 		}
@@ -108,13 +108,17 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 								required
 							/>
 						</div>
-						<div className="space-y-2">
-							<Label htmlFor="visitor-no">Phone Number:</Label>
-							<PhoneNumberInput
-								value={visitorNo}
-								onChange={setVisitorNo}
-							/>
-						</div>
+						{settings.addPersonContact && (
+							<div className="space-y-2">
+								<Label htmlFor="visitor-no">
+									Phone Number:
+								</Label>
+								<PhoneNumberInput
+									value={visitorNo}
+									onChange={setVisitorNo}
+								/>
+							</div>
+						)}
 						{settings.addPersonCnic && (
 							<div className="space-y-2">
 								<Label htmlFor="visitor-cnic">CNIC:</Label>

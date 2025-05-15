@@ -112,14 +112,11 @@ export const cancelMettingReq = async (_id) => {
 
 export const approveRejectMettingReq = async (_id, type) => {
     console.log(_id, "type " + type);
-
     const req = await Meeting.findByIdAndUpdate({ _id }, {
         status: type
     })
     console.log(req);
-
     return true
-
 }
 
 export const updateAppointmentPriority = async (_id, value) => {
@@ -128,7 +125,95 @@ export const updateAppointmentPriority = async (_id, value) => {
         priority: value
     })
     console.log(req);
-    
     return true
+}
+
+export const getReqsWithUserRole = async (role, page = 1, limit = 10) => {
+    console.log(role, page, limit);
+    const myRole = "gm"
+
+    const pageNumber = parseInt(page) || 1;
+    const pageSize = parseInt(limit) || 10;
+    const skip = (pageNumber - 1) * pageSize;
+
+    const matchStage = myRole
+        ? {
+            'toUser.role': myRole
+        }
+        : {};
+
+    const basePipeline = [
+        { $sort: { createdAt: -1 } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'to',
+                foreignField: '_id',
+                as: 'toUser'
+            }
+        },
+        {
+            $unwind: {
+                path: '$toUser',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdByUser'
+            }
+        },
+        {
+            $unwind: {
+                path: '$createdByUser',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        ...(role ? [{ $match: matchStage }] : []),
+        {
+            $project: {
+                visitorName: 1,
+                visitorNo: 1,
+                visitorCnic: 1,
+                purpose: 1,
+                notes: 1,
+                status: 1,
+                priority: 1,
+                priorityIndex: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                to: {
+                    _id: '$toUser._id',
+                    username: '$toUser.username',
+                    role: '$toUser.role'
+                },
+                createdBy: {
+                    _id: '$createdByUser._id',
+                    username: '$createdByUser.username'
+                }
+            }
+        }
+    ];
+
+    const countPipeline = [...basePipeline, { $count: 'total' }];
+    const countResult = await Meeting.aggregate(countPipeline);
+    const total = countResult[0]?.total || 0;
+
+    const paginatedPipeline = [...basePipeline, { $skip: skip }, { $limit: pageSize }];
+    const allMeetings = await Meeting.aggregate(paginatedPipeline);
+    const data = {
+        total,
+        page: pageNumber,
+        limit: pageSize,
+        totalPages: Math.ceil(total / pageSize),
+        data: allMeetings
+    }
+
+    console.log(data)
+
+    return data
 
 }

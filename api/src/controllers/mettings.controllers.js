@@ -1,6 +1,20 @@
 import { AppError, ValidationError } from '../utils/AppError.js';
-import { validateReqMeeting, validateCancelReq, validateApproveAndRej, validateUpdatePriority } from "../utils/joi-validtaion.js"
-import { updateAppointmentPriority, getRoles, createMettings, getAllMettings, cancelMettingReq, approveRejectMettingReq } from "../services/metting.service.js"
+import {
+    validateReqMeeting,
+    validateCancelReq,
+    validateApproveAndRej,
+    validateUpdatePriority,
+    validateGetReqsByRole
+} from "../utils/joi-validtaion.js"
+import {
+    updateAppointmentPriority,
+    getRoles,
+    createMettings,
+    getAllMettings,
+    cancelMettingReq,
+    approveRejectMettingReq,
+    getReqsWithUserRole
+} from "../services/metting.service.js"
 import Status from "http-status-codes"
 
 export const createMettingReq = async (req, res, next) => {
@@ -199,3 +213,39 @@ export const updatePriorityOfReq = async (req, res, next) => {
     }
 };
 
+export const getReqsByRolesWithPagination = async (req, res, next) => {
+    try {
+        console.log(req.params.role);
+        console.log(req.params.page);
+        console.log(req.params.limit);
+
+
+        const { error } = validateGetReqsByRole({
+            role: req.params.role,
+            page: req.params.page,
+            limit: req.params.limit
+        });
+        if (error) {
+            console.log(error);
+            throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+        }
+        try {
+            const response = await getReqsWithUserRole(req.params.role, req.params.page, req.params.limit)
+            if (response) {
+                res.status(Status.OK).json({ success: true, data: response });
+            }
+            else {
+                throw new AppError("Error while Updating")
+            }
+        } catch (dbError) {
+            if (dbError.code === 11000) {
+                throw new ValidationError('Something happened while fetching data from db');
+            } else if (dbError.name === 'MongoError') {
+                throw new AppError('Database error occurred', 500);
+            }
+            throw dbError;
+        }
+    } catch (err) {
+        next(err);
+    }
+} 

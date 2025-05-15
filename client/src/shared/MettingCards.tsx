@@ -118,7 +118,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 					)}
 					{settings.addPersonCnic && meeting.visitorCnic && (
 						<p>
-							<strong>CNIC:</strong>{" "}
+							<strong>ID No:</strong>{" "}
 							{showDetails
 								? meeting.visitorCnic
 								: maskCnic(meeting.visitorCnic)}
