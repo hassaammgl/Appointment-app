@@ -21,8 +21,8 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 		return cn(
 			"flex items-center gap-3 px-3 py-2 rounded-md transition-all",
 			isActive
-				? "bg-primary text-primary-foreground"
-				: "text-muted-foreground hover:bg-secondary hover:text-foreground"
+				? "bg-primary text-white"
+				: "text-muted-foreground hover:bg-secondary hover:text-white"
 		);
 	};
 
@@ -59,7 +59,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 				</button>
 			</div>
 
-			<nav className="flex-1 px-3 py-4 space-y-1">
+			<nav className="flex-1 px-3 py-4 space-y-1 group">
 				<NavLink
 					to={dashboardLink}
 					className={getNavLinkClass(dashboardLink)}
@@ -83,7 +83,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 			<div className="p-3 mt-auto border-t border-border">
 				<button
 					onClick={logout}
-					className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors"
+					className="flex items-center gap-3 w-full px-3 py-2 rounded-md hover:bg-destructive hover:text-destructive-foreground transition-colors text-white"
 				>
 					<LogOut size={20} />
 					{isOpen && <span>Logout</span>}
