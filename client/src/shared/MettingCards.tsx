@@ -172,7 +172,11 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 			<Separator />
 			<CardFooter className="text-sm flex justify-between text-muted-foreground">
 				<span>{new Date(meeting.createdAt).toLocaleString()}</span>
-				<Button onClick={handleCancelMeeting} variant={"destructive"}>
+				<Button
+					disabled={meeting.status !== "pending" ? true : false}
+					onClick={handleCancelMeeting}
+					variant={"destructive"}
+				>
 					Cancel Meeting
 				</Button>
 			</CardFooter>
