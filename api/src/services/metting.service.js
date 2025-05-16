@@ -43,62 +43,10 @@ export const createMettings = async (data) => {
 };
 
 export const getAllMettings = async () => {
-    const allMeetings = await Meeting.aggregate([
-        { $sort: { createdAt: -1 } },
-
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'to',
-                foreignField: '_id',
-                as: 'toUser'
-            }
-        },
-        {
-            $unwind: {
-                path: '$toUser',
-                preserveNullAndEmptyArrays: true
-            }
-        },
-
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'createdBy',
-                foreignField: '_id',
-                as: 'createdByUser'
-            }
-        },
-        {
-            $unwind: {
-                path: '$createdByUser',
-                preserveNullAndEmptyArrays: true
-            }
-        },
-
-        {
-            $project: {
-                visitorName: 1,
-                visitorNo: 1,
-                visitorCnic: 1,
-                purpose: 1,
-                notes: 1,
-                status: 1,
-                priority: 1,
-                priorityIndex: 1,
-                createdAt: 1,
-                updatedAt: 1,
-                to: {
-                    _id: '$toUser._id',
-                    username: '$toUser.username'
-                },
-                createdBy: {
-                    _id: '$createdByUser._id',
-                    username: '$createdByUser.username'
-                }
-            }
-        }
-    ]);
+    const allMeetings = await Meeting.find()
+        .populate({ path: "to", select: "_id username role" })
+        .populate({ path: "createdBy", select: "_id username role" })
+        .sort({ createdAt: -1 });
 
     return allMeetings
 };
@@ -131,12 +79,6 @@ export const updateAppointmentPriority = async (_id, value) => {
 
 
 export const getReqsWithUserRole = async (userId) => {
-
-    // const isUserExist = await Users.findById({ _id: userId })
-
-    // console.log(isUserExist);
-
-
     const allMeetings = await Meeting.find({ to: new mongoose.Types.ObjectId(userId) }) // ✅ Corrected
         .populate({ path: "to", select: "_id username role" })
         .sort({ createdAt: -1 });

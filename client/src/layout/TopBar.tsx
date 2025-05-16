@@ -1,9 +1,5 @@
 import { useAuth } from "@/store/auth";
-import {
-	Avatar,
-	AvatarFallback,
-	// AvatarImage
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -16,11 +12,7 @@ import {
 import { Menu, User, LogOut, Settings2 } from "lucide-react";
 import { NavLink } from "react-router";
 
-interface TopBarProps {
-	toggleSidebar: () => void;
-}
-
-export const TopBar = ({ toggleSidebar }: TopBarProps) => {
+export const TopBar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
 	const { user, logout } = useAuth();
 
 	return (

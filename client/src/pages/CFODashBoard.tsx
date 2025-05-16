@@ -4,7 +4,6 @@ import DashBoards from "@/dashboards/others/DashBoards";
 
 const CFODashBoard = () => {
 	const { user } = useAuth();
-	console.log(user);
 
 	return (
 		<AppLayout allowedRoles={["cfo"]}>

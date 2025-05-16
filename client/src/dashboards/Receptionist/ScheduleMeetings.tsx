@@ -22,11 +22,7 @@ import {
 } from "@/components/ui/select";
 import { AxiosError } from "axios";
 import { useSettings } from "@/store/settings";
-
-interface ScheduleMeetingsProps {
-	userId?: string;
-	setTabValue: (data: string) => void;
-}
+import type { ScheduleMeetingsProps } from "@/types";
 
 const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 	const { isLoading, getAllRoles, allRoles, createMeetingReq } =
@@ -156,11 +152,7 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 						)}
 						<div className="space-y-2">
 							<Label htmlFor="to">To:</Label>
-							<Select
-								value={to}
-								defaultValue={`${allRoles[0]?.username}-${allRoles[0]?.id}`}
-								onValueChange={setTo}
-							>
+							<Select value={to} onValueChange={setTo}>
 								<SelectTrigger className="w-[200px]">
 									<SelectValue placeholder="Select recipient" />
 								</SelectTrigger>
@@ -168,7 +160,7 @@ const ScheduleMeetings = ({ userId, setTabValue }: ScheduleMeetingsProps) => {
 									{allRoles && allRoles.length > 0 ? (
 										allRoles.map((r, i) => (
 											<SelectItem
-												key={r.id ?? i}
+												key={r._id ?? i}
 												value={`${r.username}-${r._id}`}
 											>
 												({r.role}) - {r.username}

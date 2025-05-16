@@ -4,7 +4,6 @@ import DashBoards from "@/dashboards/others/DashBoards";
 
 const GMDashBoard = () => {
 	const { user } = useAuth();
-	console.log(user);
 
 	return (
 		<AppLayout allowedRoles={["gm"]}>

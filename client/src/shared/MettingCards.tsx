@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMeetings } from "@/store/mettings";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,14 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
 import { AxiosError } from "axios";
 import { EyeClosed, Eye } from "lucide-react";
-import type { Appointment as Meeting } from "@/store/mettings";
+import type { MeetingCardInterface } from "@/types";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/store/settings";
-
-interface MeetingCardInterface {
-	meeting: Meeting;
-	toggleFetchAgain: () => void;
-}
 
 const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 	const [showDetails, setShowDetails] = useState(false);
@@ -92,7 +87,10 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 					</Badge>
 					<Badge
 						className={`${
-							statusColors[meeting?.status]
+							statusColors[
+								(meeting?.status as keyof typeof statusColors) ||
+									"pending"
+							]
 						} border-[1px] rounded-full uppercase`}
 					>
 						{meeting.status}
@@ -153,7 +151,11 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 
 				<div className="text-sm space-y-1">
 					<p>
-						<b>With:</b> {meeting?.to?.username}
+						<b>With:</b>{" "}
+						<span className="text-green-500">
+							({meeting?.to?.role})
+						</span>{" "}
+						{meeting?.to?.username}
 					</p>
 				</div>
 

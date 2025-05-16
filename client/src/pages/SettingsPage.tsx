@@ -32,7 +32,6 @@ const SettingsPage = () => {
 						/>
 					</div>
 
-					{/* Toggle: Add Purpose */}
 					<div className="flex items-center justify-between p-4 rounded-xl border shadow-sm">
 						<Label htmlFor="add-purpose">
 							Enable Purpose Field
@@ -46,7 +45,6 @@ const SettingsPage = () => {
 						/>
 					</div>
 
-					{/* Toggle: Add CNIC */}
 					<div className="flex items-center justify-between p-4 rounded-xl border shadow-sm">
 						<Label htmlFor="add-cnic">Enable ID No. Field</Label>
 						<Switch
@@ -70,7 +68,6 @@ const SettingsPage = () => {
 						/>
 					</div>
 
-					{/* Reset Button */}
 					<div className="pt-4 w-full relative">
 						<Button
 							variant="destructive"

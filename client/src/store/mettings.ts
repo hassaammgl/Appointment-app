@@ -1,72 +1,12 @@
 import { create } from "zustand";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { persist, devtools } from "zustand/middleware";
+import type { MeetingState } from "@/types";
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
 	withCredentials: true,
 });
-
-export interface Appointment {
-	_id: string;
-	visitorName: string;
-	visitorNo: string;
-	visitorCnic: string;
-	purpose: string;
-	status?: "pending" | "approved" | "rejected";
-	priority: 0 | 1 | 2;
-	createdBy?: {
-		_id: string;
-		username: string;
-		role: string;
-	};
-	to?: {
-		_id: string;
-		username: string;
-		role: string;
-	};
-	notes: string;
-	createdAt: string;
-	updatedAt: string;
-}
-interface Appointment2 {
-	_id?: string;
-	visitorName?: string;
-	visitorNo?: string;
-	visitorCnic?: string;
-	purpose?: string;
-	status?: "pending" | "approved" | "rejected";
-	priority?: 0 | 1 | 2;
-	createdBy?: string;
-	to?: string;
-	notes?: string;
-	createdAt?: string;
-	updatedAt?: string;
-}
-
-interface User {
-	_id: string;
-	email: string;
-	username: string;
-	role: string;
-}
-
-interface MeetingState {
-	allRoles: User[];
-	meetings: Appointment[];
-	isLoading: boolean;
-	message: string | null;
-	error: string | null;
-	getAllRoles: () => Promise<void>;
-	createMeetingReq: (formData: Partial<Appointment2>) => Promise<void>;
-	fetchAllReq: () => Promise<void>;
-	cancelMeetingReq: (reqId: string) => Promise<void>;
-	approveMeetingReq: (reqId: string) => Promise<void>;
-	rejectMeetingReq: (reqId: string) => Promise<void>;
-	updatePriority: (reqid: string, value: number) => Promise<void>;
-	fetchAllReqsByRoles: (role: string, userId: string) => Promise<void>;
-	clearError: () => void;
-}
 
 export const useMeetings = create<MeetingState>()(
 	devtools(
@@ -215,10 +155,26 @@ export const useMeetings = create<MeetingState>()(
 	)
 );
 
-const getErrorMessage = (err: AxiosError): string => {
-	return (
-		err?.response?.data?.message ||
-		err?.message ||
-		"Something went wrong. Try again."
-	);
+// const getErrorMessage = (err: AxiosError): string => {
+// 	return (
+// 		err?.response?.data?.message ||
+// 		err?.message ||
+// 		"Something went wrong. Try again."
+// 	);
+// };
+
+export const getErrorMessage = (err: unknown): string => {
+	if (axios.isAxiosError(err)) {
+		return (
+			err.response?.data?.message ??
+			err.message ??
+			"Something went wrong. Try again."
+		);
+	}
+
+	if (err instanceof Error) {
+		return err.message;
+	}
+
+	return "Something went wrong. Try again.";
 };

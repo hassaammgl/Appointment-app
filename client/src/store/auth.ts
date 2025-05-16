@@ -1,37 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
+import type { AuthState } from "@/types";
 
 const axiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
 	withCredentials: true,
 });
 
-interface User {
-	id: string;
-	email: string;
-	username: string;
-	role: string;
-}
-
-interface AuthState {
-	user: User | null;
-	isAuthenticated: boolean;
-	isLoading: boolean;
-	error: string | null;
-	login: (email: string, password: string) => Promise<void>;
-	signup: (
-		email: string,
-		password: string,
-		username: string,
-		role: string
-	) => Promise<void>;
-	logout: () => Promise<void>;
-	checkAuth: () => Promise<void>;
-	clearError: () => void;
-}
-
-// 🔥 Central error parser
 const getErrorMessage = (err: any): string => {
 	return (
 		err?.response?.data?.message ||

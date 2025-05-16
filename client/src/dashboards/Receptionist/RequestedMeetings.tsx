@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMeetings } from "@/store/mettings";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import MettingCards from "@/shared/MettingCards";
-
-interface ScheduleMeetingsProps {
-	userId?: string;
-	setTabValue: (data: string) => void;
-}
+import type { ScheduleMeetingsProps } from "@/types";
 
 const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 	const [isFetchAgain, setIsFetchAgain] = useState<boolean>(false);

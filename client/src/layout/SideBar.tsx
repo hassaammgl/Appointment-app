@@ -6,13 +6,10 @@ import {
 	LayoutDashboard,
 	LogOut,
 	User,
+	Settings2,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router";
-
-interface SidebarProps {
-	isOpen: boolean;
-	toggleSidebar: () => void;
-}
+import type { SidebarProps } from "@/types";
 
 export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 	const { user, logout } = useAuth();
@@ -29,7 +26,6 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 		);
 	};
 
-	// Determine dashboard link based on user role
 	const dashboardLink = user?.role ? `/${user.role}-dashboard` : "/login";
 
 	return (
@@ -74,6 +70,13 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 				<NavLink to="/profile" className={getNavLinkClass("/profile")}>
 					<User size={20} />
 					{isOpen && <span>Profile</span>}
+				</NavLink>
+				<NavLink
+					to="/settings"
+					className={getNavLinkClass("/settings")}
+				>
+					<Settings2 size={20} />
+					{isOpen && <span>Settings</span>}
 				</NavLink>
 			</nav>
 

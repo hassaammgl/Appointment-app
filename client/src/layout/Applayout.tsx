@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
-import type { ReactNode } from "react";
 import { useAuth } from "@/store/auth";
 import { Sidebar } from "@/layout/SideBar";
 import { TopBar } from "@/layout/TopBar";
 import { ModeToggle } from "@/components/mode-toogle";
 import { useNavigate } from "react-router";
-
-interface AppLayoutProps {
-	children: ReactNode;
-	allowedRoles?: string[];
-}
+import type { AppLayoutProps } from "@/types";
 
 export const AppLayout = ({ children, allowedRoles = [] }: AppLayoutProps) => {
 	const navigate = useNavigate();
@@ -24,7 +19,6 @@ export const AppLayout = ({ children, allowedRoles = [] }: AppLayoutProps) => {
 			allowedRoles.length > 0 &&
 			!allowedRoles.includes(user.role)
 		) {
-			// Redirect to appropriate dashboard if user doesn't have permission
 			switch (user.role) {
 				case "cto":
 					navigate("/cto-dashboard");

@@ -1,4 +1,4 @@
-import type { Appointment } from "@/store/mettings";
+import type { Appointment } from "@/types";
 import {
 	Table,
 	TableBody,

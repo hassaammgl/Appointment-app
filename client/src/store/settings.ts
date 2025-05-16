@@ -1,18 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { SettingsState } from "@/types";
 
-interface Settings {
-	addNotes: boolean;
-	addPersonCnic: boolean;
-	addPurpose: boolean;
-	addPersonContact: boolean;
-}
-
-interface SettingsState {
-	settings: Settings;
-	updateSetting: (key: keyof Settings, value: boolean) => void;
-	resetSettings: () => void;
-}
 
 export const useSettings = create<SettingsState>()(
 	persist(

@@ -1,12 +1,7 @@
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
+import type { StatsCardsType } from "@/types";
 
-type StatsCardsTypes = {
-	title: string;
-	length: number;
-	Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-};
-
-const StatsCards = ({ title, length, Icon }: StatsCardsTypes) => {
+const StatsCards = ({ title, length, Icon }: StatsCardsType) => {
 	return (
 		<Card>
 			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

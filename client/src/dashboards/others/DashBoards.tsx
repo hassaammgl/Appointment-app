@@ -12,12 +12,7 @@ import { useMeetings } from "@/store/mettings";
 import { useEffect, useState } from "react";
 import RequestsTable from "./RequestsTable";
 import { useAuth } from "@/store/auth";
-
-interface StatsArrType {
-	title: string;
-	lengthName: string;
-	Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}
+import type { StatsArrType } from "@/types";
 
 const StatsArr: StatsArrType[] = [
 	{
@@ -46,6 +41,8 @@ const DashBoards = () => {
 	const { fetchAllReqsByRoles, meetings = [] } = useMeetings();
 	const [isFetchAgain, setIsFetchAgain] = useState(false);
 	const { user } = useAuth();
+
+	console.table(user);
 
 	useEffect(() => {
 		fetchAllReqsByRoles(user?.id);
