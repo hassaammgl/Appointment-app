@@ -26,6 +26,11 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 		);
 	};
 
+	const getNavIconClass = (path: string) => {
+		const isActive = location.pathname === path;
+		return cn("", isActive ? "text-white" : "text-green-500");
+	};
+
 	const dashboardLink = user?.role ? `/${user.role}-dashboard` : "/login";
 
 	return (
@@ -64,18 +69,24 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 					to={dashboardLink}
 					className={getNavLinkClass(dashboardLink)}
 				>
-					<LayoutDashboard size={20} />
+					<LayoutDashboard
+						className={getNavIconClass(dashboardLink)}
+						size={20}
+					/>
 					{isOpen && <span>Dashboard</span>}
 				</NavLink>
 				<NavLink to="/profile" className={getNavLinkClass("/profile")}>
-					<User size={20} />
+					<User className={getNavIconClass("/profile")} size={20} />
 					{isOpen && <span>Profile</span>}
 				</NavLink>
 				<NavLink
 					to="/settings"
 					className={getNavLinkClass("/settings")}
 				>
-					<Settings2 size={20} />
+					<Settings2
+						className={getNavIconClass("/settings")}
+						size={20}
+					/>
 					{isOpen && <span>Settings</span>}
 				</NavLink>
 			</nav>
