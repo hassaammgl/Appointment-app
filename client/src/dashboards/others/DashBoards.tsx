@@ -83,7 +83,7 @@ const DashBoards = () => {
 						key={i}
 						title={val.title}
 						Icon={val.Icon}
-						length={getStatusCount(val.lengthName)}
+						length={getStatusCount(val.lengthName ?? "all")}
 					/>
 				))}
 			</div>
