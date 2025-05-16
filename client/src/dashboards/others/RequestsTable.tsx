@@ -16,6 +16,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/toast";
 import { useMeetings } from "@/store/mettings";
@@ -37,7 +45,9 @@ const RequestsTable = ({
 			<TableHeader>
 				<TableRow>
 					<TableHead>Visitor Name</TableHead>
-					<TableHead>Visitor No</TableHead>
+					{settings.addPersonContact && (
+						<TableHead>Visitor No</TableHead>
+					)}
 					{settings.addPersonCnic && (
 						<TableHead>Visitor CNIC</TableHead>
 					)}
@@ -84,7 +94,6 @@ const T_Row = ({
 	const { info, removeAllToasts, success, error: errToast } = useToast();
 	const [priority, setPriority] = useState(data.priority);
 
-	// Sync local state with incoming data
 	useEffect(() => {
 		setPriority(data.priority);
 	}, [data.priority]);
@@ -147,7 +156,9 @@ const T_Row = ({
 	return (
 		<TableRow>
 			<TableCell className="font-medium">{data.visitorName}</TableCell>
-			<TableCell className="font-medium">{data.visitorNo}</TableCell>
+			{settings.addPersonContact && (
+				<TableCell className="font-medium">{data.visitorNo}</TableCell>
+			)}
 			{settings.addPersonCnic && (
 				<TableCell className="font-medium">
 					{data.visitorCnic}
@@ -194,9 +205,71 @@ const T_Row = ({
 						</Button>
 					</div>
 				) : (
-					<Button size="sm" variant="ghost">
-						View Details
-					</Button>
+					<Dialog>
+						<DialogTrigger>
+							<Button size="sm" variant="ghost">
+								View Details
+							</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								{settings.addPurpose && (
+									<DialogTitle>{data.purpose}</DialogTitle>
+								)}
+								<DialogDescription>
+									<div className="text-sm space-y-1">
+										<p>
+											<strong>Visitor:</strong>{" "}
+											{data.visitorName}
+										</p>
+									</div>
+									<Separator />
+									<div className="text-sm space-y-1">
+										{settings.addPersonContact &&
+											data.visitorNo && (
+												<p>
+													<strong>Contact:</strong>{" "}
+													{data.visitorNo}
+												</p>
+											)}
+										{settings.addPersonCnic &&
+											data.visitorCnic && (
+												<p>
+													<strong>ID No:</strong>{" "}
+													{data.visitorCnic}
+												</p>
+											)}
+									</div>
+									{((settings.addPersonContact &&
+										data.visitorNo) ||
+										(settings.addPersonCnic &&
+											data.visitorCnic)) && <Separator />}
+
+									<div className="text-sm space-y-1">
+										<p>
+											<b>With:</b>{" "}
+											<span className="text-green-500">
+												({data?.to?.role})
+											</span>{" "}
+											{data?.to?.username}
+										</p>
+									</div>
+
+									{settings.addNotes && <Separator />}
+									{settings.addNotes && data.notes && (
+										<div className="pt-2">
+											<p className="text-sm font-medium">
+												Notes:
+											</p>
+											<p className="text-sm text-muted-foreground">
+												{data.notes}
+											</p>
+										</div>
+									)}
+								</DialogDescription>
+							</DialogHeader>
+						</DialogContent>
+					</Dialog>
 				)}
 			</TableCell>
 			<TableCell>
