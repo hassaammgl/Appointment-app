@@ -43,12 +43,15 @@ export const createMettings = async (data) => {
 };
 
 export const getAllMettings = async () => {
-    const allMeetings = await Meeting.find()
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0); // sets to 00:00:00 today
+
+    const allMeetings = await Meeting.find({ createdAt: { $gte: startOfToday } })
         .populate({ path: "to", select: "_id username role" })
         .populate({ path: "createdBy", select: "_id username role" })
         .sort({ createdAt: -1 });
 
-    return allMeetings
+    return allMeetings;
 };
 
 export const cancelMettingReq = async (_id) => {
@@ -78,8 +81,15 @@ export const updateAppointmentPriority = async (_id, value) => {
 }
 
 
+
 export const getReqsWithUserRole = async (userId) => {
-    const allMeetings = await Meeting.find({ to: new mongoose.Types.ObjectId(userId) }) // ✅ Corrected
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const allMeetings = await Meeting.find({
+        to: new mongoose.Types.ObjectId(userId),
+        createdAt: { $gte: startOfToday },
+    })
         .populate({ path: "to", select: "_id username role" })
         .sort({ createdAt: -1 });
 
@@ -87,3 +97,4 @@ export const getReqsWithUserRole = async (userId) => {
 
     return allMeetings;
 };
+
