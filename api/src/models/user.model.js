@@ -1,3 +1,4 @@
+import { required } from 'joi';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -8,6 +9,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['receptionist', 'ceo', 'cto', 'gm', 'cfo'],
         required: true
+    },
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
     },
 });
 

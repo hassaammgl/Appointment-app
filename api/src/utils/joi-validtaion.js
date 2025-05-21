@@ -46,7 +46,7 @@ export const validateRegister = (body) => {
             then: Joi.string().required().messages({
                 'string.empty': 'Organization is required for CEO'
             }),
-            otherwise: Joi.forbidden()
+            otherwise: Joi.string().allow('').optional()
         })
     });
 
