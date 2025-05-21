@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router";
 import type { SidebarProps } from "@/types";
+import PremiumInfo from "@/components/PremiumInfo";
 
 export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 	const { user, logout } = useAuth();
@@ -92,6 +93,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 			</nav>
 
 			<div className="p-3 mt-auto border-t border-border">
+				<PremiumInfo />
 				<button
 					onClick={logout}
 					className="flex items-center gap-3 w-full px-3 py-2 rounded-md hover:bg-destructive hover:text-destructive-foreground transition-colors text-white"

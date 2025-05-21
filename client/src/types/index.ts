@@ -110,14 +110,21 @@ type AuthUser = {
 	email: string;
 	username: string;
 	role: string;
-	organization: string;
 };
+
+type organization = {
+	name: string;
+	isPremium: boolean;
+	premiumStartedAt: string;
+	premiumExpiresAt: string;
+}
 
 export type AuthState = {
 	user: AuthUser | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
 	error: string | null;
+	organization: organization | null;
 	login: (email: string, password: string) => Promise<void>;
 	signup: (
 		email: string,
@@ -128,6 +135,7 @@ export type AuthState = {
 	) => Promise<void>;
 	logout: () => Promise<void>;
 	checkAuth: () => Promise<void>;
+	getOrganization: () => Promise<void>;
 	clearError: () => void;
 };
 

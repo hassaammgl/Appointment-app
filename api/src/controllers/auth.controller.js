@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from '../services/auth.service.js';
+import { registerUser, loginUser, getOrg } from '../services/auth.service.js';
 import { validateRegister, validateLogin } from '../utils/joi-validtaion.js';
 import { AppError, ValidationError, AuthenticationError } from '../utils/AppError.js';
 
@@ -62,4 +62,26 @@ export const login = async (req, res, next) => {
 export const logout = (req, res) => {
     req.session.destroy(() => res.json({ message: 'Logged out 👋' }));
 };
- 
+
+export const getOrganization = async (req, res, next) => {
+    try {
+        console.log("Getting Org details");
+        try {
+            const org = await getOrg({ _id: req.session.user.organization });
+            if (!org) {
+                throw new AppError('Organization not found', 404);
+            }
+            res.status(200).json({ message: 'Org data fetched 🎉', organization: org });
+        } catch (dbError) {
+            if (dbError.code === 11000) {
+                throw new ValidationError('Something happened in database but try to change their values');
+            } else if (dbError.name === 'MongoError') {
+                throw new AppError('Database error occurred', 500);
+            }
+            throw dbError;
+        }
+    } catch (err) {
+        next(err);
+    }
+
+};

@@ -25,3 +25,12 @@ export const loginUser = async (email, password) => {
     if (!user || !(await argon.verify(user.password, password))) return null;
     return user;
 };
+
+export const getOrg = async ({ _id }) => {
+    const org = await Organization.findById({ _id });
+    if (!org) {
+        throw new Error('Organization not found');
+    }
+    console.log(org);
+    return org;
+}

@@ -23,6 +23,7 @@ export const useAuth = create<AuthState>()(
 			isAuthenticated: false,
 			isLoading: false,
 			error: null,
+			organization: null,
 
 			login: async (email, password) => {
 				try {
@@ -85,6 +86,20 @@ export const useAuth = create<AuthState>()(
 					set({ user: data.user, isAuthenticated: true });
 				} catch {
 					await get().logout(); // logout clears state too
+				} finally {
+					set({ isLoading: false });
+				}
+			},
+
+			getOrganization: async () => {
+				try {
+					set({ isLoading: true, error: null });
+					const { data } = await axiosInstance.get("/protected/get-organization");
+					set({ organization: data.organization, });
+				} catch (err: any) {
+					const errorMessage = getErrorMessage(err);
+					set({ error: errorMessage });
+					throw new Error(errorMessage);
 				} finally {
 					set({ isLoading: false });
 				}
