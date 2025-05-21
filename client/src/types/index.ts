@@ -110,6 +110,7 @@ type AuthUser = {
 	email: string;
 	username: string;
 	role: string;
+	organization: string;
 };
 
 export type AuthState = {

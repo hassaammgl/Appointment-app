@@ -4,7 +4,6 @@ import { AppError, ValidationError, AuthenticationError } from '../utils/AppErro
 
 export const register = async (req, res, next) => {
     console.log('Registering user:', req.body);
-    
     try {
         const { error } = validateRegister(req.body);
         console.log(error);
@@ -46,6 +45,7 @@ export const login = async (req, res, next) => {
                 role: user.role,
                 email: user.email,
                 username: user.username,
+                organization: user.organization,
             };
             res.json({ message: 'Logged in 🛜', user: req.session.user });
         } catch (dbError) {
