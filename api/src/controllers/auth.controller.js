@@ -3,6 +3,8 @@ import { validateRegister, validateLogin } from '../utils/joi-validtaion.js';
 import { AppError, ValidationError, AuthenticationError } from '../utils/AppError.js';
 
 export const register = async (req, res, next) => {
+    console.log('Registering user:', req.body);
+    
     try {
         const { error } = validateRegister(req.body);
         console.log(error);
@@ -10,7 +12,6 @@ export const register = async (req, res, next) => {
             console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
-
         try {
             const user = await registerUser(req.body);
             res.status(201).json({ message: 'User created 🎉', user });

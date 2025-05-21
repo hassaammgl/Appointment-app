@@ -28,6 +28,8 @@ const SignupPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [role, setRole] = useState("receptionist");
+	const [organization, setOrganization] = useState("");
+
 
 	const navigate = useNavigate();
 	const { error, success } = useToast();
@@ -36,7 +38,7 @@ const SignupPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			await signup(email, password, name, role);
+			await signup(email, password, name, role, organization);
 			success("Account created successfully! 🎉");
 			navigate("/login");
 		} catch (err) {
@@ -59,7 +61,7 @@ const SignupPage = () => {
 						<span className="text-green-500">Smart</span> App
 					</h1>
 					<p className="mt-2 text-muted-foreground">
-						Create a new account
+						Create a new account {"and Organization"}
 					</p>
 				</div>
 
@@ -128,6 +130,18 @@ const SignupPage = () => {
 									</SelectContent>
 								</Select>
 							</div>
+							{role === "ceo" && <div className="space-y-2 mb-2">
+								<Label htmlFor="organization">Organization</Label>
+								<Input
+									id="organization"
+									type="text"
+									value={organization}
+									onChange={(e) =>
+										setOrganization(e.target.value)
+									}
+									required
+								/>
+							</div>}
 						</CardContent>
 						<CardFooter className="flex flex-col space-y-4">
 							<Button

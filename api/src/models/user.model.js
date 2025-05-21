@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['receptionist', 'ceo', 'cto', 'gm', 'cfo'],
         required: true
-    }
+    },
 });
 
 userSchema.pre('save', async function (next) {
@@ -17,7 +17,6 @@ userSchema.pre('save', async function (next) {
 
         if (existingCEO && existingCEO._id.toString() !== this._id.toString()) {
             const error = new Error('A CEO already exists in the system');
-            // @ts-ignore
             error.statusCode = 400;
             return next(error);
         }
@@ -25,6 +24,5 @@ userSchema.pre('save', async function (next) {
 
     next();
 });
-
 
 export default mongoose.model('User', userSchema);

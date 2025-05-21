@@ -43,7 +43,7 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
-			signup: async (email, password, username, role) => {
+			signup: async (email, password, username, role, organization) => {
 				try {
 					set({ isLoading: true, error: null });
 
@@ -54,6 +54,7 @@ export const useAuth = create<AuthState>()(
 							password,
 							username,
 							role,
+							organization: organization,
 						}
 					);
 

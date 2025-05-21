@@ -122,9 +122,11 @@ export type AuthState = {
 		email: string,
 		password: string,
 		username: string,
-		role: string
+		role: string,
+		organization: string
 	) => Promise<void>;
 	logout: () => Promise<void>;
 	checkAuth: () => Promise<void>;
 	clearError: () => void;
 };
+

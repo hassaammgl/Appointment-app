@@ -39,7 +39,15 @@ export const validateRegister = (body) => {
             .messages({
                 'string.empty': 'Role is required',
                 'any.only': 'Role must be one of: receptionist, ceo, cto, cfo, or gm'
-            })
+            }),
+
+        organization: Joi.when('role', {
+            is: 'ceo',
+            then: Joi.string().required().messages({
+                'string.empty': 'Organization is required for CEO'
+            }),
+            otherwise: Joi.forbidden()
+        })
     });
 
     return regValidate.validate(body, { abortEarly: false });
@@ -159,26 +167,11 @@ export const validateUpdatePriority = (body) => {
 
 export const validateGetReqsByRole = (body) => {
     const validateUpdatePrioritySchema = Joi.object({
-        // role: Joi.string()
-        //     .required()
-        //     .messages({
-        //         'string.empty': 'Request id is required',
-        //     }),
         _id: Joi.string()
             .required()
             .messages({
                 'string.empty': 'Request id is required',
             }),
-        // page: Joi.number()
-        //     .required()
-        //     .messages({
-        //         'number.empty': 'Priority value is required',
-        //     }),
-        // limit: Joi.number()
-        //     .required()
-        //     .messages({
-        //         'number.empty': 'Priority value is required',
-        //     }),
     });
 
     return validateUpdatePrioritySchema.validate(body, { abortEarly: false });
