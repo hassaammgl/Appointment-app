@@ -9,6 +9,7 @@ import CFODashBoard from "@/pages/CFODashBoard";
 import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
 import GMDashBoard from "@/pages/GMDashBoard";
 import SettingsPage from "@/pages/SettingsPage";
+import RenewalPage from "@/pages/RenewalPage";
 
 const routes = [
 	{
@@ -50,6 +51,10 @@ const routes = [
 	{
 		path: "/gm-dashboard",
 		element: <GMDashBoard />,
+	},
+	{
+		path: "/dev/:id/renew",
+		element: <RenewalPage />,
 	},
 	{
 		path: "*",

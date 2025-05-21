@@ -87,7 +87,7 @@ export const getOrganization = async (req, res, next) => {
 };
 
 export const renewOrg = async (req, res, next) => {
-     try {
+    try {
         console.log("Renewing Org details");
         try {
             const org = await renewOrganisation();
