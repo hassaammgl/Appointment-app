@@ -105,6 +105,10 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
+			renewOrganization: async () => {
+
+			},
+
 			clearError: () => set({ error: null }),
 		}),
 		{
