@@ -3,6 +3,7 @@ import { useSettings } from "@/store/settings";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import PremiumInfo from "@/components/PremiumInfo";
 
 const SettingsPage = () => {
 	const { resetSettings, settings, updateSetting } = useSettings();
@@ -77,6 +78,10 @@ const SettingsPage = () => {
 							Reset to Defaults
 						</Button>
 					</div>
+				</div>
+
+				<div className="mt-6">
+					<PremiumInfo />
 				</div>
 			</div>
 		</AppLayout>

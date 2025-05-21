@@ -34,3 +34,20 @@ export const getOrg = async ({ _id }) => {
     console.log(org);
     return org;
 }
+
+export const renewOrganisation = async () => {
+  const org = await Organization.find()[0];
+  if (!org) {
+    throw new Error("Organization not found");
+  }
+
+  const now = new Date();
+  const baseDate = org.premiumExpiresAt > now ? org.premiumExpiresAt : now;
+
+  org.premiumStartedAt = baseDate;
+  org.premiumExpiresAt = new Date(baseDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+  org.isPremium = true;
+
+  await org.save();
+  return org;
+};
