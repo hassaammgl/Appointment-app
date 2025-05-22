@@ -50,7 +50,8 @@ const RenewalPage = () => {
             </div>
             <div className="container mx-auto p-4">
                 {
-                    loading ? <h1 className="text-white">Loading....</h1> :
+                    loading ?
+                        <h1 className="text-white">Loading....</h1> :
                         <div>
 
                             <Button onClick={handleRenew}>Renew</Button>
