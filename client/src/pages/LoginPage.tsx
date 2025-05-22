@@ -23,6 +23,17 @@ const LoginPage = () => {
 	const { error, success } = useToast();
 	const { login, isLoading } = useAuth();
 
+
+	// function generateSecretKey(length = 32) {
+	// 	const array = new Uint8Array(length);
+	// 	crypto.getRandomValues(array); // 🎲 cryptographically strong RNG
+	// 	return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+	// }
+
+	// const secretKey = generateSecretKey(); // Default: 32 bytes = 256 bits
+	// console.log('Secret key:', secretKey);
+
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {

@@ -105,8 +105,18 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
-			renewOrganization: async () => {
-
+			renewOrganization: async (id) => {
+				try {
+					set({ isLoading: true, error: null });
+					const { data } = await axiosInstance.post(`/protected/renew/${id}/org`);
+					set({ organization: data.organization, });
+				} catch (err: any) {
+					const errorMessage = getErrorMessage(err);
+					set({ error: errorMessage });
+					throw new Error(errorMessage);
+				} finally {
+					set({ isLoading: false });
+				}
 			},
 
 			clearError: () => set({ error: null }),

@@ -88,19 +88,19 @@ export const getOrganization = async (req, res, next) => {
 
 export const renewOrg = async (req, res, next) => {
     try {
-        console.log("Renewing Org details");
+        console.log("Renewing Org details "+ req.params.id);
         try {
             const org = await renewOrganisation();
-            if (!org) {
-                throw new AppError('Organization not found', 404);
-            }
-            res.status(200).json({ message: 'Org data renewed 🎉', organization: org });
+        //     if (!org) {
+        //         throw new AppError('Organization not found', 404);
+        //     }
+        //     res.status(200).json({ message: 'Org data renewed 🎉', organization: org });
         } catch (dbError) {
-            if (dbError.code === 11000) {
-                throw new ValidationError('Something happened in database but try to change their values');
-            } else if (dbError.name === 'MongoError') {
-                throw new AppError('Database error occurred', 500);
-            }
+        //     if (dbError.code === 11000) {
+        //         throw new ValidationError('Something happened in database but try to change their values');
+        //     } else if (dbError.name === 'MongoError') {
+        //         throw new AppError('Database error occurred', 500);
+        //     }
             throw dbError;
         }
     } catch (err) {

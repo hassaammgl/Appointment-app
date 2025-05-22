@@ -136,7 +136,7 @@ export type AuthState = {
 	logout: () => Promise<void>;
 	checkAuth: () => Promise<void>;
 	getOrganization: () => Promise<void>;
-	renewOrganization: () => Promise<void>;
+	renewOrganization: (id: string) => Promise<void>;
 	clearError: () => void;
 };
 
