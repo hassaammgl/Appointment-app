@@ -25,6 +25,6 @@ router.put("/update-priority/:id", isAuthenticated, checkOrgPremium, authorize("
 router.get("/get-reqs-by-roles/:id", isAuthenticated, checkOrgPremium, authorize("ceo", "cfo", "cto", "gm"), getReqsByRolesWithPagination)
 
 router.get("/get-organization", isAuthenticated, checkOrgPremium, authorize('receptionist', "ceo", "cfo", "cto", "gm"), getOrganization)
-router.post("/renew/:id/org", renewOrg)
+router.post("/renew/:id/org", isAuthenticated, authorize("ceo"), renewOrg)
 
 export default router;

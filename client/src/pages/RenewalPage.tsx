@@ -26,9 +26,9 @@ const RenewalPage = () => {
         <AppLayout allowedRoles={["ceo"]}>
             <div className="space-y-8">
                 <div>
-                    <h1 className="text-3xl font-bold mb-4 text-white">Organization: {organization?.name} </h1>
+                    <h1 className="text-3xl font-bold mb-4 text-white">Organization <span className="text-green-500">{organization?.name}</span></h1>
                     <p className="text-muted-foreground">
-                        Renewal Page for {organization?.name}
+                        Renewal Page for <span className="text-green-500">{organization?.name}</span>
                     </p>
                 </div>
             </div>

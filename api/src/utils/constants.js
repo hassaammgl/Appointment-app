@@ -8,4 +8,5 @@ export const CONSTANTS = {
     SESSION_SECRET: process.env.SESSION_SECRET,
     CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
     NODE_ENV: process.env.NODE_ENV,
+    DEVELOPER_SECRET: process.env.DEVELOPER_SECRET,
 }
