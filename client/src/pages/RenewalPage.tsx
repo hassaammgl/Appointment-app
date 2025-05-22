@@ -3,23 +3,39 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router"
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/layout/Applayout";
+import { useToast } from "@/components/ui/toast";
+import { useNavigate } from "react-router";
+import { AxiosError } from "axios";
 
 const RenewalPage = () => {
     const { id } = useParams<{ id: string }>();
     const { organization, renewOrganization, getOrganization } = useAuth();
-    console.log(id);
     const [loading, setLoading] = useState(false)
+    const { success, error } = useToast()
+    const navigate = useNavigate()
+
     useEffect(() => {
         setLoading(true)
         getOrganization()
         setLoading(false)
     }, [getOrganization])
+    console.log(id);
 
     const handleRenew = async () => {
         setLoading(true)
-        await renewOrganization(id)
         setLoading(false)
-
+        try {
+            await renewOrganization(id)
+            success("You're  in! 🎉");
+            navigate("/profile");
+        } catch (err) {
+            const message =
+                (err as AxiosError<{ message?: string }>)?.response?.data
+                    ?.message ??
+                (err as Error)?.message ??
+                "Login failed 😵";
+            error(message);
+        }
     }
 
     return (
