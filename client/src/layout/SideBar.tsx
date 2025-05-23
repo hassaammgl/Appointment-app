@@ -35,11 +35,8 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 
 	return (
 		<aside
-			className={cn(
-				"bg-card border-r border-border transition-all duration-300 ease-in-out",
-				isOpen ? "w-64" : "w-16",
-				"h-screen sticky top-0 z-20 flex flex-col"
-			)}
+			className={`hidden md:flex bg-card border-r border-border transition-all duration-300 ease-in-out ${isOpen ? "w-64" : "w-16"} h-screen sticky top-0 z-20 flex flex-col`
+			}
 		>
 			<div className="flex items-center justify-between p-4 border-b border-border">
 				<h1

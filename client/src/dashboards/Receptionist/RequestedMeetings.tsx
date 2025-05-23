@@ -22,6 +22,10 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 		if (userId) fetchAllReq();
 	}, [fetchAllReq, userId, isFetchAgain]);
 
+	setTimeout(() => {
+		toggleFetchAgain();
+	}, 1000);
+
 	return (
 		<div className="w-full rounded-xl border border-accent p-4">
 			<h1 className="text-3xl font-bold mb-4 text-center">
