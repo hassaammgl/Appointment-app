@@ -8,12 +8,18 @@ import {
 	User,
 	Settings2,
 } from "lucide-react";
-import { NavLink, useLocation } from "react-router";
+// import { NavLink, useLocation } from "react-router";
 import type { SidebarProps } from "@/types";
+import { useRoute } from "@/store/route";
+import Link from "@/routes/Link";
 
 export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 	const { user, logout } = useAuth();
-	const location = useLocation();
+
+	const { route } = useRoute();
+		console.log(route);
+	
+	// const location = useLocation();
 	console.log(location);
 
 	const getNavLinkClass = (path: string) => {
@@ -62,7 +68,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 			</div>
 
 			<nav className="flex-1 px-3 py-4 space-y-1 group">
-				<NavLink
+				<Link
 					to={dashboardLink}
 					className={getNavLinkClass(dashboardLink)}
 				>
@@ -71,12 +77,12 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 						size={20}
 					/>
 					{isOpen && <span>Dashboard</span>}
-				</NavLink>
-				<NavLink to="/profile" className={getNavLinkClass("/profile")}>
+				</Link>
+				<Link to="/profile" className={getNavLinkClass("/profile")}>
 					<User className={getNavIconClass("/profile")} size={20} />
 					{isOpen && <span>Profile</span>}
-				</NavLink>
-				<NavLink
+				</Link>
+				<Link
 					to="/settings"
 					className={getNavLinkClass("/settings")}
 				>
@@ -85,7 +91,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 						size={20}
 					/>
 					{isOpen && <span>Settings</span>}
-				</NavLink>
+				</Link>
 			</nav>
 
 			<div className="p-3 mt-auto border-t border-border">

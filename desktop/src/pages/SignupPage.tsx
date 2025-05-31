@@ -17,11 +17,13 @@ import {
 	SelectItem,
 	SelectContent,
 } from "@/components/ui/select";
-import { NavLink, useNavigate } from "react-router";
+// import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
 import { ModeToggle } from "@/components/mode-toogle";
 import { AxiosError } from "axios";
+import { useRoute } from "@/store/route";
+import Link from "@/routes/Link";
 
 const SignupPage = () => {
 	const [name, setName] = useState("");
@@ -30,17 +32,18 @@ const SignupPage = () => {
 	const [role, setRole] = useState("receptionist");
 	const [organization, setOrganization] = useState("");
 
-
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const { error, success } = useToast();
 	const { signup, isLoading } = useAuth();
+	const { setRoute } = useRoute();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
 			await signup(email, password, name, role, organization);
 			success("Account created successfully! 🎉");
-			navigate("/login");
+			// navigate("/login");
+			setRoute("/login");
 		} catch (err) {
 			const message =
 				(err as AxiosError<{ message?: string }>)?.response?.data
@@ -130,18 +133,22 @@ const SignupPage = () => {
 									</SelectContent>
 								</Select>
 							</div>
-							{role === "ceo" && <div className="space-y-2 mb-2">
-								<Label htmlFor="organization">Organization</Label>
-								<Input
-									id="organization"
-									type="text"
-									value={organization}
-									onChange={(e) =>
-										setOrganization(e.target.value)
-									}
-									required
-								/>
-							</div>}
+							{role === "ceo" && (
+								<div className="space-y-2 mb-2">
+									<Label htmlFor="organization">
+										Organization
+									</Label>
+									<Input
+										id="organization"
+										type="text"
+										value={organization}
+										onChange={(e) =>
+											setOrganization(e.target.value)
+										}
+										required
+									/>
+								</div>
+							)}
 						</CardContent>
 						<CardFooter className="flex flex-col space-y-4">
 							<Button
@@ -153,12 +160,12 @@ const SignupPage = () => {
 							</Button>
 							<p className="text-center text-sm text-muted-foreground">
 								Already have an account?{" "}
-								<NavLink
+								<Link
 									to="/login"
 									className="text-green-500 hover:underline"
 								>
-									Sign In
-								</NavLink>
+									Login
+								</Link>
 							</p>
 						</CardFooter>
 					</form>

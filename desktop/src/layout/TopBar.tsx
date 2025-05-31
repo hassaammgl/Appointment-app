@@ -9,7 +9,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User, LogOut, Settings2, LayoutDashboard, } from "lucide-react";
+import { Menu, User, LogOut, Settings2, LayoutDashboard } from "lucide-react";
 import {
 	Sheet,
 	SheetContent,
@@ -17,20 +17,21 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-	SheetFooter
-} from "@/components/ui/sheet"
+	SheetFooter,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { NavLink, useLocation } from "react-router";
-
+// import { NavLink, useLocation } from "react-router";
+import { useRoute } from "@/store/route";
+import Link from "@/routes/Link";
 
 export const TopBar = () => {
 	const { user, logout } = useAuth();
 
-	const location = useLocation();
-	console.log(location);
+	const { route } = useRoute();
+	console.log(route);
 
 	const getNavLinkClass = (path: string) => {
-		const isActive = location.pathname === path;
+		const isActive = route === path;
 		return cn(
 			"flex items-center gap-3 px-3 py-2 rounded-md transition-all",
 			isActive
@@ -40,7 +41,7 @@ export const TopBar = () => {
 	};
 
 	const getNavIconClass = (path: string) => {
-		const isActive = location.pathname === path;
+		const isActive = route === path;
 		return cn("", isActive ? "text-white" : "text-green-500");
 	};
 
@@ -49,7 +50,7 @@ export const TopBar = () => {
 	return (
 		<header className="bg-card sticky top-0 z-10 border-b border-border px-4 py-3 md:py-2 flex items-center justify-between">
 			<div className="flex items-center justify-center">
-				<Sheet >
+				<Sheet>
 					<SheetTrigger asChild>
 						<Button
 							variant="ghost"
@@ -66,7 +67,8 @@ export const TopBar = () => {
 								{user?.role === "ceo" && "CEO Dashboard"}
 								{user?.role === "cfo" && "CFO Dashboard"}
 								{user?.role === "gm" && "GM Dashboard"}
-								{user?.role === "receptionist" && "Receptionist Dashboard"}
+								{user?.role === "receptionist" &&
+									"Receptionist Dashboard"}
 							</SheetTitle>
 							<SheetDescription>
 								<div className="flex items-center gap-2">
@@ -87,7 +89,7 @@ export const TopBar = () => {
 							</SheetDescription>
 						</SheetHeader>
 
-						<NavLink
+						<Link
 							to={dashboardLink}
 							className={getNavLinkClass(dashboardLink)}
 						>
@@ -96,12 +98,18 @@ export const TopBar = () => {
 								size={20}
 							/>
 							<span>Dashboard</span>
-						</NavLink>
-						<NavLink to="/profile" className={getNavLinkClass("/profile")}>
-							<User className={getNavIconClass("/profile")} size={20} />
+						</Link>
+						<Link
+							to="/profile"
+							className={getNavLinkClass("/profile")}
+						>
+							<User
+								className={getNavIconClass("/profile")}
+								size={20}
+							/>
 							<span>Profile</span>
-						</NavLink>
-						<NavLink
+						</Link>
+						<Link
 							to="/settings"
 							className={getNavLinkClass("/settings")}
 						>
@@ -110,9 +118,7 @@ export const TopBar = () => {
 								size={20}
 							/>
 							<span>Settings</span>
-						</NavLink>
-
-
+						</Link>
 
 						<SheetFooter>
 							<Button
@@ -165,18 +171,18 @@ export const TopBar = () => {
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<NavLink to="/profile">
+						<Link to="/profile">
 							<DropdownMenuItem>
 								<User className="mr-2 h-4 w-4" />
 								<span>Profile</span>
 							</DropdownMenuItem>
-						</NavLink>
-						<NavLink to="/settings">
+						</Link>
+						<Link to="/settings">
 							<DropdownMenuItem>
 								<Settings2 className="mr-2 h-4 w-4" />
 								<span>Settings</span>
 							</DropdownMenuItem>
-						</NavLink>
+						</Link>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={logout}>
 							<LogOut className="mr-2 h-4 w-4" />

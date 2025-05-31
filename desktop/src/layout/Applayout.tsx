@@ -3,17 +3,18 @@ import { useAuth } from "@/store/auth";
 import { Sidebar } from "@/layout/SideBar";
 import { TopBar } from "@/layout/TopBar";
 import { ModeToggle } from "@/components/mode-toogle";
-import { useNavigate } from "react-router";
+import { useRoute } from "@/store/route";
 import type { AppLayoutProps } from "@/types";
 
 export const AppLayout = ({ children, allowedRoles = [] }: AppLayoutProps) => {
-	const navigate = useNavigate();
 	const { user, isAuthenticated } = useAuth();
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 
+	const { setRoute, route } = useRoute();
+
 	useEffect(() => {
 		if (!isAuthenticated) {
-			navigate("/login");
+			setRoute("/login");
 		} else if (
 			user &&
 			allowedRoles.length > 0 &&
@@ -21,26 +22,26 @@ export const AppLayout = ({ children, allowedRoles = [] }: AppLayoutProps) => {
 		) {
 			switch (user.role) {
 				case "cto":
-					navigate("/cto-dashboard");
+					setRoute("/cto-dashboard");
 					break;
 				case "ceo":
-					navigate("/ceo-dashboard");
+					setRoute("/ceo-dashboard");
 					break;
 				case "cfo":
-					navigate("/cfo-dashboard");
+					setRoute("/cfo-dashboard");
 					break;
 				case "gm":
-					navigate("/gm-dashboard");
+					setRoute("/gm-dashboard");
 					break;
 				case "receptionist":
-					navigate("/receptionist-dashboard");
+					setRoute("/receptionist-dashboard");
 					break;
 
 				default:
-					navigate("/login");
+					setRoute("/login");
 			}
 		}
-	}, [isAuthenticated, user, allowedRoles, navigate]);
+	}, [isAuthenticated, user, allowedRoles, route]);
 
 	const toggleSidebar = () => {
 		setSidebarOpen(!sidebarOpen);

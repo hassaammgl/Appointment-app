@@ -10,16 +10,19 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
 import { ModeToggle } from "@/components/mode-toogle";
 import { AxiosError } from "axios";
+import Link from "@/routes/Link";
+import { useRoute } from "@/store/route";
 
 const LoginPage = () => {
+	const { setRoute } = useRoute();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const { error, success } = useToast();
 	const { login, isLoading } = useAuth();
 
@@ -28,7 +31,7 @@ const LoginPage = () => {
 		try {
 			await login(email, password);
 			success("You're in! 🎉");
-			navigate("/profile");
+			setRoute("/profile");
 		} catch (err) {
 			const message =
 				(err as AxiosError<{ message?: string }>)?.response?.data
@@ -96,13 +99,13 @@ const LoginPage = () => {
 								{isLoading ? "Loging in account..." : "Login"}
 							</Button>
 							<p className="text-center text-sm text-muted-foreground">
-								Don't have an account?{" "}
-								<NavLink
+								Don't have an account?
+								<Link
 									to="/signup"
 									className="text-green-500 hover:underline"
 								>
 									Sign In
-								</NavLink>
+								</Link>
 							</p>
 						</CardFooter>
 					</form>

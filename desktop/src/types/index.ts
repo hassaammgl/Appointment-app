@@ -140,3 +140,8 @@ export type AuthState = {
 	clearError: () => void;
 };
 
+
+export type RouteState = {
+	route: string;
+	setRoute: (route: string) => void
+};
