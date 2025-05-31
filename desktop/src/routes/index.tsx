@@ -7,6 +7,7 @@ import CFODashBoard from "@/pages/CFODashBoard";
 import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
 import GMDashBoard from "@/pages/GMDashBoard";
 import SettingsPage from "@/pages/SettingsPage";
+
 import { useRoute } from "@/store/route";
 
 const Route = () => {
@@ -30,9 +31,4 @@ const Route = () => {
 
 export default Route;
 
-// const routes = [
-// 	{
-// 		path: "/dev/:id/renew",
-// 		element: <RenewalPage />,
-// 	},
-// ];
+

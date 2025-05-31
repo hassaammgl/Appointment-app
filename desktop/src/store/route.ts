@@ -10,5 +10,3 @@ export const useRoute = create<RouteState>()(
         }),
     )
 );
-
-

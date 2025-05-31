@@ -16,14 +16,10 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 	const { user, logout } = useAuth();
 
 	const { route } = useRoute();
-	console.log(route);
-
-	console.log(location);
-
 	const getNavLinkClass = (path: string) => {
-		const isActive = location.pathname === path;
+		const isActive = route === path;
 		return cn(
-			"flex items-center gap-3 px-3 py-2 rounded-md transition-all",
+			"flex items-center justify-start gap-3 px-3 py-2 rounded-md transition-all",
 			isActive
 				? "bg-primary text-white"
 				: "text-muted-foreground hover:bg-secondary hover:text-white"
@@ -31,7 +27,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 	};
 
 	const getNavIconClass = (path: string) => {
-		const isActive = location.pathname === path;
+		const isActive = route === path;
 		return cn("", isActive ? "text-white" : "text-green-500");
 	};
 
@@ -66,7 +62,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 				</button>
 			</div>
 
-			<nav className="flex-1 px-3 py-4 space-y-1 group">
+			<nav className="flex-1 px-3 py-4 space-y-1 group flex flex-col">
 				<Link
 					to={dashboardLink}
 					className={getNavLinkClass(dashboardLink)}
