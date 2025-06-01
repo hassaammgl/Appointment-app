@@ -1,5 +1,5 @@
-import Users from "../models/user.model"
-import Meeting from "../models/appointments.model"
+import Users from "../models/user.model.js"
+import Meeting from "../models/appointments.model.js"
 import mongoose from "mongoose";
 
 export const getRoles = async () => {

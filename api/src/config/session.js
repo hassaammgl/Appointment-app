@@ -1,6 +1,6 @@
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-import { CONSTANTS } from '../utils/constants';
+import { CONSTANTS } from '../utils/constants.js';
 
 export const sessionMiddleware = session({
     secret: CONSTANTS.SESSION_SECRET,
