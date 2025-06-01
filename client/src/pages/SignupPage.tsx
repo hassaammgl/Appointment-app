@@ -157,7 +157,7 @@ const SignupPage = () => {
 									to="/login"
 									className="text-green-500 hover:underline"
 								>
-									Sign In
+									Login
 								</NavLink>
 							</p>
 						</CardFooter>
