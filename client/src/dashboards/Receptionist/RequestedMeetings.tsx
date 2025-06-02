@@ -7,24 +7,19 @@ import MettingCards from "@/shared/MettingCards";
 import type { ScheduleMeetingsProps } from "@/types";
 
 const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
-	const [isFetchAgain, setIsFetchAgain] = useState<boolean>(false);
+	const [isFetchAgain, setIsFetchAgain] = useState(false);
 	const [layout, setLayout] = useState<"grid" | "list">("grid");
 
 	const { fetchAllReq, meetings } = useMeetings();
 
 	console.table(meetings);
 
-	const toggleFetchAgain = () => {
-		setIsFetchAgain((prev) => !prev);
-	};
+	const toggleFetchAgain = () => setIsFetchAgain((prev) => !prev);
 
 	useEffect(() => {
 		if (userId) fetchAllReq();
-	}, [fetchAllReq, userId, isFetchAgain]);
-
-	setTimeout(() => {
-		toggleFetchAgain();
-	}, 1000);
+		setTimeout(toggleFetchAgain, 60000);
+	}, [isFetchAgain]);
 
 	return (
 		<div className="w-full rounded-xl border border-accent p-4">
