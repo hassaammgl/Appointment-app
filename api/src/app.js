@@ -18,18 +18,19 @@ app.use(sessionMiddleware);
 
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
-// Routes
-app.use('/auth', authRoutes);
-app.use('/protected', protectedRoutes);
-
-app.use(notFound);
-app.use(errorHandler);
-
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Hello world"
     })
 })
+
+app.use('/auth', authRoutes);
+app.use('/protected', protectedRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
+
+
 
 export default app;
