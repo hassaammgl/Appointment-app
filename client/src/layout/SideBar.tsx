@@ -46,7 +46,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 					)}
 				>
 					<h1 className="text-3xl font-bold">
-						<span className="text-green-500">Smart</span> App
+						<span className="text-green-500">Smart</span> Visitors
 					</h1>
 				</h1>
 				<button
