@@ -4,7 +4,7 @@ import { persist, devtools } from "zustand/middleware";
 import type { MeetingState } from "@/types";
 
 export const axiosInstance = axios.create({
-	baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+	baseURL: import.meta.env.VITE_API_URL || "https://sapps.site/api/",
 	withCredentials: true,
 });
 
