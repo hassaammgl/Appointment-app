@@ -18,15 +18,15 @@ app.use(sessionMiddleware);
 
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
-app.get("/", (req, res) => {
+app.get("/api/ping", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Hello world"
     })
 })
 
-app.use('/auth', authRoutes);
-app.use('/protected', protectedRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/protected', protectedRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
