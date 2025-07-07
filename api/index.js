@@ -10,5 +10,5 @@ await connectDB().then(() => {
 
 const PORT = CONSTANTS.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log('API running on port 5000');
+    console.log(`API running on port ${PORT}`);
 });

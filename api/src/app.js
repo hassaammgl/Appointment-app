@@ -9,8 +9,12 @@ import morgan from 'morgan';
 
 const app = express();
 
+console.log(CONSTANTS.CLIENT_ORIGIN);
+
+
 app.use(cors({
-    origin: CONSTANTS.CLIENT_ORIGIN || 'http://localhost:5173',
+    // origin: CONSTANTS.CLIENT_ORIGIN || 'http://localhost:5173',
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(express.json());

@@ -199,7 +199,7 @@ const formatCNIC = (value: string) => {
 
 const CNICInput = ({
 	value,
-	onChange,
+	onChange, 
 }: {
 	value: string;
 	onChange: (val: string) => void;

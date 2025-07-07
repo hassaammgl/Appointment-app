@@ -7,10 +7,12 @@ const ScheduleMeetings = lazy(
 	() => import("@/dashboards/Receptionist/ScheduleMeetings")
 );
 import { useMeetings } from "@/store/mettings";
-import { Clock, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, XCircle, PlusIcon } from "lucide-react";
 import StatsCards from "@/dashboards/others/StatsCards";
 import Loader from "@/components/Loader";
 import type { StatsArrType } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const StatsArr: StatsArrType[] = [
 	{
@@ -40,6 +42,8 @@ const ReceptionistDashBoard = () => {
 	const { user } = useAuth();
 	const { meetings } = useMeetings();
 
+
+
 	const getStatusCount = (status: string): number =>
 		meetings.filter((request) =>
 			status === "all" ? true : request.status === status
@@ -48,15 +52,32 @@ const ReceptionistDashBoard = () => {
 	return (
 		<AppLayout allowedRoles={["receptionist"]}>
 			<div className="space-y-8">
-				<div>
-					<h1 className="text-3xl font-bold tracking-tight">
-						Receptionist Dashboard
-					</h1>
-					<p className="text-muted-foreground">
-						Manage visitors and meeting schedules
-					</p>
-				</div>
+				<div className="flex items-center justify-between">
+					<div>
+						<h1 className="text-3xl font-bold tracking-tight">
+							Receptionist Dashboard
+						</h1>
+						<p className="text-muted-foreground">
+							Manage visitors and meeting schedules
+						</p>
+					</div>
+					<div>
+						<Dialog>
+							<DialogTrigger>
+								<Button>
+									<PlusIcon />
+								</Button>
+							</DialogTrigger>
+							<DialogContent>
+								<ScheduleMeetings
+									setTabValue={setTabValue}
+									userId={user?.id}
+								/>
+							</DialogContent>
+						</Dialog>
+					</div>
 
+				</div>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					{StatsArr.map((val, i) => (
 						<StatsCards
