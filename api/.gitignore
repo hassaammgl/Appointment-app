@@ -14,7 +14,9 @@ dist
 dist-ssr
 *.local
 bun.lock
-./src/config/sapps.json
+sapps.json
+.env
+
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +28,7 @@ bun.lock
 *.njsproj
 *.sln
 *.sw?
+
+# Added exact paths for .env and sapps.json to .gitignore
+/api/.env
+/api/src/config/sapps.json

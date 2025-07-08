@@ -11,3 +11,4 @@
 	},
 	"include": ["public/firebase-messaging-sw.ts"]
 }
+ 
