@@ -14,6 +14,7 @@ dist
 dist-ssr
 *.local
 bun.lock
+./src/config/sapps.json
 
 # Editor directories and files
 .vscode/*
