@@ -16,7 +16,7 @@ export const sendNotification = async (userTokens, title, body) => {
             notification: { title, body },
             webpush: {
                 headers: {
-                    Urgency: 'high'  // For background notifications
+                    Urgency: 'high' 
                 }
             }
         });
