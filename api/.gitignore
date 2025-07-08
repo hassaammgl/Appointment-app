@@ -31,4 +31,5 @@ sapps.json
 
 # Added exact paths for .env and sapps.json to .gitignore
 /api/.env
-/api/src/config/sapps.json
+# /api/src/config/sapps.json
+/media/ratx16/Codes/Appointment-app/api/src/config/sapps.json
