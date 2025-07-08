@@ -117,7 +117,7 @@ type organization = {
 	isPremium: boolean;
 	premiumStartedAt: string;
 	premiumExpiresAt: string;
-}
+};
 
 export type AuthState = {
 	user: AuthUser | null;
@@ -139,4 +139,3 @@ export type AuthState = {
 	renewOrganization: (id: string | undefined) => Promise<void>;
 	clearError: () => void;
 };
-
