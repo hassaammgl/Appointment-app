@@ -13,11 +13,7 @@ const useFCM = (vapidKey: string) => {
 				const token = await getFCMToken(vapidKey);
 				if (token) {
 					// Send token to backend
-					await fetch("http://localhost:5000/register-token", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ token }),
-					});
+					console.log(token);
 				}
 			}
 		};
@@ -29,10 +25,9 @@ const useFCM = (vapidKey: string) => {
 		onForegroundMessage().then((payload: any) => {
 			console.log("Foreground message:", payload);
 			// Display notification in-app
+			console.log(payload);
 		});
 	}, [vapidKey]);
 };
 
 export default useFCM;
-
-// BE7RHC6cyzJkxzQqXnWJz9L-LEij85wTpEBZ1A92ANwVvxn-29ZeDQykN7QzEMaggPhVapSZO-gaH9ljOiN_78Y

@@ -11,7 +11,6 @@ import { Clock, AlertCircle, CheckCircle2, XCircle, PlusIcon } from "lucide-reac
 import StatsCards from "@/dashboards/others/StatsCards";
 import Loader from "@/components/Loader";
 import type { StatsArrType } from "@/types";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const StatsArr: StatsArrType[] = [
@@ -63,10 +62,8 @@ const ReceptionistDashBoard = () => {
 					</div>
 					<div>
 						<Dialog>
-							<DialogTrigger>
-								<Button>
-									<PlusIcon />
-								</Button>
+							<DialogTrigger className="bg-green-500 p-1 rounded-xl">
+								<PlusIcon />
 							</DialogTrigger>
 							<DialogContent>
 								<ScheduleMeetings
