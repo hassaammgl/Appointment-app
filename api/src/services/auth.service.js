@@ -22,7 +22,15 @@ export const registerUser = async ({ username, email, password, role, organizati
 
 export const loginUser = async (email, password) => {
     const user = await User.findOne({ email });
-    if (!user || !(await argon.verify(user.password, password))) return null;
+    if (!user) {
+        throw new AuthenticationError('User not found');
+    }
+
+    const isValid = await argon.verify(user.password, password);
+    if (!isValid) {
+        throw new AuthenticationError('Invalid password');
+    }
+
     return user;
 };
 
@@ -38,7 +46,7 @@ export const getOrg = async ({ _id }) => {
 export const renewOrganisation = async () => {
     const orgMain = await Organization.find();
     console.log(orgMain[0]);
-    
+
     if (!orgMain[0]) {
         throw new Error("Organization not found");
     }

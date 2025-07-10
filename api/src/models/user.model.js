@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
         ref: 'Organization',
         required: true,
     },
+    fcmTokens: [{ type: String, unique: true }]
 });
 
 userSchema.pre('save', async function (next) {

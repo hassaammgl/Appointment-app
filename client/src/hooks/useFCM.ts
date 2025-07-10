@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-	requestPermission,
-	getFCMToken,
-	// onForegroundMessage,
-	// messaging,
-} from "@/utils/firebase";
+import { requestPermission, getFCMToken } from "@/utils/firebase";
 
 const useFCM = () => {
 	useEffect(() => {

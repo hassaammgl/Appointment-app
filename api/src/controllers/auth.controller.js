@@ -2,6 +2,7 @@ import { registerUser, loginUser, getOrg, renewOrganisation } from '../services/
 import { validateRegister, validateLogin } from '../utils/joi-validtaion.js';
 import { AppError, ValidationError, AuthenticationError } from '../utils/AppError.js';
 import { CONSTANTS } from "../utils/constants.js"
+import { handleDbError } from '../utils/handleDbError.js';
 
 export const register = async (req, res, next) => {
     console.log('Registering user:', req.body);
@@ -16,13 +17,9 @@ export const register = async (req, res, next) => {
             const user = await registerUser(req.body);
             res.status(201).json({ message: 'User created 🎉', user });
         } catch (dbError) {
-            if (dbError.code === 11000) {
-                throw new ValidationError('User with this email or username already exists');
-            } else if (dbError.name === 'MongoError') {
-                throw new AppError('Database error occurred', 500);
-            }
-            throw dbError;
+            handleDbError(dbError);
         }
+
     } catch (err) {
         next(err);
     }
@@ -50,11 +47,9 @@ export const login = async (req, res, next) => {
             };
             res.json({ message: 'Logged in 🛜', user: req.session.user });
         } catch (dbError) {
-            if (dbError.name === 'MongoError') {
-                throw new AppError('Database error occurred', 500);
-            }
-            throw dbError;
+            handleDbError(dbError);
         }
+
     } catch (err) {
         next(err);
     }
@@ -74,13 +69,9 @@ export const getOrganization = async (req, res, next) => {
             }
             res.status(200).json({ message: 'Org data fetched 🎉', organization: org });
         } catch (dbError) {
-            if (dbError.code === 11000) {
-                throw new ValidationError('Something happened in database but try to change their values');
-            } else if (dbError.name === 'MongoError') {
-                throw new AppError('Database error occurred', 500);
-            }
-            throw dbError;
+            handleDbError(dbError);
         }
+
     } catch (err) {
         next(err);
     }
@@ -104,13 +95,9 @@ export const renewOrg = async (req, res, next) => {
             }
             res.status(200).json({ message: 'Org data renewed 🎉', organization: org });
         } catch (dbError) {
-            if (dbError.code === 11000) {
-                throw new ValidationError('Something happened in database but try to change their values');
-            } else if (dbError.name === 'MongoError') {
-                throw new AppError('Database error occurred', 500);
-            }
-            throw dbError;
+            handleDbError(dbError);
         }
+
     } catch (err) {
         next(err);
     }
