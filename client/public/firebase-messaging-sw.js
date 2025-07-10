@@ -1,5 +1,9 @@
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
+importScripts(
+	"https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"
+);
+importScripts(
+	"https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"
+);
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBneablpzMxZRsV2mpNXCE90JHXbIyTOGg",
@@ -13,7 +17,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Background message handler
 messaging.onBackgroundMessage((payload) => {
 	console.log('[SW] Background message:', payload);
 
