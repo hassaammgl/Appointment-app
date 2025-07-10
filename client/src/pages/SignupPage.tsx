@@ -33,12 +33,12 @@ const SignupPage = () => {
 
 	const navigate = useNavigate();
 	const { error, success } = useToast();
-	const { signup, isLoading } = useAuth();
+	const { signup, isLoading, token } = useAuth();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			await signup(email, password, name, role, organization);
+			await signup(email, password, name, role, organization, token);
 			success("Account created successfully! 🎉");
 			navigate("/login");
 		} catch (err) {

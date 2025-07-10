@@ -7,11 +7,11 @@ if (!admin.apps.length) {
     });
 }
 
-export const messaging = admin.messaging();
+const messaging = admin.messaging();
 
 export const sendNotification = async (userTokens, title, body, user) => {
     try {
-        const response = await messaging.sendMulticast({
+        const response = await messaging.sendEachForMulticast({
             tokens: userTokens,
             notification: { title, body },
             webpush: {
@@ -19,11 +19,25 @@ export const sendNotification = async (userTokens, title, body, user) => {
                     Urgency: 'high',
                 },
             },
+            apns: { // For iOS specific options
+                payload: {
+                    aps: {
+                        badge: 1,
+                        sound: 'default'
+                    }
+                }
+            },
+            android: { // For Android specific options
+                priority: 'high',
+                notification: {
+                    channelId: 'my_channel_id',
+                    sound: 'default'
+                }
+            },
         });
 
         console.log(`✅ ${response.successCount} / ${userTokens.length} messages sent`);
 
-        // 🔥 Cleanup invalid tokens
         const invalidTokens = [];
         response.responses.forEach((resp, idx) => {
             if (!resp.success) {

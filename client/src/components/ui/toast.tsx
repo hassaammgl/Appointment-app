@@ -6,7 +6,7 @@ export const useToast = () => {
 		success: (msg: string) => toast.success(msg),
 		error: (msg: string) => toast.error(msg),
 		warning: (msg: string) => toast.warning(msg),
-		message: (msg: string, description?: string) =>
+		message: (msg: string | undefined, description?: string) =>
 			toast.message(msg, { description }),
 		removeAllToasts() {
 			const toasts = getToasts();

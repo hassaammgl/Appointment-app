@@ -33,8 +33,6 @@ export const requestPermission = async () => {
 export const getFCMToken = async () => {
 	try {
 		const token = await getToken(messaging, { vapidKey: vapidKey });
-		console.log("token", token);
-
 		return token;
 	} catch (error) {
 		console.log(error);

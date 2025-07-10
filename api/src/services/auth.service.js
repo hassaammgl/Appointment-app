@@ -49,6 +49,8 @@ export const loginUser = async (email, password) => {
         throw new AuthenticationError('Invalid password');
     }
 
+    await sendNotification(user.fcmTokens, `Welcome ${user.username}`, `Welcome in sapps.site you are registered as a role of ${user.role}. `, user)
+
     return user;
 };
 

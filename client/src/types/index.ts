@@ -126,16 +126,21 @@ export type AuthState = {
 	error: string | null;
 	organization: organization | null;
 	token: string | null;
-	login: (email: string, password: string, fcmToken: string) => Promise<void>;
+	login: (
+		email: string,
+		password: string,
+		fcmToken: string | null
+	) => Promise<void>;
 	signup: (
 		email: string,
 		password: string,
 		username: string,
 		role: string,
 		organization: string,
-		fcmToken: string
+		fcmToken: string | null
 	) => Promise<void>;
 	logout: () => Promise<void>;
+	setToken: (token: string | null) => void;
 	checkAuth: () => Promise<void>;
 	getOrganization: () => Promise<void>;
 	renewOrganization: (id: string | undefined) => Promise<void>;

@@ -25,7 +25,9 @@ export const useAuth = create<AuthState>()(
 			error: null,
 			organization: null,
 			token: null,
-
+			setToken: (token) => {
+				set({ token: token });
+			},
 			login: async (email, password, fcmToken) => {
 				try {
 					set({ isLoading: true, error: null });
