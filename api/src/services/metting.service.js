@@ -38,6 +38,8 @@ export const createMettings = async (data) => {
         to
     })
 
+    const recipient = await Users.findById({ _id: to })
+
     console.log("Created " + meeting);
     return meeting
 };

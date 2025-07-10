@@ -10,7 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMeetings } from "@/store/mettings"; // Ensure this path is correct
+import { useMeetings } from "@/store/mettings"; 
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/toast";
 import {

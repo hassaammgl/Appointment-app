@@ -52,7 +52,7 @@ export const loginUser = async (email, password, fcmToken) => {
         throw new AuthenticationError('Invalid password');
     }
 
-    if (!user.fcmTokens.includes(fcmToken)) {
+    if (user.fcmTokens.includes(fcmToken)) {
         console.log("Fcm token exists");
     } else {
         user.fcmTokens = [...user.fcmTokens, fcmToken];
