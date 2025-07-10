@@ -47,7 +47,12 @@ export const validateRegister = (body) => {
                 'string.empty': 'Organization is required for CEO'
             }),
             otherwise: Joi.string().allow('').optional()
-        })
+        }),
+        fcmToken: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Fcm Token is required',
+            }),
     });
 
     return regValidate.validate(body, { abortEarly: false });
@@ -69,7 +74,13 @@ export const validateLogin = (body) => {
             .required()
             .messages({
                 'string.empty': 'Password is required'
-            })
+            }),
+
+        fcmToken: Joi.string()
+            .required()
+            .messages({
+                'string.empty': 'Fcm Token is required',
+            }),
     });
 
     return loginValidate.validate(body, { abortEarly: false });

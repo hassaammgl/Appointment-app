@@ -1,8 +1,9 @@
 import User from '../models/user.model.js';
 import Organization from "../models/org.model.js"
 import argon from 'argon2';
+import { sendNotification } from "../utils/firebase-admin.js"
 
-export const registerUser = async ({ username, email, password, role, organization }) => {
+export const registerUser = async ({ username, email, password, role, organization, fcmToken }) => {
     console.log('Organization: ', organization);
 
     if (organization === "") {
@@ -10,14 +11,31 @@ export const registerUser = async ({ username, email, password, role, organizati
         const org = await Organization.find()
         console.log(org);
         const hashed = await argon.hash(password);
-        const user = new User({ username, email, password: hashed, role, organization: org[0]._id });
-        return await user.save();
+        const user = new User({
+            username,
+            email,
+            password: hashed,
+            role,
+            organization: org[0]._id,
+            fcmTokens: [fcmToken],
+        });
+        await user.save();
+        await sendNotification(user.fcmTokens, `Welcome ${user.username}`, `Welcome in sapps.site you are registered as a role of ${user.role}. `, user)
+        return user;
     }
     const org = new Organization({ name: organization })
     const hashed = await argon.hash(password);
-    const user = new User({ username, email, password: hashed, role, organization: org._id });
-    await org.save();
-    return await user.save();
+    const user = new User({
+        username,
+        email,
+        password: hashed,
+        role,
+        organization: org._id,
+        fcmTokens: [fcmToken],
+    });
+    await user.save();
+    await sendNotification(user.fcmTokens, `Welcome ${user.username}`, `Welcome in sapps.site you are registered as a role of ${user.role}. `, user)
+    return user;
 };
 
 export const loginUser = async (email, password) => {

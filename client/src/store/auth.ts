@@ -24,14 +24,16 @@ export const useAuth = create<AuthState>()(
 			isLoading: false,
 			error: null,
 			organization: null,
+			token: null,
 
-			login: async (email, password) => {
+			login: async (email, password, fcmToken) => {
 				try {
 					set({ isLoading: true, error: null });
 
 					const { data } = await axiosInstance.post("/auth/login", {
 						email,
 						password,
+						fcmToken,
 					});
 
 					set({ user: data.user, isAuthenticated: true });
@@ -44,7 +46,14 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
-			signup: async (email, password, username, role, organization) => {
+			signup: async (
+				email,
+				password,
+				username,
+				role,
+				organization,
+				fcmToken
+			) => {
 				try {
 					set({ isLoading: true, error: null });
 
@@ -56,6 +65,7 @@ export const useAuth = create<AuthState>()(
 							username,
 							role,
 							organization: organization,
+							fcmToken,
 						}
 					);
 
@@ -94,8 +104,10 @@ export const useAuth = create<AuthState>()(
 			getOrganization: async () => {
 				try {
 					set({ isLoading: true, error: null });
-					const { data } = await axiosInstance.get("/protected/get-organization");
-					set({ organization: data.organization, });
+					const { data } = await axiosInstance.get(
+						"/protected/get-organization"
+					);
+					set({ organization: data.organization });
 				} catch (err: any) {
 					const errorMessage = getErrorMessage(err);
 					set({ error: errorMessage });
@@ -108,8 +120,10 @@ export const useAuth = create<AuthState>()(
 			renewOrganization: async (id) => {
 				try {
 					set({ isLoading: true, error: null });
-					const { data } = await axiosInstance.post(`/protected/renew/${id}/org`);
-					set({ organization: data.organization, });
+					const { data } = await axiosInstance.post(
+						`/protected/renew/${id}/org`
+					);
+					set({ organization: data.organization });
 				} catch (err: any) {
 					const errorMessage = getErrorMessage(err);
 					set({ error: errorMessage });
