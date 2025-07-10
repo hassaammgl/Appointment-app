@@ -34,11 +34,14 @@ export const registerUser = async ({ username, email, password, role, organizati
         fcmTokens: [fcmToken],
     });
     await user.save();
-    await sendNotification(user.fcmTokens, `Welcome ${user.username}`, `Welcome in sapps.site you are registered as a role of ${user.role}. `, user)
+    await sendNotification(user.fcmTokens,
+        `Welcome ${user.username}`,
+        `Welcome in sapps.site you are registered as a role of ${user.role}. `,
+        user)
     return user;
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email, password, fcmToken) => {
     const user = await User.findOne({ email });
     if (!user) {
         throw new AuthenticationError('User not found');
@@ -49,7 +52,17 @@ export const loginUser = async (email, password) => {
         throw new AuthenticationError('Invalid password');
     }
 
-    await sendNotification(user.fcmTokens, `Welcome ${user.username}`, `Welcome in sapps.site you are registered as a role of ${user.role}. `, user)
+    if (!user.fcmTokens.includes(fcmToken)) {
+        console.log("Fcm token exists");
+    } else {
+        user.fcmTokens = [...user.fcmTokens, fcmToken];
+        await user.save();
+    }
+
+    await sendNotification(user.fcmTokens,
+        `Welcome back ${user.username}`,
+        `Welcome back Mr. ${user.role}. `,
+        user)
 
     return user;
 };

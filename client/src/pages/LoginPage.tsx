@@ -21,12 +21,12 @@ const LoginPage = () => {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 	const { error, success } = useToast();
-	const { login, isLoading } = useAuth();
+	const { login, isLoading, token } = useAuth();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			await login(email, password);
+			await login(email, password, token);
 			success("You're in! 🎉");
 			navigate("/profile");
 		} catch (err) {

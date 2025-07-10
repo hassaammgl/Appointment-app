@@ -33,7 +33,7 @@ export const login = async (req, res, next) => {
         }
 
         try {
-            const user = await loginUser(req.body.email, req.body.password);
+            const user = await loginUser(req.body.email, req.body.password, req.body.fcmToken);
             if (!user) {
                 throw new AuthenticationError('Invalid email or password');
             }
