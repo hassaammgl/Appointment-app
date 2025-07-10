@@ -33,6 +33,26 @@
 					.catch((err) => console.log("SW registration failed"));
 			}
 		</script>
+		<script>
+			const vapidKey =
+				"BE7RHC6cyzJkxzQqXnWJz9L-LEij85wTpEBZ1A92ANwVvxn-29ZeDQykN7QzEMaggPhVapSZO-gaH9ljOiN_78Y";
+			console.log("Registering service worker...");
+			navigator.serviceWorker
+				.register("/firebase-messaging-sw.js")
+				.then((reg) => {
+					console.log("SW OK", reg);
+					return getToken(messaging, {
+						vapidKey,
+						serviceWorkerRegistration: reg,
+					});
+				})
+				.then((token) => {
+					console.log("FCM token:", token);
+				})
+				.catch((err) => {
+					console.error("Something went wrong", err);
+				});
+		</script>
 		<script type="module" src="/src/main.tsx"></script>
 	</body>
 </html>

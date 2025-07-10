@@ -5,14 +5,13 @@ import {
 	onForegroundMessage,
 } from "@/utils/firebase";
 
-const useFCM = (vapidKey: string) => {
+const useFCM = () => {
 	useEffect(() => {
 		const registerToken = async () => {
 			const hasPermission = await requestPermission();
 			if (hasPermission) {
-				const token = await getFCMToken(vapidKey);
+				const token = await getFCMToken();
 				if (token) {
-					// Send token to backend
 					console.log(token);
 				}
 			}
@@ -27,7 +26,7 @@ const useFCM = (vapidKey: string) => {
 			// Display notification in-app
 			console.log(payload);
 		});
-	}, [vapidKey]);
+	}, []);
 };
 
 export default useFCM;

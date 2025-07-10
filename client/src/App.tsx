@@ -6,12 +6,8 @@ import useFCM from "@/hooks/useFCM";
 
 const router = createBrowserRouter(routes);
 
-function App() {
-
-	const vapidKey = import.meta.env.VITE_VAPID_KEY;
-	useFCM(vapidKey);
-
-
+const App = () => {
+	useFCM();
 	return (
 		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
 			<RouterProvider router={router} />
