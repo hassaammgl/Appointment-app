@@ -2,6 +2,7 @@ import User from '../models/user.model.js';
 import Organization from "../models/org.model.js"
 import argon from 'argon2';
 import { sendNotification } from "../utils/firebase-admin.js"
+import { AuthenticationError } from '../utils/AppError.js';
 
 export const registerUser = async ({ username, email, password, role, organization, fcmToken }) => {
     console.log('Organization: ', organization);
@@ -33,6 +34,7 @@ export const registerUser = async ({ username, email, password, role, organizati
         organization: org._id,
         fcmTokens: [fcmToken],
     });
+    await org.save();
     await user.save();
     await sendNotification(user.fcmTokens,
         `Welcome ${user.username}`,

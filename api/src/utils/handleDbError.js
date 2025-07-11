@@ -1,4 +1,4 @@
-import { AppError, ValidationError } from "./AppError"
+import { AppError, ValidationError } from "./AppError.js"
 
 export function handleDbError(error) {
     if (error.code === 11000) {
