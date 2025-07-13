@@ -5,9 +5,11 @@
 		"lib": ["webworker", "esnext"],
 		"outDir": "public",
 		"strict": true,
+		"allowJs": false,
+		"checkJs": false,
 		"moduleResolution": "node",
 		"esModuleInterop": true,
 		"skipLibCheck": true
 	},
-	"include": ["public/firebase-messaging-sw.js"]
+	"include": ["src/firebase-messaging-sw.ts"]
 }
