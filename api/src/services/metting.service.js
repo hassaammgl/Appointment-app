@@ -1,6 +1,7 @@
 import Users from "../models/user.model.js"
 import Meeting from "../models/appointments.model.js"
 import mongoose from "mongoose";
+import { sendNotification } from "../utils/firebase-admin.js"
 
 export const getRoles = async () => {
     console.log("Getting roles");
@@ -39,7 +40,9 @@ export const createMettings = async (data) => {
     })
 
     const recipient = await Users.findById({ _id: to })
+    console.log(recipient);
 
+    await sendNotification(recipient.fcmTokens, `meeting request from ${visitorName}`, `${visitorName} wants to meet with you.`, recipient)
     console.log("Created " + meeting);
     return meeting
 };
