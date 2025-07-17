@@ -5,12 +5,11 @@ import { CONSTANTS } from "../utils/constants.js"
 import { handleDbError } from '../utils/handleDbError.js';
 
 export const register = async (req, res, next) => {
-    console.log('Registering user:', req.body);
+    // console.log('Registering user:', req.body);
     try {
         const { error } = validateRegister(req.body);
-        console.log(error);
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
@@ -61,7 +60,7 @@ export const logout = (req, res) => {
 
 export const getOrganization = async (req, res, next) => {
     try {
-        console.log("Getting Org details");
+        // console.log("Getting Org details");
         try {
             const org = await getOrg({ _id: req.session.user.organization });
             if (!org) {
@@ -80,7 +79,7 @@ export const getOrganization = async (req, res, next) => {
 
 export const renewOrg = async (req, res, next) => {
     try {
-        console.log("Renewing Org details " + req.params.id);
+        // console.log("Renewing Org details " + req.params.id);
         const { id } = req.params;
         if (!id) {
             throw new ValidationError('Developer Secret ID is required');

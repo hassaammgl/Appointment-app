@@ -5,12 +5,12 @@ import { sendNotification } from "../utils/firebase-admin.js"
 import { AuthenticationError } from '../utils/AppError.js';
 
 export const registerUser = async ({ username, email, password, role, organization, fcmToken }) => {
-    console.log('Organization: ', organization);
+    // console.log('Organization: ', organization);
 
     if (organization === "") {
-        console.log('Organization is empty');
+        // console.log('Organization is empty');
         const org = await Organization.find()
-        console.log(org);
+        // console.log(org);
         const hashed = await argon.hash(password);
         const user = new User({
             username,
@@ -62,7 +62,7 @@ export const loginUser = async (email, password, fcmToken) => {
     }
 
     await sendNotification(user.fcmTokens,
-        `Welcome back ${user.username}`,
+        `Welcome ${user.username}`,
         `Welcome back Mr. ${user.role}. `,
         user)
 
@@ -74,20 +74,19 @@ export const getOrg = async ({ _id }) => {
     if (!org) {
         throw new Error('Organization not found');
     }
-    console.log(org);
     return org;
 }
 
 export const renewOrganisation = async () => {
     const orgMain = await Organization.find();
-    console.log(orgMain[0]);
+    // console.log(orgMain[0]);
 
     if (!orgMain[0]) {
         throw new Error("Organization not found");
     }
 
     const org = orgMain[0];
-    console.log(org);
+    // console.log(org);
 
     const now = new Date();
     const baseDate = org.premiumExpiresAt > now ? org.premiumExpiresAt : now;

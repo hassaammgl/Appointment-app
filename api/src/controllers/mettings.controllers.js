@@ -19,11 +19,11 @@ import Status from "http-status-codes"
 
 export const createMettingReq = async (req, res, next) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
 
         const { error } = validateReqMeeting(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
 
@@ -68,7 +68,7 @@ export const getAllMeetingsReq = async (req, res, next) => {
     try {
         try {
             const allMettings = await getAllMettings();
-            console.log(allMettings);
+            // console.log(allMettings);
 
             res.status(200).json({ message: 'All appointments fetched 🎉', allMettings });
         } catch (dbError) {
@@ -86,19 +86,18 @@ export const getAllMeetingsReq = async (req, res, next) => {
 
 export const cancelMeetingReq = async (req, res, next) => {
     try {
-        console.log("canceling meeting req");
-        console.log(req.params.id);
+        // console.log("canceling meeting req");
+        // console.log(req.params.id);
 
 
         const { error } = validateCancelReq({ _id: req.params.id });
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
             const respose = await cancelMettingReq(req.params.id)
             if (respose) {
-
                 res.status(Status.OK).json({ message: 'Request Deleted 🎉', success: true });
             }
             else {
@@ -119,13 +118,13 @@ export const cancelMeetingReq = async (req, res, next) => {
 
 export const approveMeetingReq = async (req, res, next) => {
     try {
-        console.log("Approving Req");
-        console.log(req.params.id);
+        // console.log("Approving Req");
+        // console.log(req.params.id);
 
 
         const { error } = validateApproveAndRej({ _id: req.params.id });
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
@@ -151,13 +150,11 @@ export const approveMeetingReq = async (req, res, next) => {
 
 export const rejectMeetingReq = async (req, res, next) => {
     try {
-        console.log("Rejecting Req");
-        console.log(req.params.id);
-
-
+        // console.log("Rejecting Req");
+        // console.log(req.params.id);
         const { error } = validateApproveAndRej({ _id: req.params.id });
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
@@ -183,13 +180,13 @@ export const rejectMeetingReq = async (req, res, next) => {
 
 export const updatePriorityOfReq = async (req, res, next) => {
     try {
-        console.log(req.params.id);
-        console.log(req.body.data);
+        // console.log(req.params.id);
+        // console.log(req.body.data);
 
 
         const { error } = validateUpdatePriority({ _id: req.params.id, value: req.body.data });
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
@@ -215,14 +212,12 @@ export const updatePriorityOfReq = async (req, res, next) => {
 
 export const getReqsByRolesWithPagination = async (req, res, next) => {
     try {
-        console.log(req.params.id);
-
-
+        // console.log(req.params.id);
         const { error } = validateGetReqsByRole({
             _id: req.params.id
         });
         if (error) {
-            console.log(error);
+            // console.log(error);
             throw new ValidationError(error.details.map(detail => detail.message).join(', '));
         }
         try {
