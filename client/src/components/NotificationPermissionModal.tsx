@@ -7,7 +7,7 @@ export default function NotificationPermissionModal() {
 
   useEffect(() => {
     if (Notification.permission === 'default') {
-      setTimeout(() => setOpen(true), 1500) // wait 1.5s for dramatic effect lol
+      setTimeout(() => setOpen(true), 1500) 
     }
   }, [])
 
@@ -15,7 +15,7 @@ export default function NotificationPermissionModal() {
     const result = await Notification.requestPermission()
     if (result === 'granted') {
       console.log('Notifications allowed 🥳')
-      new Notification('Thanks for subscribing! 🎉')
+      new Notification('Thanks for allowing! 🎉')
     } else {
       console.log('Notifications not allowed 😢')
     }
