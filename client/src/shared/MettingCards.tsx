@@ -21,6 +21,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
 
 	const { cancelMeetingReq } = useMeetings();
 	const { settings } = useSettings();
+	
 	const { info, removeAllToasts, success, error: errToast } = useToast();
 
 	const priorityColors = {
