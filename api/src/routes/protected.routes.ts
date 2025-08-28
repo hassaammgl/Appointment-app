@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { isAuthenticated, authorize } from "../middlewares/auth.middlewares";
 import { meetingController } from "../controllers/mettings.controllers";
-// import { getOrganization, renewOrg } from '../controllers/auth.controller.js';
+import { AuthController, authController } from "../controllers/auth.controller";
 import { checkOrgPremium } from "../middlewares/checkPremium.middleware";
 import {
 	validateReqMeeting,
 	validateCancelReq,
-    validateApproveAndRej,
-    validateUpdatePriority
+	validateApproveAndRej,
+	validateUpdatePriorityBody,
+	validateUpdatePriorityParams,
+	validateGetReqsByRole,
 } from "../validations/auth.validation";
 import { validateRequest } from "../middlewares/validation.middleware";
 
@@ -60,16 +62,34 @@ router.put(
 	meetingController.rejectMeetingReq
 );
 router.put(
-    "/update-priority/:id",
+	"/update-priority/:id",
 	isAuthenticated,
 	checkOrgPremium,
 	authorize("ceo", "cfo", "cto", "gm"),
-    validateRequest(validateUpdatePriority, true),
-	
+	validateRequest(validateUpdatePriorityParams, true),
+	validateRequest(validateUpdatePriorityBody),
+	meetingController.updatePriorityOfReq
 );
-// router.get("/get-reqs-by-roles/:id", isAuthenticated, checkOrgPremium, authorize("ceo", "cfo", "cto", "gm"), getReqsByRolesWithPagination)
+router.get(
+	"/get-reqs-by-roles/:id",
+	isAuthenticated,
+	checkOrgPremium,
+	authorize("ceo", "cfo", "cto", "gm"),
+	validateRequest(validateGetReqsByRole, true),
+	meetingController.getReqsByRolesWithPagination
+);
 
-// router.get("/get-organization", isAuthenticated, checkOrgPremium, authorize('receptionist', "ceo", "cfo", "cto", "gm"), getOrganization)
-// router.post("/renew/:id/org", isAuthenticated, authorize("ceo"), renewOrg)
+router.get(
+	"/get-organization",
+	isAuthenticated,
+	checkOrgPremium,
+	authorize("receptionist", "ceo", "cfo", "cto", "gm"),
+	authController.getOrganization
+);
+router.post(
+	"/renew/:id/org",
+	isAuthenticated,
+	authController.renewOrg
+);
 
 export default router;

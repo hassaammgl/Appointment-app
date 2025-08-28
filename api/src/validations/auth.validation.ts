@@ -96,17 +96,19 @@ export const validateApproveAndRej = Joi.object({
 	}),
 });
 
-export const validateUpdatePriority = Joi.object({
+export const validateUpdatePriorityParams = Joi.object({
 	id: Joi.string().required().max(24).messages({
 		"string.empty": "Request id is required",
 	}),
-	value: Joi.number().required().messages({
+});
+export const validateUpdatePriorityBody = Joi.object({
+	data: Joi.number().required().messages({
 		"number.empty": "Priority value is required",
 	}),
 });
 
 export const validateGetReqsByRole = Joi.object({
-	_id: Joi.string().required().messages({
+	id: Joi.string().required().messages({
 		"string.empty": "Request id is required",
 	}),
 });

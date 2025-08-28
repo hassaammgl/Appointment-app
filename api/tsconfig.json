@@ -9,8 +9,9 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"types": ["node", "express", "express-session"]
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "types"],
 	"exclude": ["node_modules"]
 }

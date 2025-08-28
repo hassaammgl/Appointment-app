@@ -235,6 +235,8 @@ export class MeetingController {
 		next: NextFunction
 	): Promise<void> {
 		try {
+			console.log(req.params.id, req.body.data);
+
 			try {
 				const response = await meetingService.updateAppointmentPriority(
 					req.params.id,
