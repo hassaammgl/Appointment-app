@@ -11,7 +11,6 @@ const app = express();
 
 console.log(CONSTANTS.CLIENT_ORIGIN);
 
-
 app.use(cors({
     // origin: CONSTANTS.CLIENT_ORIGIN || 'http://localhost:5173',
     origin: 'http://localhost:5173',

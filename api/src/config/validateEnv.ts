@@ -1,42 +1,40 @@
 interface IEnvRule {
-	key: string;
-	required?: boolean;
-	default?: string;
+  key: string;
+  required?: boolean;
+  default?: string;
 }
 
 export const validateEnv = (): string[] => {
-	const requiredEnvs: IEnvRule[] = [
-		{ key: "PORT", default: "5000" },
-		{ key: "MONGO_URI", required: true },
-		{ key: "JWT_SECRET", required: true },
-		{ key: "JWT_REFRESH_SECRET", required: true },
-		{ key: "FRONTEND_URL", required: true },
-		{ key: "NODE_ENV", default: "development" },
-	];
+  const requiredEnvs: IEnvRule[] = [
+    { key: "PORT", default: "5000" },//
+    { key: "MONGO_URI", required: true }, //
+    { key: "CLIENT_ORIGIN", required: true },
+    { key: "SESSION_SECRET", required: true },
+    { key: "DEVELOPER_SECRET", required: true },
+    { key: "NODE_ENV", default: "development" },
+  ];
 
-	const missingEnvs: string[] = [];
-	const warnings: string[] = [];
+  const missingEnvs: string[] = [];
+  const warnings: string[] = [];
 
-	requiredEnvs.forEach((env: IEnvRule) => {
-		if (!process.env[env.key]) {
-			if (env.required) {
-				missingEnvs.push(env.key);
-			} else if (env.default) {
-				process.env[env.key] = env.default;
-				warnings.push(
-					`${env.key} not set, using default value: ${env.default}`
-				);
-			}
-		}
-	});
+  requiredEnvs.forEach((env: IEnvRule) => {
+    if (!process.env[env.key]) {
+      if (env.required) {
+        missingEnvs.push(env.key);
+      } else if (env.default) {
+        process.env[env.key] = env.default;
+        warnings.push(
+          `${env.key} not set, using default value: ${env.default}`
+        );
+      }
+    }
+  });
 
-	if (missingEnvs.length > 0) {
-		throw new Error(
-			`Missing required environment variables: ${missingEnvs.join(
-				", "
-			)}\n` +
-				`Please check your .env file and ensure all required variables are set.`
-		);
-	}
-	return warnings;
+  if (missingEnvs.length > 0) {
+    throw new Error(
+      `Missing required environment variables: ${missingEnvs.join(", ")}\n` +
+        `Please check your .env file and ensure all required variables are set.`
+    );
+  }
+  return warnings;
 };
