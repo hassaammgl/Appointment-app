@@ -7,7 +7,7 @@ export const validateRequest = (schema: Schema, isUrl = false) => {
 		const dataToValidate = isUrl ? req.params : req.body;
 		const { error } = schema.validate(dataToValidate, {
 			abortEarly: false,
-		}); // optional: validate all fields
+		});
 
 		if (error?.details?.length) {
 			const message = error.details

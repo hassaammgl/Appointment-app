@@ -1,83 +1,54 @@
-import mongoose, { Document, Model, Types } from "mongoose";
-import argon2 from "argon2";
-import { passwordRegex } from "../validations/auth.validation.js"; // 👈 use `.js` if you're using ESM
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
+// Define the user roles as a type
+export type UserRole = 'receptionist' | 'ceo' | 'cto' | 'gm' | 'cfo';
+
+// Interface for the User document
 export interface IUser extends Document {
-	name: string;
-	email: string;
-	password?: string; // <- because it's `select: false`
-	refreshToken?: string;
-	_id: Types.ObjectId;
-	verifyPassword(candidatePassword: string): Promise<boolean>;
+	_id: mongoose.Types.ObjectId;
+    username: string;
+    email: string;
+    password: string;
+    role: UserRole;
+    organization: mongoose.Types.ObjectId;
 }
 
-interface IUserModel extends Model<IUser> {}
+// Custom error interface for better type safety
+interface CustomError extends Error {
+    statusCode?: number;
+}
 
-const userSchema = new mongoose.Schema<IUser, IUserModel>(
-	{
-		name: {
-			type: String,
-			required: [true, "Name is required"],
-			trim: true,
-		},
-		email: {
-			type: String,
-			required: [true, "Email is required"],
-			unique: true,
-			lowercase: true,
-			validate: {
-				validator: (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-				message: (props) =>
-					`${props.value} is not a valid email address!`,
-			},
-		},
-		password: {
-			type: String,
-			required: [true, "Password is required"],
-			select: false,
-			validate: {
-				validator: function (v: string) {
-					return passwordRegex.test(v);
-				},
-				message:
-					"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)",
-			},
-		},
-		refreshToken: {
-			type: String,
-			select: false,
-		},
-	},
-	{
-		timestamps: true,
-	}
-);
-
-userSchema.pre<IUser>("save", async function (next) {
-	if (!this.isModified("password")) return next();
-
-	try {
-		if (this.password) {
-			this.password = await argon2.hash(this.password);
-		}
-		next();
-	} catch (err) {
-		next(err as Error);
-	}
+const userSchema = new Schema<IUser>({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+        type: String,
+        enum: ['receptionist', 'ceo', 'cto', 'gm', 'cfo'] as const,
+        required: true
+    },
+    organization: {
+        type: Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+    },
 });
 
-userSchema.methods.verifyPassword = async function (
-	candidatePassword: string
-): Promise<boolean> {
-	if (!this.password) return false;
+userSchema.pre<IUser>('save', async function (next) {
+    if (this.role === 'ceo') {
+        const User = mongoose.models.User as Model<IUser>;
+        const existingCEO = await User.findOne({ role: 'ceo' });
 
-	try {
-		return await argon2.verify(this.password, candidatePassword);
-	} catch (err) {
-		console.error("argon2.verify failed:", err);
-		return false;
-	}
-};
+        if (existingCEO && existingCEO?._id.toString() !== this._id?.toString()) {
+            const error: CustomError = new Error('A CEO already exists in the system');
+            error.statusCode = 400;
+            return next(error);
+        }
+    }
 
-const User = mongoose.model<IUser, IUserModel>("User", userSchema);
+    next();
+});
+
+const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
+
 export default User;

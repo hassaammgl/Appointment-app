@@ -19,14 +19,6 @@ import Status from "http-status-codes"
 
 export const createMettingReq = async (req, res, next) => {
     try {
-        // console.log(req.body);
-
-        const { error } = validateReqMeeting(req.body);
-        if (error) {
-            // console.log(error);
-            throw new ValidationError(error.details.map(detail => detail.message).join(', '));
-        }
-
         try {
             const metting = await createMettings(req.body);
             res.status(201).json({ message: 'Appointment created 🎉', metting });

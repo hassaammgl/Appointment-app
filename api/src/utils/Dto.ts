@@ -4,7 +4,7 @@ export class DTO {
 	static userDto(user: IUser) {
 		return {
 			_id: user._id.toString(),
-			name: user.name,
+			name: user.username,
 			email: user.email,
 			// You can optionally add:
 			// role: user.role,

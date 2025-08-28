@@ -1,35 +1,182 @@
-import asyncHandler from "express-async-handler"
-import { TokenService } from "../utils/Jwt.js"
-import { AuthService } from "../services/auth.service.js"
-import { ApiResponse } from "../utils/ApiResponse.js"
+import { Request, Response, NextFunction } from "express";
+import {
+    authService
+} from "../services/auth.service";
+import {
+	AppError,
+	ValidationError,
+	AuthenticationError,
+} from "../utils/AppError";
+import { ENVS as CONSTANTS } from "../config/constants";
+import { handleDbError } from "../utils/handleDbError";
+import type { UserRole } from "../models/user.model"; // Assuming you export UserRole from User model
+import mongoose from "mongoose";
 
-export const registerUser = asyncHandler(async (req, res) => {
-    const { user, accessToken, refreshToken } = await AuthService.register(req.body)
-    TokenService.setTokens(res, { accessToken, refreshToken })
-    console.log(user);
+// Extend the session interface to include user data
+declare module "express-session" {
+	interface SessionData {
+		user?: {
+			id: string;
+			role: UserRole;
+			email: string;
+			username: string;
+			organization: mongoose.Types.ObjectId;
+		};
+	}
+}
 
-    return ApiResponse.success(res, {
-        statusCode: 201,
-        message: "User Created Succesfully",
-        data: user
-    })
-})
+// Types for request bodies
+interface RegisterBody {
+	username: string;
+	email: string;
+	password: string;
+	role: UserRole;
+	organization?: mongoose.Types.ObjectId | string;
+}
 
-export const loginUser = asyncHandler(async (req, res) => {
-    const { user, accessToken, refreshToken } = await AuthService.login(req.body)
-    TokenService.setTokens(res, { accessToken, refreshToken })
-    return ApiResponse.success(res, {
-        message: "User login Succesfully",
-        data: user
-    })
-})
+interface LoginBody {
+	email: string;
+	password: string;
+}
 
-export const logoutUser = asyncHandler(async (req, res) => {
-    const isClear = await AuthService.logout(req.user.id)
-    if (isClear) {
-        TokenService.clearTokens(res)
-        return ApiResponse.success(res, {
-            message: "Logged out successfully"
-        })
-    }
-})
+interface AuthenticatedRequest extends Request {
+	session: Request["session"] & {
+		user: {
+			id: string;
+			role: UserRole;
+			email: string;
+			username: string;
+			organization: mongoose.Types.ObjectId;
+		};
+	};
+}
+
+// Response types
+interface ApiResponse<T = any> {
+	message: string;
+	user?: T;
+	organization?: T;
+}
+
+export class AuthController {
+	public static async register(
+		req: Request<{}, ApiResponse, RegisterBody>,
+		res: Response<ApiResponse>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+            try {
+                console.log(req.body);
+                const user = await authService.registerUser(req.body)
+				res.status(201).json({ message: "User created 🎉", user });
+			} catch (dbError) {
+				handleDbError(dbError);
+			}
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	/**
+	 * Login user and create session
+	 */
+	public static async login(
+		req: Request<{}, ApiResponse, LoginBody>,
+		res: Response<ApiResponse>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+			try {
+				const user = await authService.loginUser(req.body.email, req.body.password);
+				if (!user) {
+					throw new AuthenticationError("Invalid email or password");
+				}
+
+				req.session.user = {
+					id: user._id?.toString() || "",
+					role: user.role,
+					email: user.email,
+					username: user.username,
+					organization: user.organization,
+				};
+
+				res.json({ message: "Logged in 🛜", user: req.session.user });
+			} catch (dbError) {
+				handleDbError(dbError);
+			}
+		} catch (err) {
+			next(err);
+		}
+	}
+
+	/**
+	 * Logout user and destroy session
+	 */
+	public static logout(req: Request, res: Response): void {
+		req.session.destroy(() => {
+			res.json({ message: "Logged out 👋" });
+		});
+	}
+
+	/**
+	 * Get organization data for authenticated user
+	 */
+	// public static async getOrganization(
+	// 	req: AuthenticatedRequest,
+	// 	res: Response<ApiResponse>,
+	// 	next: NextFunction
+	// ): Promise<void> {
+	// 	try {
+	// 		try {
+	// 			const org = await getOrg({
+	// 				_id: req.session.user.organization,
+	// 			});
+	// 			if (!org) {
+	// 				throw new AppError("Organization not found", 404);
+	// 			}
+	// 			res.status(200).json({
+	// 				message: "Org data fetched 🎉",
+	// 				organization: org,
+	// 			});
+	// 		} catch (dbError) {
+	// 			handleDbError(dbError);
+	// 		}
+	// 	} catch (err) {
+	// 		next(err);
+	// 	}
+	// }
+
+	/**
+	 * Renew organization subscription (Admin only)
+	 */
+	// public static async renewOrg(
+	// 	req: Request<{ id: string }>,
+	// 	res: Response<ApiResponse>,
+	// 	next: NextFunction
+	// ): Promise<void> {
+	// 	try {
+	// 		const { id } = req.params;
+	// 		if (!id) {
+	// 			throw new ValidationError("Developer Secret ID is required");
+	// 		}
+	// 		if (id !== CONSTANTS.DEVELOPER_SECRET) {
+	// 			throw new ValidationError("Invalid Developer Secret ID");
+	// 		}
+
+	// 		try {
+	// 			const org = await renewOrganisation();
+	// 			if (!org) {
+	// 				throw new AppError("Organization not found", 404);
+	// 			}
+	// 			res.status(200).json({
+	// 				message: "Org data renewed 🎉",
+	// 				organization: org,
+	// 			});
+	// 		} catch (dbError) {
+	// 			handleDbError(dbError);
+	// 		}
+	// 	} catch (err) {
+	// 		next(err);
+	// 	}
+	// }
+}
