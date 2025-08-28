@@ -2,18 +2,23 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { RouterProvider, createBrowserRouter } from "react-router";
 import routes from "@/routes";
 import { Toaster } from "sonner";
-import useFCM from "@/hooks/useFCM";
+// import useFCM from "@/hooks/useFCM";
+import { initOneSignal } from "./OneSignalConfig.ts";
+import { useEffect } from "react";
 
 const router = createBrowserRouter(routes);
 
 const App = () => {
-	useFCM();
-	return (
-		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-			<RouterProvider router={router} />
-			<Toaster position="top-center" richColors />
-		</ThemeProvider>
-	);
-}
+  useEffect(() => {
+    initOneSignal();
+  }, []);
+  // useFCM();
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+      <Toaster position="top-center" richColors />
+    </ThemeProvider>
+  );
+};
 
 export default App;

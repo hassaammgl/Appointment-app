@@ -24,18 +24,13 @@ export const useAuth = create<AuthState>()(
 			isLoading: false,
 			error: null,
 			organization: null,
-			token: null,
-			setToken: (token) => {
-				set({ token: token });
-			},
-			login: async (email, password, fcmToken) => {
+			login: async (email, password) => {
 				try {
 					set({ isLoading: true, error: null });
 
 					const { data } = await axiosInstance.post("/auth/login", {
 						email,
 						password,
-						fcmToken,
 					});
 
 					set({ user: data.user, isAuthenticated: true });
@@ -54,7 +49,6 @@ export const useAuth = create<AuthState>()(
 				username,
 				role,
 				organization,
-				fcmToken
 			) => {
 				try {
 					set({ isLoading: true, error: null });
@@ -67,7 +61,6 @@ export const useAuth = create<AuthState>()(
 							username,
 							role,
 							organization: organization,
-							fcmToken,
 						}
 					);
 

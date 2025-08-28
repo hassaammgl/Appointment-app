@@ -1,13 +1,8 @@
 import { NotFoundError } from '../utils/AppError.js';
 
-/**
- * Global error handling middleware
- */
 export const errorHandler = (err, req, res, next) => {
-    // Log error for debugging
     console.error(err);
 
-    // Set default error values
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
@@ -50,9 +45,7 @@ export const errorHandler = (err, req, res, next) => {
     });
 };
 
-/**
- * Handle 404 errors for undefined routes
- */
+
 export const notFound = (req, res, next) => {
     const error = new NotFoundError(`Route ${req.originalUrl} not found`);
     next(error);

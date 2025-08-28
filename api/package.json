@@ -1,25 +1,40 @@
 {
-	"version": "1.0.0",
-	"description": "A web application for managing appointments and scheduling using Express.js and MongoDB",
-	"main": "index.js",
-	"type": "module",
-	"scripts": {
-		"start": "node index.js",
-		"dev": "bun --watch index.js"
-	},
-	"author": "hassaammgl😎",
-	"license": "MIT",
-	"dependencies": {
-		"argon2": "^0.43.0",
-		"connect-mongo": "^5.1.0",
-		"cors": "^2.8.5",
-		"dotenv": "^16.5.0",
-		"express": "^5.1.0",
-		"express-session": "^1.18.1",
-		"firebase-admin": "^13.4.0",
-		"http-status-codes": "^2.3.0",
-		"joi": "^17.13.3",
-		"mongoose": "^8.14.1",
-		"morgan": "^1.10.0"
-	}
+  "name": "ts-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "To install dependencies:",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch index.ts",
+    "start": "tsx index.ts"
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "joi": "^18.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "@types/argon2": "^0.14.1",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.3.0",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
 }

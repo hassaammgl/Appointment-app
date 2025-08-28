@@ -125,7 +125,6 @@ export type AuthState = {
 	isLoading: boolean;
 	error: string | null;
 	organization: organization | null;
-	token: string | null;
 	login: (
 		email: string,
 		password: string,
@@ -137,10 +136,9 @@ export type AuthState = {
 		username: string,
 		role: string,
 		organization: string,
-		fcmToken: string | null
+		// fcmToken: string | null
 	) => Promise<void>;
 	logout: () => Promise<void>;
-	setToken: (token: string | null) => void;
 	checkAuth: () => Promise<void>;
 	getOrganization: () => Promise<void>;
 	renewOrganization: (id: string | undefined) => Promise<void>;

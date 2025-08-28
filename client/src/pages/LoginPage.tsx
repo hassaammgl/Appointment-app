@@ -15,7 +15,7 @@ import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
 import { ModeToggle } from "@/components/mode-toogle";
 import { AxiosError } from "axios";
-import NotificationPermissionModal from "@/components/NotificationPermissionModal";
+// import NotificationPermissionModal from "@/components/NotificationPermissionModal";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -44,7 +44,7 @@ const LoginPage = () => {
 		<div className="min-h-screen w-full flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
 			<div className="fixed top-6 right-6">
 				<ModeToggle />
-				<NotificationPermissionModal />
+				{/* <NotificationPermissionModal /> */}
 			</div>
 			<div className="max-w-md w-full space-y-8">
 				<div className="text-center">

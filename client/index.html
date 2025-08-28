@@ -1,38 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/favicon-16x16.png"
-		/>
-		<link rel="manifest" href="/site.webmanifest" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>SmartVisitors</title>
-	</head>
-	<body>
-		<div id="root"></div>
-		<script>
-			if ("serviceWorker" in navigator) {
-				navigator.serviceWorker
-					.register("/firebase-messaging-sw.js")
-					.then((registration) => console.log("SW registered"))
-					.catch((err) => console.log("SW registration failed"));
-			}
-		</script>
-		<script type="module" src="/src/main.tsx"></script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartVisitors</title>
+    <script
+      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+      defer
+    ></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function (OneSignal) {
+        await OneSignal.init({
+          appId: "aa5d096e-9e0b-455f-9a2e-fbc73bcbf781",
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

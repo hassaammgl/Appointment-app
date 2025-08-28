@@ -1,35 +1,34 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# dependencies (bun install)
 node_modules
-./.env
-.env.local
+
+# output
+out
 dist
-dist-ssr
-*.local
-bun.lock
-sapps.json
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
 .env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+# IntelliJ based IDEs
 .idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
-# Added exact paths for .env and sapps.json to .gitignore
-/api/.env
-# /api/src/config/sapps.json
-/media/ratx16/Codes/Appointment-app/api/src/config/sapps.json
+# Finder (MacOS) folder config
+.DS_Store

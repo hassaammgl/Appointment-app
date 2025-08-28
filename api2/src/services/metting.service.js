@@ -1,7 +1,6 @@
 import Users from "../models/user.model.js"
 import Meeting from "../models/appointments.model.js"
 import mongoose from "mongoose";
-import { sendNotification } from "../utils/firebase-admin.js"
 
 export const getRoles = async () => {
     // console.log("Getting roles");
@@ -39,7 +38,6 @@ export const createMettings = async (data) => {
     })
 
     const recipient = await Users.findById({ _id: to })
-    await sendNotification(recipient.fcmTokens, `meeting request from ${visitorName}`, `${visitorName} wants to meet with you.`, recipient)
     return meeting
 };
 
@@ -56,8 +54,6 @@ export const getAllMettings = async () => {
 };
 
 export const cancelMettingReq = async (_id) => {
-    // console.log(_id);
-    // const meeting = await Meeting.findOneAndDelete({ _id })
     await Meeting.findOneAndDelete({ _id })
         .populate({ path: "to", select: "_id username role fcmTokens" })
         .populate({ path: "createdBy", select: "_id username role fcmTokens" })
@@ -66,8 +62,6 @@ export const cancelMettingReq = async (_id) => {
 
 
 export const approveRejectMettingReq = async (_id, type) => {
-    // console.log(_id, "type " + type);
-    // const req = await Meeting.findByIdAndUpdate({ _id }, {
     await Meeting.findByIdAndUpdate({ _id }, {
         status: type
     })
@@ -75,14 +69,11 @@ export const approveRejectMettingReq = async (_id, type) => {
 }
 
 export const updateAppointmentPriority = async (_id, value) => {
-    // console.log(_id, "Value " + value);
-    // const req = await Meeting.findByIdAndUpdate({ _id }, {
     await Meeting.findByIdAndUpdate({ _id }, {
         priority: value
     })
     return true
 }
-
 
 
 export const getReqsWithUserRole = async (userId) => {
@@ -97,4 +88,3 @@ export const getReqsWithUserRole = async (userId) => {
         .sort({ createdAt: -1 });
     return allMeetings;
 };
-
