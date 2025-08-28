@@ -90,7 +90,6 @@
 // };
 
 
-// services/MeetingService.ts
 import mongoose, { Types } from "mongoose";
 import type { IUser } from "../models/user.model";
 import Users from "../models/user.model";
@@ -99,15 +98,15 @@ import Meeting from "../models/appointments.model";
 
 interface CreateMeetingDTO {
   visitorName: string;
-  visitorNo: string;
-  visitorCnic: string;
-  purpose: string;
+  visitorNo?: string;
+  visitorCnic?: string;
+  purpose?: string;
   notes?: string;
   createdBy: string; // userId
   to: string; // format "role-userId"
 }
 
-export class MeetingService {
+class MeetingService {
 	async getRoles(): Promise<IUser[]> {
 		const roles = await Users.aggregate([
 			{
@@ -212,3 +211,5 @@ export class MeetingService {
 		return allMeetings;
 	}
 }
+
+export const meetingService = new MeetingService()

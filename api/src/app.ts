@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { errorHandler } from "./middlewares/error.middleware";
 import authRoutes from "./routes/auth.routes";
+import protectedRoutes from "./routes/protected.routes";
 import morgan from "morgan";
 import { ENVS } from "./config/constants";
 import { sessionMiddleware } from "./middlewares/session.middleware";
@@ -35,6 +36,7 @@ app.get("/ping", (_req: Request, res: Response) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/protected", protectedRoutes);
 
 // Error handler
 app.use(errorHandler);

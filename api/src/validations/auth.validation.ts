@@ -85,19 +85,19 @@ export const validateReqMeeting = Joi.object({
 });
 
 export const validateCancelReq = Joi.object({
-	_id: Joi.string().required().max(24).messages({
+	id: Joi.string().required().max(24).messages({
 		"string.empty": "Request id is required",
 	}),
 });
 
 export const validateApproveAndRej = Joi.object({
-	_id: Joi.string().required().max(24).messages({
+	id: Joi.string().required().max(24).messages({
 		"string.empty": "Request id is required",
 	}),
 });
 
 export const validateUpdatePriority = Joi.object({
-	_id: Joi.string().required().max(24).messages({
+	id: Joi.string().required().max(24).messages({
 		"string.empty": "Request id is required",
 	}),
 	value: Joi.number().required().messages({
