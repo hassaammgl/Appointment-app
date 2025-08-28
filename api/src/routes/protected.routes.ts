@@ -1,14 +1,6 @@
 import { Router } from "express";
-import { protect } from "../middlewares/auth.middlewares";
+import { isAuthenticated,authorize } from "../middlewares/auth.middlewares";
 import {
-	// createMettingReq,
-	// getAllRoles,
-	// getAllMeetingsReq,
-	// cancelMeetingReq,
-	// approveMeetingReq,
-	// rejectMeetingReq,
-	// updatePriorityOfReq,
-	// getReqsByRolesWithPagination
 	meetingController,
 } from "../controllers/mettings.controllers";
 // import { checkOrgPremium } from '../middlewares/checkpremium.middleware';

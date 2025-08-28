@@ -1,10 +1,9 @@
-import User, { IUser, UserRole } from "../models/user.model.js";
-import Organization, { IOrganization } from "../models/org.model.js";
+import User, { IUser, UserRole } from "../models/user.model";
+import Organization, { IOrganization } from "../models/org.model";
 import argon from "argon2";
-import { AuthenticationError } from "../utils/AppError.js";
+import { AuthenticationError } from "../utils/AppError";
 import mongoose from "mongoose";
 
-// Types for service parameters
 interface RegisterUserParams {
 	username: string;
 	email: string;
@@ -18,9 +17,6 @@ interface GetOrgParams {
 }
 
 export class AuthService {
-	/**
-	 * Register a new user with organization handling
-	 */
 	public async registerUser({
 		username,
 		email,
@@ -60,9 +56,6 @@ export class AuthService {
 		return user;
 	}
 
-	/**
-	 * Authenticate user with email and password
-	 */
 	public async loginUser(
 		email: string,
 		password: string,
@@ -82,9 +75,6 @@ export class AuthService {
 		return user;
 	}
 
-	/**
-	 * Get organization by ID
-	 */
 	public async getOrg({ _id }: GetOrgParams): Promise<IOrganization> {
 	    const org = await Organization.findById(_id);
 	    if (!org) {
@@ -93,9 +83,6 @@ export class AuthService {
 	    return org;
 	}
 
-	/**
-	 * Renew organization premium subscription
-	 */
 	public async renewOrganisation(): Promise<IOrganization> {
 	    const orgs = await Organization.find().limit(1);
 
@@ -118,9 +105,6 @@ export class AuthService {
 	    return org;
 	}
 
-	/**
-	 * Check if organization premium is still valid
-	 */
 	public async checkPremiumStatus(organizationId: mongoose.Types.ObjectId | string): Promise<boolean> {
 	    const org = await this.getOrg({ _id: organizationId });
 	    org.updatePremiumStatus(); // Use the method from the model
@@ -128,9 +112,6 @@ export class AuthService {
 	    return org.isPremium;
 	}
 
-	/**
-	 * Get all users in an organization
-	 */
 	public async getOrganizationUsers(organizationId: mongoose.Types.ObjectId | string): Promise<IUser[]> {
 	    const users = await User.find({ organization: organizationId })
 	        .select('-password') // Exclude password from results
@@ -139,9 +120,6 @@ export class AuthService {
 	    return users;
 	}
 
-	/**
-	 * Update user role (admin function)
-	 */
 	public async updateUserRole(userId: mongoose.Types.ObjectId | string, newRole: UserRole): Promise<IUser> {
 	    const user = await User.findById(userId);
 	    if (!user) {
@@ -153,9 +131,6 @@ export class AuthService {
 	    return user;
 	}
 
-	/**
-	 * Verify user exists and return basic info
-	 */
 	public async verifyUser(userId: mongoose.Types.ObjectId | string): Promise<Partial<IUser>> {
 	    const user = await User.findById(userId)
 	        .select('username email role organization')
@@ -169,8 +144,4 @@ export class AuthService {
 	}
 }
 
-// Export singleton instance
 export const authService = new AuthService();
-
-// Export individual functions for backward compatibility
-// export const { registerUser, loginUser, getOrg, renewOrganisation } = authService;
