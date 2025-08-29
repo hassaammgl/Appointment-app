@@ -12,6 +12,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"types": ["node", "express", "express-session"]
 	},
-	"include": ["src/**/*", "types"],
+	"include": ["./","src/**/*", "types"],
 	"exclude": ["node_modules"]
 }

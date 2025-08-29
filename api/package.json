@@ -10,11 +10,12 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch index.ts",
-    "start": "tsx index.ts"
+    "start": "bun dist/index.js"
   },
   "dependencies": {
     "@types/express-session": "^1.18.2",
     "argon2": "^0.44.0",
+    "axios": "^1.11.0",
     "colors": "^1.4.0",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import colors from "colors";
-import { validateEnv } from "./validateEnv.js";
+import { validateEnv } from "./validateEnv";
 
 interface IEnvConfig {
   PORT: string | number;

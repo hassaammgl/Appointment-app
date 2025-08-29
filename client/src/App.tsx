@@ -2,7 +2,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { RouterProvider, createBrowserRouter } from "react-router";
 import routes from "@/routes";
 import { Toaster } from "sonner";
-// import useFCM from "@/hooks/useFCM";
 import { initOneSignal } from "./OneSignalConfig.ts";
 import { useEffect } from "react";
 

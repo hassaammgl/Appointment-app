@@ -13,7 +13,6 @@ export interface IUser extends Document {
     organization: mongoose.Types.ObjectId;
 }
 
-// Custom error interface for better type safety
 interface CustomError extends Error {
     statusCode?: number;
 }
