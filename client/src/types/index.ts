@@ -135,12 +135,12 @@ export type AuthState = {
 		password: string,
 		username: string,
 		role: string,
-		organization: string,
-		// fcmToken: string | null
+		organization: string
 	) => Promise<void>;
 	logout: () => Promise<void>;
 	checkAuth: () => Promise<void>;
 	getOrganization: () => Promise<void>;
 	renewOrganization: (id: string | undefined) => Promise<void>;
+	addPlayerId: (userId: string, playerId: string) => Promise<void>;
 	clearError: () => void;
 };

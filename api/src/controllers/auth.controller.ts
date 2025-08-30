@@ -24,6 +24,11 @@ interface LoginBody {
 	password: string;
 }
 
+interface SavePlayer {
+	userId: string;
+	playerId: string;
+}
+
 // ---- Response wrapper ----
 interface ApiResponse<T = any> {
 	message: string;
@@ -85,7 +90,7 @@ export class AuthController {
 	/**
 	 * Logout user and destroy session
 	 */
-	public static logout(req: Request, res: Response): void {
+	public static async logout(req: Request, res: Response): Promise<void> {
 		req.session.destroy(() => {
 			res.json({ message: "Logged out 👋" });
 		});
@@ -155,7 +160,28 @@ export class AuthController {
 			next(dbError);
 		}
 	}
-}
 
+	public static async savePlayer(
+		req: Request<{}, ApiResponse, SavePlayer>,
+		res: Response<ApiResponse>,
+		next: NextFunction
+	): Promise<void> {
+		try {
+			const { playerId, userId } = req.body;
+
+			const player = await authService.savePlayerId(userId, playerId);
+			if (!player) {
+				throw new AppError("Error while saving player id", 404);
+			}
+			res.status(201).json({
+				message: "Player id saved 🎉",
+				user: player,
+			});
+		} catch (dbError) {
+			handleDbError(dbError);
+			next(dbError);
+		}
+	}
+}
 // Export singleton instance
 export const authController = new AuthController();

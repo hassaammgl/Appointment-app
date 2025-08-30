@@ -3,6 +3,7 @@ import Organization, { IOrganization } from "../models/org.model";
 import argon from "argon2";
 import { AuthenticationError } from "../utils/AppError";
 import mongoose from "mongoose";
+import { NotificationService } from "../utils/NotificationSystem";
 
 interface RegisterUserParams {
 	username: string;
@@ -56,10 +57,7 @@ export class AuthService {
 		return user;
 	}
 
-	public async loginUser(
-		email: string,
-		password: string,
-	): Promise<IUser> {
+	public async loginUser(email: string, password: string): Promise<IUser> {
 		const user = await User.findOne({ email }).populate("organization");
 		if (!user) {
 			throw new AuthenticationError("User not found");
@@ -72,75 +70,109 @@ export class AuthService {
 
 		// Update user if needed (e.g., FCM token handling could be added here)
 		await user.save();
+		await NotificationService.notifyUser(
+			user._id,
+			`Welcome Back`,
+			`Welcome back (${user.username}) again`
+		);
 		return user;
 	}
 
 	public async getOrg({ _id }: GetOrgParams): Promise<IOrganization> {
-	    const org = await Organization.findById(_id);
-	    if (!org) {
-	        throw new Error('Organization not found');
-	    }
-	    return org;
+		const org = await Organization.findById(_id);
+		if (!org) {
+			throw new Error("Organization not found");
+		}
+		return org;
 	}
 
 	public async renewOrganisation(): Promise<IOrganization> {
-	    const orgs = await Organization.find().limit(1);
+		const orgs = await Organization.find().limit(1);
 
-	    if (!orgs.length) {
-	        throw new Error("Organization not found");
-	    }
+		if (!orgs.length) {
+			throw new Error("Organization not found");
+		}
 
-	    const org = orgs[0];
-	    const now = new Date();
+		const org = orgs[0];
+		const now = new Date();
 
-	    // Calculate base date - either current expiry or now (whichever is later)
-	    const baseDate = org.premiumExpiresAt > now ? org.premiumExpiresAt : now;
+		// Calculate base date - either current expiry or now (whichever is later)
+		const baseDate =
+			org.premiumExpiresAt > now ? org.premiumExpiresAt : now;
 
-	    // Set new premium period
-	    org.premiumStartedAt = baseDate;
-	    org.premiumExpiresAt = new Date(baseDate.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year
-	    org.isPremium = true;
+		// Set new premium period
+		org.premiumStartedAt = baseDate;
+		org.premiumExpiresAt = new Date(
+			baseDate.getTime() + 365 * 24 * 60 * 60 * 1000
+		); // 1 year
+		org.isPremium = true;
 
-	    await org.save();
-	    return org;
+		await org.save();
+		return org;
 	}
 
-	public async checkPremiumStatus(organizationId: mongoose.Types.ObjectId | string): Promise<boolean> {
-	    const org = await this.getOrg({ _id: organizationId });
-	    org.updatePremiumStatus(); // Use the method from the model
-	    await org.save();
-	    return org.isPremium;
+	public async checkPremiumStatus(
+		organizationId: mongoose.Types.ObjectId | string
+	): Promise<boolean> {
+		const org = await this.getOrg({ _id: organizationId });
+		org.updatePremiumStatus(); // Use the method from the model
+		await org.save();
+		return org.isPremium;
 	}
 
-	public async getOrganizationUsers(organizationId: mongoose.Types.ObjectId | string): Promise<IUser[]> {
-	    const users = await User.find({ organization: organizationId })
-	        .select('-password') // Exclude password from results
-	        .populate('organization', 'name isPremium');
+	public async getOrganizationUsers(
+		organizationId: mongoose.Types.ObjectId | string
+	): Promise<IUser[]> {
+		const users = await User.find({ organization: organizationId })
+			.select("-password") // Exclude password from results
+			.populate("organization", "name isPremium");
 
-	    return users;
+		return users;
 	}
 
-	public async updateUserRole(userId: mongoose.Types.ObjectId | string, newRole: UserRole): Promise<IUser> {
-	    const user = await User.findById(userId);
-	    if (!user) {
-	        throw new Error('User not found');
-	    }
+	public async updateUserRole(
+		userId: mongoose.Types.ObjectId | string,
+		newRole: UserRole
+	): Promise<IUser> {
+		const user = await User.findById(userId);
+		if (!user) {
+			throw new Error("User not found");
+		}
 
-	    user.role = newRole;
-	    await user.save();
-	    return user;
+		user.role = newRole;
+		await user.save();
+		return user;
 	}
 
-	public async verifyUser(userId: mongoose.Types.ObjectId | string): Promise<Partial<IUser>> {
-	    const user = await User.findById(userId)
-	        .select('username email role organization')
-	        .populate('organization', 'name isPremium');
+	public async verifyUser(
+		userId: mongoose.Types.ObjectId | string
+	): Promise<Partial<IUser>> {
+		const user = await User.findById(userId)
+			.select("username email role organization")
+			.populate("organization", "name isPremium");
 
-	    if (!user) {
-	        throw new Error('User not found');
-	    }
+		if (!user) {
+			throw new Error("User not found");
+		}
 
-	    return user;
+		return user;
+	}
+
+	public async savePlayerId(
+		userId: mongoose.Types.ObjectId | string,
+		playerId: string
+	) {
+		const user = await User.findByIdAndUpdate(
+			userId,
+			{ $addToSet: { oneSignalIds: playerId } },
+			{ new: true }
+		);
+
+		if (!user) {
+			throw new Error("User not found");
+		}
+
+		return user;
 	}
 }
 

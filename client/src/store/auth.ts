@@ -43,13 +43,7 @@ export const useAuth = create<AuthState>()(
 				}
 			},
 
-			signup: async (
-				email,
-				password,
-				username,
-				role,
-				organization,
-			) => {
+			signup: async (email, password, username, role, organization) => {
 				try {
 					set({ isLoading: true, error: null });
 
@@ -126,6 +120,13 @@ export const useAuth = create<AuthState>()(
 				} finally {
 					set({ isLoading: false });
 				}
+			},
+
+			addPlayerId: async (userId, playerId) => {
+				await axios.post("/auth/save-player-id", {
+					userId,
+					playerId,
+				});
 			},
 
 			clearError: () => set({ error: null }),

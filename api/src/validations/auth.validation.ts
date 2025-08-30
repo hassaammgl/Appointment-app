@@ -101,6 +101,7 @@ export const validateUpdatePriorityParams = Joi.object({
 		"string.empty": "Request id is required",
 	}),
 });
+
 export const validateUpdatePriorityBody = Joi.object({
 	data: Joi.number().required().messages({
 		"number.empty": "Priority value is required",
@@ -110,5 +111,14 @@ export const validateUpdatePriorityBody = Joi.object({
 export const validateGetReqsByRole = Joi.object({
 	id: Joi.string().required().messages({
 		"string.empty": "Request id is required",
+	}),
+});
+
+export const validateSavePlayer = Joi.object({
+	userId: Joi.string().required().messages({
+		"string.empty": "User id is required",
+	}),
+	playerId: Joi.string().required().messages({
+		"string.empty": "Onesignal player id is required",
 	}),
 });
