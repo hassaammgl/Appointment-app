@@ -3,8 +3,7 @@ import type { IUser } from "../models/user.model";
 import Users from "../models/user.model";
 import type { IAppointment } from "../models/appointments.model";
 import Meeting from "../models/appointments.model";
-import {NotificationService} from "../utils/NotificationSystem"
-
+import { NotificationService } from "../utils/NotificationSystem";
 
 interface CreateMeetingDTO {
   visitorName: string;
@@ -17,116 +16,123 @@ interface CreateMeetingDTO {
 }
 
 class MeetingService {
-	async getRoles(): Promise<IUser[]> {
-		const roles = await Users.aggregate([
-			{
-				$match: {
-					role: {
-						$in: ["ceo", "cto", "cfo", "gm"],
-					},
-				},
-			},
-			{
-				$project: {
-					_id: 1,
-					username: 1,
-					email: 1,
-					role: 1,
-				},
-			},
-		]);
-		return roles;
-	}
+  async getRoles(): Promise<IUser[]> {
+    const roles = await Users.aggregate([
+      {
+        $match: {
+          role: {
+            $in: ["ceo", "cto", "cfo", "gm"],
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          email: 1,
+          role: 1,
+        },
+      },
+    ]);
+    return roles;
+  }
 
-	async createMeeting(data: CreateMeetingDTO): Promise<IAppointment> {
-		let {
-			visitorName,
-			visitorNo,
-			visitorCnic,
-			purpose,
-			notes,
-			createdBy,
-			to,
-		} = data;
+  async createMeeting(data: CreateMeetingDTO): Promise<IAppointment> {
+    let { visitorName, visitorNo, visitorCnic, purpose, notes, createdBy, to } =
+      data;
 
-		to = to.split("-")[1];
+    to = to.split("-")[1];
 
-		const meeting = await Meeting.create({
-			visitorName,
-			visitorNo,
-			visitorCnic,
-			purpose,
-			notes,
-			createdBy,
-			to,
-		});
+    const meeting = await Meeting.create({
+      visitorName,
+      visitorNo,
+      visitorCnic,
+      purpose,
+      notes,
+      createdBy,
+      to,
+    });
 
-		const user = await Users.findById(to);
+    const user = await Users.findById(to);
 
-		await NotificationService.notifyUser(
-			user?._id || "",
-			"New Meeting Request",
-			`You have a new meeting request from ${visitorName}.`,
-		);
+    await NotificationService.notifyUser(
+      user?._id || "",
+      "New Meeting Request",
+      `You have a new meeting request from ${visitorName}.`
+    );
 
-		return meeting;
-	}
+    return meeting;
+  }
 
-	async getAllMeetings(): Promise<IAppointment[]> {
-		const startOfToday = new Date();
-		startOfToday.setHours(0, 0, 0, 0);
+  async getAllMeetings(): Promise<IAppointment[]> {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
 
-		const allMeetings = await Meeting.find({
-			createdAt: { $gte: startOfToday },
-		})
-			.populate({ path: "to", select: "_id username role" })
-			.populate({ path: "createdBy", select: "_id username role" })
-			.sort({ createdAt: -1 });
+    const allMeetings = await Meeting.find({
+      createdAt: { $gte: startOfToday },
+    })
+      .populate({ path: "to", select: "_id username role" })
+      .populate({ path: "createdBy", select: "_id username role" })
+      .sort({ createdAt: -1 });
 
-		return allMeetings;
-	}
+    return allMeetings;
+  }
 
-	async cancelMeetingReq(_id: string): Promise<boolean> {
-	const met =	await Meeting.findOneAndDelete({ _id })
-			.populate({ path: "to", select: "_id username role fcmTokens" })
-			.populate({
-				path: "createdBy",
-				select: "_id username role fcmTokens",
-			});
-			
+  async cancelMeetingReq(_id: string): Promise<boolean> {
+    const met = await Meeting.findOneAndDelete({ _id })
+      .populate({ path: "to", select: "_id username role fcmTokens" })
+      .populate({
+        path: "createdBy",
+        select: "_id username role fcmTokens",
+      });
 
-		return true;
-	}
+    if (met) {
+      await NotificationService.notifyUser(
+        met?.to?._id || "",
+        "Meeting Request Cancelled",
+        `The meeting request from ${met.visitorName} has been cancelled.`
+      );
+    }
+    return true;
+  }
 
-	async approveRejectMeetingReq(
-		_id: string,
-		type: "approved" | "rejected"
-	): Promise<boolean> {
-		await Meeting.findByIdAndUpdate(_id, { status: type });
-		return true;
-	}
+  async approveRejectMeetingReq(
+    _id: string,
+    type: "approved" | "rejected"
+  ): Promise<boolean> {
+    const met = await Meeting.findByIdAndUpdate(_id, { status: type });
+    if (met) {
+      await NotificationService.notifyUser(
+        met?.createdBy || "",
+        "Request Approved",
+        `Your meeting request has been ${type}.`
+      );
+    }
+    return true;
+  }
 
-	async updateAppointmentPriority(
-		_id: string,
-		value: number
-	): Promise<boolean> {
-		await Meeting.findByIdAndUpdate(_id, { priority: value });
-		return true;
-	}
+  async updateAppointmentPriority(
+    _id: string,
+    value: number
+  ): Promise<boolean> {
+    await Meeting.findByIdAndUpdate(_id, { priority: value });
+	
+    return true;
+  }
 
-	async getReqsWithUserRole(userId: string): Promise<IAppointment[]> {
-		const startOfToday = new Date();
-		startOfToday.setHours(0, 0, 0, 0);
+  async getReqsWithUserRole(userId: string): Promise<IAppointment[]> {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
 
-		const allMeetings = await Meeting.find({
-			to: new Types.ObjectId(userId),
-			createdAt: { $gte: startOfToday },
-		})
-			.populate({ path: "to", select: "_id username role" })
-			.sort({ createdAt: -1 });
+    const allMeetings = await Meeting.find({
+      to: new Types.ObjectId(userId),
+      createdAt: { $gte: startOfToday },
+    })
+      .populate({ path: "to", select: "_id username role" })
+      .sort({ createdAt: -1 });
 
-		return allMeetings;
-	}
+    return allMeetings;
+  }
 }
 
-export const meetingService = new MeetingService()
+export const meetingService = new MeetingService();
