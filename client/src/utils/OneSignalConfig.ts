@@ -2,10 +2,10 @@ import OneSignal from "react-onesignal";
 import axios from "axios";
 
 export async function initOneSignal(userId: string) {
-	await OneSignal.init({
-		appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
-		allowLocalhostAsSecureOrigin: true,
-	});
+	// await OneSignal.init({
+	// 	appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+	// 	allowLocalhostAsSecureOrigin: true,
+	// });
 
 	OneSignal.Slidedown.promptPush();
 

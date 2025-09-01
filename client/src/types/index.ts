@@ -128,7 +128,6 @@ export type AuthState = {
 	login: (
 		email: string,
 		password: string,
-		fcmToken: string | null
 	) => Promise<void>;
 	signup: (
 		email: string,
