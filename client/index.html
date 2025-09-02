@@ -19,7 +19,6 @@
         baseURL: import.meta.env.VITE_API_URL || "https://sapps.site/api/",
         withCredentials: true,
       });
-
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function (OneSignal) {
         await OneSignal.init({
@@ -30,20 +29,20 @@
           },
         });
 
-        OneSignal.Slidedown.promptPush();
+      OneSignal.Slidedown.promptPush();
 
-        OneSignal.User.PushSubscription.addEventListener(
-          "change",
-          async (event) => {
-            if (event.current.id) {
-              await axiosInstance.post("/api/auth/save-player-id", {
-                userId,
-                playerId: event.current.id,
-              });
-            }
+      OneSignal.User.PushSubscription.addEventListener(
+        "change",
+        async (event) => {
+          if (event.current.id) {
+            await axiosInstance.post("/api/auth/save-player-id", {
+              userId,
+              playerId: event.current.id,
+            });
           }
-        );
-      });
+        }
+      );
+        });
     </script>
   </head>
 
