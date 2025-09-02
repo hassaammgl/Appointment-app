@@ -5,9 +5,7 @@ export async function initOneSignal(userId?: string) {
     appId: "acd308c2-485f-463c-8c08-93c66ef34608",
     safari_web_id: "web.onesignal.auto.21fd847c-14e1-48c8-a072-78170e2e9023",
     allowLocalhostAsSecureOrigin: true,
-    notifyButton: {
-      enable: true,
-    },
+    serviceWorkerPath: "/OneSignalSDKWorker.js",
   });
 
   // Ask permission
