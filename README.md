@@ -111,3 +111,11 @@ A full-stack appointment booking application with a React frontend and a Node.js
 | GET    | /api/protected/get-reqs-by-roles/:id | Get meeting requests by role with pagination | ceo, cfo, cto, gm               |
 | GET    | /api/protected/get-organization      | Get organization details                     | receptionist, ceo, cfo, cto, gm |
 | POST   | /api/protected/renew/:id/org         | Renew organization's premium subscription    | Authenticated                   |
+
+
+
+<!-- 
+hassaammgl
+oIJSUhDhxX9DXr0U
+mongodb+srv://hassaammgl:oIJSUhDhxX9DXr0U@cluster0.rmlp1aw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+ -->
