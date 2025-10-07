@@ -14,7 +14,6 @@ declare global {
 }
 
 export function useOneSignal() {
-
   useEffect(() => {
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
