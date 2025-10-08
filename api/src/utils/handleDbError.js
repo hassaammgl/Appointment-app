@@ -14,9 +14,7 @@ export class DatabaseErrorHandler {
   }
 }
 
-// Export singleton instance
 export const databaseErrorHandler = new DatabaseErrorHandler();
 
-// Export the method for backward compatibility
 export const handleDbError =
   databaseErrorHandler.handleDbError.bind(databaseErrorHandler);

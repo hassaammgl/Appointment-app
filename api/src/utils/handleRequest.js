@@ -36,8 +36,6 @@ export class RequestHandler {
   }
 }
 
-// Export singleton instance
 export const requestHandler = new RequestHandler();
 
-// Export the method for backward compatibility
 export const handleRequest = requestHandler.handleRequest.bind(requestHandler);

@@ -8,7 +8,6 @@ export class AppError extends Error {
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.name = "AppError";
 
-    // Maintains proper stack trace for where our error was thrown (only available on V8)
     Error.captureStackTrace(this, this.constructor);
   }
 }

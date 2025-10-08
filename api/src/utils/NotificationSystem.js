@@ -1,4 +1,4 @@
-import { sendNotification } from "./onesignal.js";
+// import { sendNotification } from "./onesignal.js";
 import User from "../models/user.model.js";
 
 export class NotificationService {
@@ -9,11 +9,11 @@ export class NotificationService {
       throw new Error("User has no OneSignal IDs");
     }
 
-    return sendNotification({
-      title,
-      message,
-      url,
-      playerIds: user.oneSignalIds,
-    });
+    // return sendNotification({
+    //   title,
+    //   message,
+    //   url,
+    //   playerIds: user.oneSignalIds,
+    // });
   }
 }
