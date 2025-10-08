@@ -8,12 +8,10 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-.env
-.env.local
 dist
 dist-ssr
+dev-dist
 *.local
-bun.lock
 
 # Editor directories and files
 .vscode/*
