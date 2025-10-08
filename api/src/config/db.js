@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import colors from "colors";
-import { ENVS } from "./constants";
+import { ENVS } from "./constants.js";
 
-const connectDb = async (): Promise<void> => {
+const connectDb = async () => {
 	console.time("connected Db in");
 	try {
 		const conn = await mongoose.connect(ENVS.MONGO_URI);
@@ -11,7 +11,7 @@ const connectDb = async (): Promise<void> => {
 				`MongoDB Connected: ${conn?.connection?.db?.databaseName}`
 			)
 		);
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error) {
 			console.error(
 				colors.red(`MongoDB Connection Error: ${error.message}`)

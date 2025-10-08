@@ -8,8 +8,8 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch index.ts",
-    "start": "bun run index.ts"
+    "dev": "node --watch index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "@types/express-session": "^1.18.2",

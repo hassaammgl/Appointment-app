@@ -1,10 +1,8 @@
-export type ErrorStatus = "fail" | "error";
-
 export class AppError extends Error {
-  public readonly statusCode: number;
-  public readonly status: ErrorStatus;
+  statusCode;
+  status;
 
-  constructor(message: string, statusCode: number) {
+  constructor(message, statusCode) {
     super(message);
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
@@ -16,65 +14,65 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-  public readonly name = "ValidationError";
+  name = "ValidationError";
 
-  constructor(message: string) {
+  constructor(message) {
     super(message, 400);
   }
 }
 
 export class AuthenticationError extends AppError {
-  public readonly name = "AuthenticationError";
+  name = "AuthenticationError";
 
-  constructor(message: string = "Authentication failed") {
+  constructor(message = "Authentication failed") {
     super(message, 401);
   }
 }
 
 export class AuthorizationError extends AppError {
-  public readonly name = "AuthorizationError";
+  name = "AuthorizationError";
 
-  constructor(message: string = "Not authorized") {
+  constructor(message = "Not authorized") {
     super(message, 403);
   }
 }
 
 export class NotFoundError extends AppError {
-  public readonly name = "NotFoundError";
+  name = "NotFoundError";
 
-  constructor(message: string = "Resource not found") {
+  constructor(message = "Resource not found") {
     super(message, 404);
   }
 }
 
 export class ConflictError extends AppError {
-  public readonly name = "ConflictError";
+  name = "ConflictError";
 
-  constructor(message: string = "Resource conflict") {
+  constructor(message = "Resource conflict") {
     super(message, 409);
   }
 }
 
 export class InternalServerError extends AppError {
-  public readonly name = "InternalServerError";
+  name = "InternalServerError";
 
-  constructor(message: string = "Internal server error") {
+  constructor(message = "Internal server error") {
     super(message, 500);
   }
 }
 
 export class BadRequestError extends AppError {
-  public readonly name = "BadRequestError";
+  name = "BadRequestError";
 
-  constructor(message: string = "Bad request") {
+  constructor(message = "Bad request") {
     super(message, 400);
   }
 }
 
 export class RateLimitError extends AppError {
-  public readonly name = "RateLimitError";
+  name = "RateLimitError";
 
-  constructor(message: string = "Too many requests") {
+  constructor(message = "Too many requests") {
     super(message, 429);
   }
 }

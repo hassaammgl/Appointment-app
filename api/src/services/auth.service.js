@@ -1,30 +1,11 @@
-import User, { IUser, UserRole } from "../models/user.model";
-import Organization, { IOrganization } from "../models/org.model";
+import User from "../models/user.model.js";
+import Organization from "../models/org.model.js";
 import argon from "argon2";
-import { AuthenticationError } from "../utils/AppError";
-import mongoose from "mongoose";
-
-interface RegisterUserParams {
-  username: string;
-  email: string;
-  password: string;
-  role: UserRole;
-  organization?: mongoose.Types.ObjectId | string;
-}
-
-interface GetOrgParams {
-  _id: mongoose.Types.ObjectId | string;
-}
+import { AuthenticationError } from "../utils/AppError.js";
 
 export class AuthService {
-  public async registerUser({
-    username,
-    email,
-    password,
-    role,
-    organization,
-  }: RegisterUserParams): Promise<IUser> {
-    let orgId: mongoose.Types.ObjectId;
+  async registerUser({ username, email, password, role, organization }) {
+    let orgId;
 
     if (organization === "") {
       const orgs = await Organization.find().limit(1);
@@ -33,11 +14,11 @@ export class AuthService {
           "No organizations found. Please create an organization first."
         );
       }
-      orgId = orgs[0]._id as mongoose.Types.ObjectId;
+      orgId = orgs[0]._id;
     } else {
       const org = new Organization({ name: organization });
       await org.save();
-      orgId = org._id as mongoose.Types.ObjectId;
+      orgId = org._id;
     }
 
     const hashedPassword = await argon.hash(password);
@@ -53,7 +34,7 @@ export class AuthService {
     return user;
   }
 
-  public async loginUser(email: string, password: string): Promise<IUser> {
+  async loginUser(email, password) {
     const user = await User.findOne({ email }).populate("organization");
     if (!user) {
       throw new AuthenticationError("User not found");
@@ -68,7 +49,7 @@ export class AuthService {
     return user;
   }
 
-  public async getOrg({ _id }: GetOrgParams): Promise<IOrganization> {
+  async getOrg({ _id }) {
     const org = await Organization.findById(_id);
     if (!org) {
       throw new Error("Organization not found");
@@ -76,7 +57,7 @@ export class AuthService {
     return org;
   }
 
-  public async renewOrganisation(): Promise<IOrganization> {
+  async renewOrganisation() {
     const orgs = await Organization.find().limit(1);
 
     if (!orgs.length) {
@@ -98,18 +79,14 @@ export class AuthService {
     return org;
   }
 
-  public async checkPremiumStatus(
-    organizationId: mongoose.Types.ObjectId | string
-  ): Promise<boolean> {
+  async checkPremiumStatus(organizationId) {
     const org = await this.getOrg({ _id: organizationId });
     org.updatePremiumStatus();
     await org.save();
     return org.isPremium;
   }
 
-  public async getOrganizationUsers(
-    organizationId: mongoose.Types.ObjectId | string
-  ): Promise<IUser[]> {
+  async getOrganizationUsers(organizationId) {
     const users = await User.find({ organization: organizationId })
       .select("-password")
       .populate("organization", "name isPremium");
@@ -117,10 +94,7 @@ export class AuthService {
     return users;
   }
 
-  public async updateUserRole(
-    userId: mongoose.Types.ObjectId | string,
-    newRole: UserRole
-  ): Promise<IUser> {
+  async updateUserRole(userId, newRole) {
     const user = await User.findById(userId);
     if (!user) {
       throw new Error("User not found");
@@ -131,9 +105,7 @@ export class AuthService {
     return user;
   }
 
-  public async verifyUser(
-    userId: mongoose.Types.ObjectId | string
-  ): Promise<Partial<IUser>> {
+  async verifyUser(userId) {
     const user = await User.findById(userId)
       .select("username email role organization")
       .populate("organization", "name isPremium");
@@ -145,10 +117,7 @@ export class AuthService {
     return user;
   }
 
-  public async savePlayerId(
-    userId: mongoose.Types.ObjectId | string,
-    playerId: string
-  ) {
+  async savePlayerId(userId, playerId) {
     const user = await User.findByIdAndUpdate(
       userId,
       { $addToSet: { oneSignalIds: playerId } },

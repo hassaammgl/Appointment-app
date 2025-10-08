@@ -1,12 +1,6 @@
-interface IEnvRule {
-  key: string;
-  required?: boolean;
-  default?: string;
-}
-
-export const validateEnv = (): string[] => {
-  const requiredEnvs: IEnvRule[] = [
-    { key: "PORT", default: "5000" },//
+export const validateEnv = () => {
+  const requiredEnvs = [
+    { key: "PORT", default: "5000" }, //
     { key: "MONGO_URI", required: true }, //
     { key: "CLIENT_ORIGIN", required: true },
     { key: "SESSION_SECRET", required: true },
@@ -14,10 +8,10 @@ export const validateEnv = (): string[] => {
     { key: "NODE_ENV", default: "development" },
   ];
 
-  const missingEnvs: string[] = [];
-  const warnings: string[] = [];
+  const missingEnvs = [];
+  const warnings = [];
 
-  requiredEnvs.forEach((env: IEnvRule) => {
+  requiredEnvs.forEach((env) => {
     if (!process.env[env.key]) {
       if (env.required) {
         missingEnvs.push(env.key);

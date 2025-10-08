@@ -1,6 +1,6 @@
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { ENVS } from "../config/constants";
+import { ENVS } from "../config/constants.js";
 
 export const sessionMiddleware = session({
   secret: ENVS.SESSION_SECRET,
@@ -14,7 +14,7 @@ export const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     secure: ENVS.NODE_ENV === "production",
-    sameSite: ENVS.NODE_ENV === "production" ? "none" : "lax", // 👈 important if frontend is on different domain
+    sameSite: ENVS.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 });

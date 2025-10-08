@@ -1,14 +1,13 @@
 import express from "express";
-import type { Request, Response, NextFunction } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { errorHandler } from "./middlewares/error.middleware";
-import authRoutes from "./routes/auth.routes";
-import protectedRoutes from "./routes/protected.routes";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
+import protectedRoutes from "./routes/protected.routes.js";
 import morgan from "morgan";
-import { ENVS } from "./config/constants";
-import { sessionMiddleware } from "./middlewares/session.middleware";
-import { NotFound } from "./middlewares/notFound.middleware";
+import { ENVS } from "./config/constants.js";
+import { sessionMiddleware } from "./middlewares/session.middleware.js";
+import { NotFound } from "./middlewares/notFound.middleware.js";
 
 const app = express();
 
@@ -27,7 +26,7 @@ app.use(
 );
 app.use(morgan("combined"));
 
-app.get("/ping", (_req: Request, res: Response) => {
+app.get("/ping", (_req, res) => {
   res.status(200).json({
     success: true,
     message: "Hello World",

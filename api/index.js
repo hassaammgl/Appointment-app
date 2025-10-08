@@ -13,7 +13,7 @@ const server = app.listen(PORT, () => {
 	console.log(colors.green(`🚀 Server listening on port ${PORT}`));
 });
 
-process.on("unhandledRejection", (reason: any, promise: Promise<any>) => {
+process.on("unhandledRejection", (reason, promise) => {
 	console.error(
 		colors.red.bold("🔥 Unhandled Rejection:"),
 		reason instanceof Error ? reason.stack : reason
@@ -25,7 +25,7 @@ process.on("unhandledRejection", (reason: any, promise: Promise<any>) => {
 	}
 });
 
-process.on("uncaughtException", (err: Error) => {
+process.on("uncaughtException", (err) => {
 	console.error(
 		colors.bgRed.white("💥 Uncaught Exception:"),
 		err.stack || err.message

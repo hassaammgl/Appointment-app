@@ -1,22 +1,10 @@
-import mongoose, { Types } from "mongoose";
-import type { IUser } from "../models/user.model";
-import Users from "../models/user.model";
-import type { IAppointment } from "../models/appointments.model";
-import Meeting from "../models/appointments.model";
-import { NotificationService } from "../utils/NotificationSystem";
-
-interface CreateMeetingDTO {
-  visitorName: string;
-  visitorNo?: string;
-  visitorCnic?: string;
-  purpose?: string;
-  notes?: string;
-  createdBy: string;
-  to: string;
-}
+import { Types } from "mongoose";
+import Users from "../models/user.model.js";
+import Meeting from "../models/appointments.model.js";
+import { NotificationService } from "../utils/NotificationSystem.js";
 
 class MeetingService {
-  async getRoles(): Promise<IUser[]> {
+  async getRoles() {
     const roles = await Users.aggregate([
       {
         $match: {
@@ -37,7 +25,7 @@ class MeetingService {
     return roles;
   }
 
-  async createMeeting(data: CreateMeetingDTO): Promise<IAppointment> {
+  async createMeeting(data) {
     let { visitorName, visitorNo, visitorCnic, purpose, notes, createdBy, to } =
       data;
 
@@ -64,7 +52,7 @@ class MeetingService {
     return meeting;
   }
 
-  async getAllMeetings(): Promise<IAppointment[]> {
+  async getAllMeetings() {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -78,7 +66,7 @@ class MeetingService {
     return allMeetings;
   }
 
-  async cancelMeetingReq(_id: string): Promise<boolean> {
+  async cancelMeetingReq(_id) {
     const met = await Meeting.findOneAndDelete({ _id })
       .populate({ path: "to", select: "_id username role fcmTokens" })
       .populate({
@@ -97,9 +85,9 @@ class MeetingService {
   }
 
   async approveRejectMeetingReq(
-    _id: string,
-    type: "approved" | "rejected"
-  ): Promise<boolean> {
+    _id,
+    type
+  ) {
     const met = await Meeting.findByIdAndUpdate(_id, { status: type });
     if (met) {
       await NotificationService.notifyUser(
@@ -112,15 +100,15 @@ class MeetingService {
   }
 
   async updateAppointmentPriority(
-    _id: string,
-    value: number
-  ): Promise<boolean> {
+    _id,
+    value
+  ){
     await Meeting.findByIdAndUpdate(_id, { priority: value });
 	
     return true;
   }
 
-  async getReqsWithUserRole(userId: string): Promise<IAppointment[]> {
+  async getReqsWithUserRole(userId) {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
