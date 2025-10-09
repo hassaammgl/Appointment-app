@@ -15,21 +15,19 @@ import { useAuth } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/toast";
 import { ModeToggle } from "@/components/mode-toogle";
 import { AxiosError } from "axios";
-import { initOneSignal } from "@/utils/OneSignalConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { error, success } = useToast();
-  const { login, isLoading, user } = useAuth();
+  const { login, isLoading, } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
       success("You're in! 🎉");
-      await initOneSignal(user?.id || "");
       navigate("/profile");
     } catch (err) {
       const message =
