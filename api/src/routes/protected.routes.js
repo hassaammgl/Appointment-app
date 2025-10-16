@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated, authorize } from "../middlewares/auth.middlewares.js";
-import { meetingController } from "../controllers/mettings.controllers.js";
+import {MeetingController as meetingController } from "../controllers/mettings.controllers.js";
 import { authController } from "../controllers/auth.controller.js";
 import { checkOrgPremium } from "../middlewares/checkPremium.middleware.js";
 import {

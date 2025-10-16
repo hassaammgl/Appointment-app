@@ -1,7 +1,6 @@
 import { Types } from "mongoose";
 import Users from "../models/user.model.js";
 import Meeting from "../models/appointments.model.js";
-import { NotificationService } from "../utils/NotificationSystem.js";
 
 class MeetingService {
   async getRoles() {
@@ -42,13 +41,6 @@ class MeetingService {
     });
 
     const user = await Users.findById(to);
-
-    await NotificationService.notifyUser(
-      user?._id || "",
-      "New Meeting Request",
-      `You have a new meeting request from ${visitorName}.`
-    );
-
     return meeting;
   }
 
@@ -74,37 +66,16 @@ class MeetingService {
         select: "_id username role fcmTokens",
       });
 
-    if (met) {
-      await NotificationService.notifyUser(
-        met?.to?._id || "",
-        "Meeting Request Cancelled",
-        `The meeting request from ${met.visitorName} has been cancelled.`
-      );
-    }
     return true;
   }
 
-  async approveRejectMeetingReq(
-    _id,
-    type
-  ) {
+  async approveRejectMeetingReq(_id, type) {
     const met = await Meeting.findByIdAndUpdate(_id, { status: type });
-    if (met) {
-      await NotificationService.notifyUser(
-        met?.createdBy || "",
-        "Request Approved",
-        `Your meeting request has been ${type}.`
-      );
-    }
     return true;
   }
 
-  async updateAppointmentPriority(
-    _id,
-    value
-  ){
+  async updateAppointmentPriority(_id, value) {
     await Meeting.findByIdAndUpdate(_id, { priority: value });
-	
     return true;
   }
 
