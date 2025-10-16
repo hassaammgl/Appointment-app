@@ -3,7 +3,7 @@ import colors from "colors";
 import { ENVS } from "./constants.js";
 
 const connectDb = async () => {
-	console.time("connected Db in");
+	console.time("Db connected in");
 	try {
 		const conn = await mongoose.connect(ENVS.MONGO_URI);
 		console.log(
@@ -25,7 +25,7 @@ const connectDb = async () => {
 		}
 		process.exit(1);
 	}
-	console.timeEnd("connected Db in");
+	console.timeEnd("Db connected in");
 };
 
 export default connectDb;

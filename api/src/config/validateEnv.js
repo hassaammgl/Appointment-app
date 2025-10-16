@@ -1,7 +1,7 @@
 export const validateEnv = () => {
   const requiredEnvs = [
-    { key: "PORT", default: "5000" }, //
-    { key: "MONGO_URI", required: true }, //
+    { key: "PORT", default: "5000" },
+    { key: "MONGO_URI", required: true },
     { key: "CLIENT_ORIGIN", required: true },
     { key: "SESSION_SECRET", required: true },
     { key: "DEVELOPER_SECRET", required: true },

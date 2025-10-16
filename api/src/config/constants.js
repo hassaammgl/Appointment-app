@@ -13,16 +13,12 @@ export const ENVS = {
 };
 
 export const checkEnvs = async () => {
-  console.time("Variables Validation time");
   try {
     const warnings = validateEnv();
-
     warnings.forEach((warning) => {
       console.log(colors.yellow("Environment Warning:"), warning);
     });
-
     console.log(colors.green("Environment variables validated successfully"));
-
     console.log(colors.cyan("Environment Mode:"), ENVS.NODE_ENV);
   } catch (error) {
     if (error instanceof Error) {
@@ -34,5 +30,4 @@ export const checkEnvs = async () => {
     }
     process.exit(1);
   }
-  console.timeEnd("Variables Validation time");
 };
