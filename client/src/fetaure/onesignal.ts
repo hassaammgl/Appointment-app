@@ -33,6 +33,7 @@ export const useOneSignal = () => {
       },
     }).then(() => {
       OneSignal.Debug.setLogLevel("trace");
+      OneSignal.Slidedown.promptPush();
     });
   }, []);
 };
