@@ -24,9 +24,9 @@ app.use(
     credentials: true,
   })
 );
-app.use(morgan("combined"));
+app.use(morgan("tiny"));
 
-app.get("/ping", (_req, res) => {
+app.get("/api/ping", (_req, res) => {
   res.status(200).json({
     success: true,
     message: "Hello World",

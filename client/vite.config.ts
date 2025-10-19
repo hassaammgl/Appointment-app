@@ -11,4 +11,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server:{
+    allowedHosts:[
+      "diencephalic-marguerite-mazily.ngrok-free.dev"
+    ]
+  }
 });
