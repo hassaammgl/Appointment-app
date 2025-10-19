@@ -1,42 +1,64 @@
 import { useEffect } from "react";
 import OneSignal from "react-onesignal";
 
-// [TODO]: setup one signal system
 export const useOneSignal = () => {
   useEffect(() => {
+    const initOneSignal = async () => {
+      try {
+        const isTrue = localStorage.getItem("is-one-signal-initialized");
+        console.log(typeof isTrue, "value: ", isTrue);
 
-      OneSignal.init({
-          appId: import.meta.env.VITE_ONESIGNAL_APP_ID! as string,
-          welcomeNotification:{
-              message:"Welcome & Thanks to enable notifications...",
-              title: "Welcome",
+        // if (isTrue === "true") return;
+        // else {
+        await OneSignal.init({
+          appId: import.meta.env.VITE_ONESIGNAL_APP_ID as string,
+          safari_web_id: import.meta.env.VITE_ONESIGNAL_SAFARI_WEB_ID as string,
+          allowLocalhostAsSecureOrigin: true,
+          welcomeNotification: {
+            title: "Welcome 🎉",
+            message:
+              "Thanks for enabling notifications! You’ll get alerts for new appointments.",
           },
-          notifyButton:{
-enable:true,
-              position: "bottom-left",
-              prenotify:true,
-              text: {
-    "dialog.main.button.subscribe":"Subscribe to get Notifications on each appointments",
+          notifyButton: {
+            enable: true,
+            position: "bottom-left",
+            size: "medium",
+            prenotify: true,
 
-              }
-          }
-      });
+            showCredit: false,
+            text: {
+              "tip.state.unsubscribed": "Click to subscribe for updates!",
+              "tip.state.subscribed": "You’re subscribed 🔔",
+              "tip.state.blocked": "Notifications are blocked 😢",
+              "message.prenotify": "Click to get appointment alerts!",
+              "message.action.subscribing": "Subscribing...",
+              "message.action.subscribed": "You’re now subscribed 🎉",
+              "message.action.resubscribed": "Welcome back!",
+              "message.action.unsubscribed": "You’ve unsubscribed 😔",
+              "dialog.main.title": "Stay Updated!",
+              "dialog.main.button.subscribe": "Subscribe to Appointment Alerts",
+              "dialog.main.button.unsubscribe": "Unsubscribe",
+              "dialog.blocked.title": "Notifications Blocked",
+              "dialog.blocked.message":
+                "Please enable notifications in your browser settings.",
+            },
+          },
+        });
+        // }
 
+        await OneSignal.User.PushSubscription.optedIn;
+
+        const id = await OneSignal.User.PushSubscription.id;
+
+        console.log("OneSignal ID:", id);
+
+        localStorage.setItem("is-one-signal-initialized", "true");
+        console.log("✅ OneSignal initialized successfully");
+      } catch (err) {
+        console.error("❌ OneSignal init failed:", err);
+      }
+    };
+
+    initOneSignal();
   }, []);
 };
-
-  /**
-   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-   <script>
-
-   OneSignalDeferred.push(async function(OneSignal) {
-   await OneSignal.init({
-   appId: "e1e63370-18ef-495b-9aff-d6766c418856",
-   safari_web_id: "web.onesignal.auto.01b883ce-5cfa-4aca-8569-bf08de600615",
-   notifyButton: {
-   enable: true,
-   },
-   });
-   });
-   </script>
-   */
