@@ -3,7 +3,7 @@ import { validateRequest } from "../middlewares/validation.middleware.js";
 import {
   validateRegister,
   validateLogin,
-  validateSavePlayer,
+  validateSaveUserDevice,
 } from "../validations/auth.validation.js";
 import { AuthController } from "../controllers/auth.controller.js";
 import { isAuthenticated } from "../middlewares/auth.middlewares.js";
@@ -17,11 +17,11 @@ router.post(
 );
 router.post("/login", validateRequest(validateLogin), AuthController.login);
 router.post("/logout", isAuthenticated, AuthController.logout);
-router.post(
-  "/save-player-id",
+router.put(
+  "/add-user-device-id",
   isAuthenticated,
-  validateRequest(validateSavePlayer),
-  AuthController.savePlayer
+  validateRequest(validateSaveUserDevice),
+  AuthController.saveDeviceId
 );
 
 export default router;

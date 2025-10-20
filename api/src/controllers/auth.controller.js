@@ -101,17 +101,17 @@ export class AuthController {
     }
   }
 
-  static async savePlayer(req, res, next) {
+  static async saveDeviceId(req, res, next) {
     try {
-      const { playerId, userId } = req.body;
+      const { deviceId, userId } = req.body;
 
-      const player = await authService.savePlayerId(userId, playerId);
-      if (!player) {
+      const user = await authService.saveDeviceId(userId, deviceId);
+      if (!user) {
         throw new AppError("Error while saving player id", 404);
       }
       res.status(201).json({
-        message: "Player id saved 🎉",
-        user: player,
+        message: "Device id is saved 🎉",
+        user,
       });
     } catch (dbError) {
       handleDbError(dbError);

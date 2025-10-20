@@ -11,9 +11,6 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 	const [layout, setLayout] = useState<"grid" | "list">("grid");
 
 	const { fetchAllReq, meetings } = useMeetings();
-
-	console.table(meetings);
-
 	const toggleFetchAgain = () => setIsFetchAgain((prev) => !prev);
 
 	useEffect(() => {

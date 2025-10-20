@@ -117,18 +117,16 @@ export class AuthService {
     return user;
   }
 
-  async savePlayerId(userId, playerId) {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { oneSignalIds: playerId } },
-      { new: true }
-    );
+  async saveDeviceId(userId, deviceId) {
+    console.log(userId);
+    console.log(deviceId);
+    
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
 
-    return user;
+    // return user;
   }
 }
 

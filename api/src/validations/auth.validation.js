@@ -114,11 +114,11 @@ export const validateGetReqsByRole = Joi.object({
 	}),
 });
 
-export const validateSavePlayer = Joi.object({
+export const validateSaveUserDevice = Joi.object({
 	userId: Joi.string().required().messages({
 		"string.empty": "User id is required",
 	}),
-	playerId: Joi.string().required().messages({
+	deviceId: Joi.string().required().messages({
 		"string.empty": "Onesignal player id is required",
 	}),
 });

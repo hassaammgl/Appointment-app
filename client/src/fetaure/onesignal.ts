@@ -3,7 +3,7 @@ import OneSignal from "react-onesignal";
 import { useAuth } from "@/store/auth";
 
 export const useOneSignal = () => {
-  const { user } = useAuth();
+  const { user, saveUserDevice } = useAuth();
   console.log(user?.id);
 
   useEffect(() => {
@@ -50,12 +50,20 @@ export const useOneSignal = () => {
               },
             },
           });
-        }
 
-        const isSubscribed = await OneSignal.User.PushSubscription.optedIn;
-        if (isSubscribed) {
-          const id = await OneSignal.User.PushSubscription.id;
-          console.log("Already subscribed! ID:", id);
+          const isSubscribed = await OneSignal.User.PushSubscription.optedIn;
+          if (isSubscribed) {
+            const id = await OneSignal.User.PushSubscription.id;
+            console.log(
+              "Already subscribed! ID:",
+              id,
+              "isSubscribed:",
+              isSubscribed,
+              "userId:",
+              user?.id
+            );
+            await saveUserDevice(user?.id as string, id as string);
+          }
         }
 
         localStorage.setItem("is-one-signal-initialized", "true");
