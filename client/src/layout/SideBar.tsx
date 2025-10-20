@@ -14,7 +14,6 @@ import type { SidebarProps } from "@/types";
 export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  console.log(location);
 
   const getNavLinkClass = (path: string) => {
     const isActive = location.pathname === path;

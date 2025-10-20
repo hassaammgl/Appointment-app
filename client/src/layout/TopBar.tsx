@@ -27,7 +27,6 @@ export const TopBar = () => {
 	const { user, logout } = useAuth();
 
 	const location = useLocation();
-	console.log(location);
 
 	const getNavLinkClass = (path: string) => {
 		const isActive = location.pathname === path;

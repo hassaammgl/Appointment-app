@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
 import type { AuthState } from "@/types";
 
 const axiosInstance = axios.create({
-	baseURL: import.meta.env.VITE_API_URL || "https://sapps.site/api/",
+	baseURL: import.meta.env.VITE_API_URL! as string,
 	withCredentials: true,
 });
 
@@ -121,13 +122,22 @@ export const useAuth = create<AuthState>()(
 					set({ isLoading: false });
 				}
 			},
-
-			addPlayerId: async (userId, playerId) => {
-				await axios.post("/auth/save-player-id", {
-					userId,
-					playerId,
-				});
+			saveUserDevice: async(userId, onesignalId)=> {
+				try {
+					set({ isLoading: true, error: null });
+					// const { data } = await axiosInstance.post(
+					// 	`/`
+					// );
+				} catch (err: any) {
+					const errorMessage = getErrorMessage(err);
+					set({ error: errorMessage });
+					throw new Error(errorMessage);
+				} finally {
+					set({ isLoading: false });
+				}
 			},
+
+
 
 			clearError: () => set({ error: null }),
 		}),
