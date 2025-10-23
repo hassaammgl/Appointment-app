@@ -16,7 +16,10 @@ import type { MeetingCardInterface } from "@/types";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/store/settings";
 
-const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
+const MainMeetingCards = ({
+  meeting,
+  toggleFetchAgain,
+}: MeetingCardInterface) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const { cancelMeetingReq } = useMeetings();
@@ -175,4 +178,4 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
   );
 };
 
-export default MettingCards;
+export default MainMeetingCards;

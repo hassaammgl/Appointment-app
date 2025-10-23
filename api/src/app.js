@@ -14,13 +14,12 @@ const app = express();
 console.log(ENVS.CLIENT_ORIGIN);
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(
   cors({
-    // origin: CONSTANTS.CLIENT_ORIGIN,
-    origin: "http://localhost:5173",
+    origin: ENVS.CLIENT_ORIGIN || "http://localhost:5173",
     credentials: true,
   })
 );

@@ -37,6 +37,14 @@ export class AuthController {
         organization: user.organization,
       };
 
+      // Ensure session is saved before sending response
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+
       res.json({ message: "Logged in 🛜", user: req.session.user });
     } catch (dbError) {
       handleDbError(dbError);
@@ -45,9 +53,19 @@ export class AuthController {
   }
 
   static async logout(req, res) {
-    req.session.destroy(() => {
-      res.json({ message: "Logged out 👋" });
+    // Properly destroy session and clear cookie
+    await new Promise((resolve) => {
+      req.session.destroy(() => {
+        try {
+          res.clearCookie("connect.sid");
+        } catch (e) {
+          // ignore
+        }
+        resolve();
+      });
     });
+
+    res.json({ message: "Logged out 👋" });
   }
 
   async getOrganization(req, res, next) {

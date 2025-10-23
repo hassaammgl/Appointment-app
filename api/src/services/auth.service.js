@@ -118,15 +118,33 @@ export class AuthService {
   }
 
   async saveDeviceId(userId, deviceId) {
-    console.log(userId);
-    console.log(deviceId);
-    
+    if (!userId || !deviceId) {
+      throw new Error("userId and deviceId are required");
+    }
 
-    // if (!user) {
-    //   throw new Error("User not found");
-    // }
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-    // return user;
+    // Ensure deviceIds array exists
+    user.deviceIds = user.deviceIds || [];
+    if (!user.deviceIds.includes(deviceId)) {
+      user.deviceIds.push(deviceId);
+    }
+
+    // Also track onesignal ids if present
+    user.oneSignalIds = user.oneSignalIds || [];
+    if (!user.oneSignalIds.includes(deviceId)) {
+      user.oneSignalIds.push(deviceId);
+    }
+
+    await user.save();
+
+    // Return user without password
+    const userObj = user.toObject();
+    delete userObj.password;
+    return userObj;
   }
 }
 
