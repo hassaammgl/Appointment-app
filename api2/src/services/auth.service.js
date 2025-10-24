@@ -11,7 +11,7 @@ export class AuthService {
       const orgs = await Organization.find().limit(1);
       if (!orgs.length) {
         throw new Error(
-          "No organizations found. Please create an organization first.",
+          "No organizations found. Please create an organization first."
         );
       }
       orgId = orgs[0]._id;
@@ -71,7 +71,7 @@ export class AuthService {
 
     org.premiumStartedAt = baseDate;
     org.premiumExpiresAt = new Date(
-      baseDate.getTime() + 365 * 24 * 60 * 60 * 1000,
+      baseDate.getTime() + 365 * 24 * 60 * 60 * 1000
     );
     org.isPremium = true;
 
@@ -130,7 +130,7 @@ export class AuthService {
           oneSignalIds: deviceId,
         },
       },
-      { new: true, select: "-password" },
+      { new: true, select: "-password" }
     );
     if (!user) {
       throw new Error("User not found");

@@ -22,7 +22,14 @@ export const envSchema = Joi.object({
 				"CLIENT_ORIGIN must be a valid URL (e.g. http://localhost:3000)",
 			"any.required": "CLIENT_ORIGIN is required",
 		}),
-
+	CLIENT_ORIGIN_PROD: Joi.string()
+		.uri({ scheme: ["http", "https"] })
+		.required()
+		.messages({
+			"string.uri":
+				"CLIENT_ORIGIN must be a valid URL (e.g. http://localhost:3000)",
+			"any.required": "CLIENT_ORIGIN is required",
+		}),
 	NODE_ENV: Joi.string()
 		.valid("development", "production", "test")
 		.default("development"),

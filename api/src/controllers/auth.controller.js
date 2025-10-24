@@ -15,7 +15,35 @@ class Auth {
 			next(error);
 		}
 	}
-	async login(req, res, next) {}
+	async login(req, res, next) {
+		try {
+			const { email, password } = req.body;
+			const user = await authservice.login(email, password);
+
+			if (!user) {
+				throw new AuthenticationError("Invalid email or password");
+			}
+			req.session.user = {
+				id: user._id?.toString() || "",
+				role: user.role,
+				email: user.email,
+				username: user.username,
+				organization: user.organization,
+			};
+
+			await new Promise((resolve, reject) => {
+				req.session.save((err) => {
+					if (err) return reject(err);
+					resolve();
+				});
+			});
+
+			res.json({ message: "Logged in 🛜", user: req.session.user });
+		} catch (dbError) {
+			handleDbError(dbError);
+			next(dbError);
+		}
+	}
 	async logout(req, res, next) {}
 }
 
