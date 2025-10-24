@@ -59,7 +59,6 @@ const DashBoards = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("Fetching again");
       toggleFetchAgain();
     }, 1000 * 60);
     return () => clearInterval(interval);
