@@ -1,5 +1,5 @@
 export class ApiResponse {
-  static success(res, options) { 
+  static success(res, options) {
     const {
       statusCode = 200,
       message = "",

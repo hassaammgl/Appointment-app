@@ -25,8 +25,10 @@ export class MeetingController {
       const roles = await meetingService.getRoles();
       res.status(200).json({ message: "Users fetched 🎉", roles });
     } catch (err) {
-      if (err.name === "MongoError" || err.code === 11000) {
-        this.handleDatabaseError(err, "Failed to fetch roles");
+      try {
+        MeetingController.handleDatabaseError(err, "Failed to fetch roles");
+      } catch (error) {
+        return next(error);
       }
       next(err);
     }

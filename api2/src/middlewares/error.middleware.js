@@ -1,4 +1,4 @@
-import { ENVS } from "../utils/constants.js";
+import { ENVS } from "../config/constants.js";
 import { AppError } from "../utils/AppError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 

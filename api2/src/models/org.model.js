@@ -82,8 +82,6 @@ organizationSchema.pre("save", function (next) {
 });
 
 
-organizationSchema.index({ name: 1 });
-
 const Organization = mongoose.model("Organization", organizationSchema);
 
 export default Organization;

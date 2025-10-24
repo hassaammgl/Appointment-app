@@ -1,49 +1,64 @@
+import { logger } from "./src/config/logger.js";
+import { ENVS } from "./src/utils/constants.js";
 import app from "./src/app.js";
-import colors from "colors";
-import connectDb from "./src/config/db.js";
-import { checkEnvs } from "./src/config/constants.js";
+import connectDB from "./src/config/db.js";
+import { checkEnv } from "./src/utils/checkEnvs.js";
 
-process.on("unhandledRejection", (reason, _promise) => {
-  console.error(
-    colors.red.bold("🔥 Unhandled Rejection:"),
-    reason instanceof Error ? reason.stack : reason,
-  );
-  if (typeof server !== "undefined" && server.close) {
-    server.close(() => process.exit(1));
-    setTimeout(() => {
-      console.error(colors.red("Forced exit after timeout"));
-      process.exit(1);
-    }, 10000);
-  } else {
-    process.exit(1);
-  }
+process.on("unhandledRejection", (reason) => {
+	logger.error(
+		"Unhandled Rejection:",
+		reason instanceof Error ? reason.stack : reason
+	);
+	gracefulShutdown(1);
+});
+
+process.on("uncaughtException", (err) => {
+	logger.error(`Uncaught Exception: ${err.stack || err.message}`);
+	gracefulShutdown(1);
 });
 
 let server;
+const gracefulShutdown = (code = 0) => {
+	logger.info("Shutting down gracefully...");
 
-process.on("uncaughtException", (err) => {
-  console.error(
-    colors.bgRed.white("💥 Uncaught Exception:"),
-    err.stack || err.message,
-  );
-  process.exit(1);
-});
+	if (server) {
+		server.close(() => {
+			logger.info("HTTP server closed.");
+			process.exit(code);
+		});
 
-(async function () {
-  try {
-    checkEnvs();
+		setTimeout(() => {
+			logger.error("Forced exit: Server did not close in time");
+			process.exit(1);
+		}, 10000);
+	} else {
+		process.exit(code);
+	}
+};
 
-    await connectDb();
+process.on("SIGTERM", () => gracefulShutdown(0));
+process.on("SIGINT", () => gracefulShutdown(0));
 
-    const PORT = process.env.PORT || 5000;
-    server = app.listen(PORT, () => {
-      console.log(
-        colors.green(`🚀 Server listening on port http://localhost:${PORT}`),
-      );
-    });
-  } catch (err) {
-    console.error(colors.red("Failed to start application:"), err);
-    process.exit(1);
-  }
+(async () => {
+	try {
+		checkEnv();
+
+		await connectDB();
+
+		const PORT = ENVS.PORT ?? 5500;
+		server = app.listen(PORT, () => {
+			logger.info(`Server running on http://localhost:${PORT}`);
+		});
+
+		server.on("listening", () => {
+			logger.info("Server is ready and accepting connections");
+		});
+	} catch (err) {
+		logger.error(
+			`Failed to start application: ${
+				err instanceof Error ? err.message : err
+			}`
+		);
+		gracefulShutdown(1);
+	}
 })();
-
