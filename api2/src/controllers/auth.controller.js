@@ -22,7 +22,7 @@ export class AuthController {
     try {
       const user = await authService.loginUser(
         req.body.email,
-        req.body.password,
+        req.body.password
       );
 
       if (!user) {
