@@ -22,7 +22,7 @@ export class AuthController {
     try {
       const user = await authService.loginUser(
         req.body.email,
-        req.body.password
+        req.body.password,
       );
 
       if (!user) {
@@ -52,18 +52,24 @@ export class AuthController {
     }
   }
 
-  static async logout(req, res) {
-    // Properly destroy session and clear cookie
-    await new Promise((resolve) => {
-      req.session.destroy(() => {
-        try {
-          res.clearCookie("connect.sid");
-        } catch (e) {
-          // ignore
-        }
-        resolve();
+  static async logout(req, res, next) {
+    try {
+      await new Promise((resolve, reject) => {
+        req.session.destroy((err) => {
+          if (err) return reject(err);
+          try {
+            res.clearCookie("connect.sid");
+          } catch (e) {
+            // ignore
+          }
+          resolve();
+        });
       });
-    });
+    } catch (error) {
+      console.error(error);
+      console.error("Failed to log out");
+      next(error);
+    }
 
     res.json({ message: "Logged out 👋" });
   }
@@ -125,7 +131,7 @@ export class AuthController {
 
       const user = await authService.saveDeviceId(userId, deviceId);
       if (!user) {
-        throw new AppError("Error while saving player id", 404);
+        throw new AppError("Error while saving device id", 404);
       }
       res.status(201).json({
         message: "Device id is saved 🎉",

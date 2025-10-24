@@ -25,7 +25,9 @@ export class MeetingController {
       const roles = await meetingService.getRoles();
       res.status(200).json({ message: "Users fetched 🎉", roles });
     } catch (err) {
-      this.handleDatabaseError(err, "Failed to fetch roles");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Failed to fetch roles");
+      }
       next(err);
     }
   }
@@ -37,7 +39,9 @@ export class MeetingController {
         .status(200)
         .json({ message: "All appointments fetched 🎉", allMettings });
     } catch (err) {
-      this.handleDatabaseError(err, "Error fetching all meetings");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error fetching all meetings");
+      }
       next(err);
     }
   }
@@ -48,7 +52,9 @@ export class MeetingController {
       if (!response) throw new AppError("Error while deleting", 500);
       res.status(200).json({ message: "Request Deleted 🎉", success: true });
     } catch (err) {
-      this.handleDatabaseError(err, "Error while canceling in DB");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error while canceling in DB");
+      }
       next(err);
     }
   }
@@ -57,12 +63,14 @@ export class MeetingController {
     try {
       const response = await meetingService.approveRejectMeetingReq(
         req.params.id,
-        "approved"
+        "approved",
       );
       if (!response) throw new AppError("Error while approving", 500);
       res.status(200).json({ message: "Request Approved 🎉", success: true });
     } catch (err) {
-      this.handleDatabaseError(err, "Error while approving in DB");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error while approving in DB");
+      }
       next(err);
     }
   }
@@ -71,12 +79,14 @@ export class MeetingController {
     try {
       const response = await meetingService.approveRejectMeetingReq(
         req.params.id,
-        "rejected"
+        "rejected",
       );
       if (!response) throw new AppError("Error while rejecting", 500);
       res.status(200).json({ message: "Request Rejected 🎉", success: true });
     } catch (err) {
-      this.handleDatabaseError(err, "Error while rejecting in DB");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error while rejecting in DB");
+      }
       next(err);
     }
   }
@@ -85,12 +95,14 @@ export class MeetingController {
     try {
       const response = await meetingService.updateAppointmentPriority(
         req.params.id,
-        req.body.data
+        req.body.data,
       );
       if (!response) throw new AppError("Error while updating", 500);
       res.status(200).json({ message: "Priority Updated 🎉", success: true });
     } catch (err) {
-      this.handleDatabaseError(err, "Error updating priority");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error updating priority");
+      }
       next(err);
     }
   }
@@ -101,7 +113,9 @@ export class MeetingController {
       if (!response) throw new AppError("Error while fetching data", 500);
       res.status(200).json({ success: true, mettings: response });
     } catch (err) {
-      this.handleDatabaseError(err, "Error fetching data from DB");
+      if (err.name === "MongoError" || err.code === 11000) {
+        this.handleDatabaseError(err, "Error fetching data from DB");
+      }
       next(err);
     }
   }

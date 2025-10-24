@@ -50,8 +50,6 @@ const DashBoards = () => {
   const [isFetchAgain, setIsFetchAgain] = useState(false);
   const { user } = useAuth();
 
-  console.table(user);
-
   useEffect(() => {
     fetchAllReqsByRoles(user?.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +79,7 @@ const DashBoards = () => {
 
   const getStatusCount = (status: string): number =>
     meetings.filter((request) =>
-      status === "all" ? true : request.status === status
+      status === "all" ? true : request.status === status,
     ).length;
 
   return (
@@ -135,7 +133,7 @@ const DashBoards = () => {
         <RequestsCards
           toggleFetchAgain={toggleFetchAgain}
           requests={filteredRequests}
-		  tabValue={mainTabValue}
+          tabValue={mainTabValue}
         />
 
         <Tabs

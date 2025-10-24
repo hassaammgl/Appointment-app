@@ -70,13 +70,41 @@ class MeetingService {
   }
 
   async approveRejectMeetingReq(_id, type) {
-    const met = await Meeting.findByIdAndUpdate(_id, { status: type });
+    const validStatus = ["approved", "rejected"];
+    if (!validStatus.includes(type))
+      throw new Error(
+        `Invalid status type: ${type}. Must be one of ${validStatus.join(", ")}`,
+      );
+
+    await Meeting.findByIdAndUpdate(_id, { status: type });
     return true;
   }
 
   async updateAppointmentPriority(_id, value) {
-    await Meeting.findByIdAndUpdate(_id, { priority: value });
-    return true;
+    const VALID_PRIORITIES = Object.freeze(["low", "medium", "high", "urgent"]);
+
+    if (!_id || !value) {
+      throw new Error("Meeting ID and priority value are required");
+    }
+
+    const priority = value.toLowerCase().trim();
+    if (!VALID_PRIORITIES.includes(priority)) {
+      throw new Error(
+        `Invalid priority: "${value}". Must be one of: ${VALID_PRIORITIES.join(", ")}`,
+      );
+    }
+
+    const updatedMeeting = await Meeting.findByIdAndUpdate(
+      _id,
+      { priority, updatedAt: new Date() },
+      { new: true, runValidators: true, select: "priority status title" },
+    );
+
+    if (!updatedMeeting) {
+      throw new Error(`Meeting not found with ID: ${_id}`);
+    }
+
+    return updatedMeeting;
   }
 
   async getReqsWithUserRole(userId) {

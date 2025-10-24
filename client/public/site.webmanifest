@@ -1,9 +1,9 @@
 {
   "name": "visitors.sapps.site",
   "short_name": "visitors",
-  "start_url": "/login",
+  "start_url": "/",
   "id": "e1e63370",
-  "description": "This helps user to organized and mange their appointments",
+  "description": "This helps users organize and manage their appointments",
   "theme_color": "#ffffff",
   "display": "standalone",
   "icons": [

@@ -11,7 +11,7 @@ export class AuthService {
       const orgs = await Organization.find().limit(1);
       if (!orgs.length) {
         throw new Error(
-          "No organizations found. Please create an organization first."
+          "No organizations found. Please create an organization first.",
         );
       }
       orgId = orgs[0]._id;
@@ -71,7 +71,7 @@ export class AuthService {
 
     org.premiumStartedAt = baseDate;
     org.premiumExpiresAt = new Date(
-      baseDate.getTime() + 365 * 24 * 60 * 60 * 1000
+      baseDate.getTime() + 365 * 24 * 60 * 60 * 1000,
     );
     org.isPremium = true;
 
@@ -122,28 +122,21 @@ export class AuthService {
       throw new Error("userId and deviceId are required");
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $addToSet: {
+          deviceIds: deviceId,
+          oneSignalIds: deviceId,
+        },
+      },
+      { new: true, select: "-password" },
+    );
     if (!user) {
       throw new Error("User not found");
     }
-
-    // Ensure deviceIds array exists
-    user.deviceIds = user.deviceIds || [];
-    if (!user.deviceIds.includes(deviceId)) {
-      user.deviceIds.push(deviceId);
-    }
-
-    // Also track onesignal ids if present
-    user.oneSignalIds = user.oneSignalIds || [];
-    if (!user.oneSignalIds.includes(deviceId)) {
-      user.oneSignalIds.push(deviceId);
-    }
-
-    await user.save();
-
     // Return user without password
     const userObj = user.toObject();
-    delete userObj.password;
     return userObj;
   }
 }

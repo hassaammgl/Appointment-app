@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated, authorize } from "../middlewares/auth.middlewares.js";
-import { MeetingController as meetingController } from "../controllers/mettings.controllers.js";
+import { MeetingController } from "../controllers/meetings.controllers.js";
 import { authController } from "../controllers/auth.controller.js";
 import { checkOrgPremium } from "../middlewares/checkPremium.middleware.js";
 import {
@@ -20,7 +20,7 @@ router.get(
   isAuthenticated,
   checkOrgPremium,
   authorize("receptionist"),
-  meetingController.getAllRoles
+  MeetingController.getAllRoles
 );
 router.post(
   "/met-req",
@@ -28,14 +28,14 @@ router.post(
   checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateReqMeeting),
-  meetingController.createMettingReq
+  MeetingController.createMettingReq
 );
 router.get(
   "/get-all-reqs",
   isAuthenticated,
   checkOrgPremium,
   authorize("receptionist", "ceo", "cfo", "cto", "gm"),
-  meetingController.getAllMeetingsReq
+  MeetingController.getAllMeetingsReq
 );
 router.delete(
   "/cancel-req/:id",
@@ -43,7 +43,7 @@ router.delete(
   checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateCancelReq, true),
-  meetingController.cancelMeetingReq
+  MeetingController.cancelMeetingReq
 );
 router.put(
   "/approve-req/:id",
@@ -51,7 +51,7 @@ router.put(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
-  meetingController.approveMeetingReq
+  MeetingController.approveMeetingReq
 );
 router.put(
   "/reject-req/:id",
@@ -59,7 +59,7 @@ router.put(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
-  meetingController.rejectMeetingReq
+  MeetingController.rejectMeetingReq
 );
 router.put(
   "/update-priority/:id",
@@ -68,7 +68,7 @@ router.put(
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateUpdatePriorityParams, true),
   validateRequest(validateUpdatePriorityBody),
-  meetingController.updatePriorityOfReq
+  MeetingController.updatePriorityOfReq
 );
 router.get(
   "/get-reqs-by-roles/:id",
@@ -76,7 +76,7 @@ router.get(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateGetReqsByRole, true),
-  meetingController.getReqsByRolesWithPagination
+  MeetingController.getReqsByRolesWithPagination
 );
 
 router.get(
