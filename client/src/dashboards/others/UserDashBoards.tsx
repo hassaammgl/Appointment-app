@@ -45,7 +45,7 @@ const StatsArr: StatsArrType[] = [
   },
 ];
 
-const DashBoards = () => {
+const UserDashBoard = () => {
   const { fetchAllReqsByRoles, meetings = [] } = useMeetings();
   const [isFetchAgain, setIsFetchAgain] = useState(false);
   const { user } = useAuth();
@@ -82,7 +82,7 @@ const DashBoards = () => {
     ).length;
 
   return (
-    <div className="w-full h-fit border-[1px] p-4 rounded-xl">
+    <div className="w-full h-fit border p-4 rounded-xl">
       <div className="hidden sm:grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {StatsArr.map((val, i) => (
           <StatsCards
@@ -183,4 +183,4 @@ const DashBoards = () => {
   );
 };
 
-export default DashBoards;
+export default UserDashBoard;

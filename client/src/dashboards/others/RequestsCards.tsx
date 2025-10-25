@@ -1,5 +1,5 @@
 import type { Appointment } from "@/types";
-import MainMeetingCards from "@/shared/MainMeetingCards";
+import MainMeetingCards from "@/components/shared/MainMeetingCards";
 
 const RequestsCards = ({
   requests: meetings,
@@ -10,7 +10,6 @@ const RequestsCards = ({
   toggleFetchAgain: () => void;
   tabValue: string;
 }) => {
-
   return (
     <div className="sm:hidden">
       <div className="w-full rounded-xl border border-accent p-4">
@@ -20,9 +19,7 @@ const RequestsCards = ({
         </h1>
 
         {meetings?.length > 0 ? (
-          <div
-            className={"flex flex-col gap-4"}
-          >
+          <div className={"flex flex-col gap-4"}>
             {meetings?.map((meeting) => (
               <MainMeetingCards
                 key={meeting?._id}

@@ -23,7 +23,7 @@ const ProfilePage = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-                <Avatar className="h-24 w-24">
+                <Avatar className="size-24">
                   <AvatarFallback className="text-4xl">
                     {user?.username?.charAt(0)?.toUpperCase() || "U"}
                   </AvatarFallback>

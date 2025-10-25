@@ -20,7 +20,7 @@ export const useMeetings = create<MeetingState>()(
         getAllRoles: async () => {
           try {
             set({ isLoading: true, error: null });
-            const { data } = await axiosInstance.get("/protected/roles");
+            const { data } = await axiosInstance.get("/meetings/roles");
 
             set({ isLoading: false, allRoles: data?.roles });
           } catch (err) {
@@ -32,7 +32,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.post(
-              "/protected/met-req",
+              "/meetings/met-req",
               formData
             );
 
@@ -49,7 +49,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.delete(
-              `/protected/cancel-req/${reqid}`
+              `/meetings/cancel-req/${reqid}`
             );
             set({ message: data?.message });
           } catch (err: any) {
@@ -64,7 +64,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.put(
-              `/protected/approve-req/${reqid}`
+              `/meetings/approve-req/${reqid}`
             );
             set({ message: data?.message });
           } catch (err: any) {
@@ -79,7 +79,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.put(
-              `/protected/reject-req/${reqid}`
+              `/meetings/reject-req/${reqid}`
             );
             set({ message: data?.message });
           } catch (err: any) {
@@ -94,7 +94,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.put(
-              `/protected/update-priority/${reqid}`,
+              `/meetings/update-priority/${reqid}`,
               {
                 data: value,
               }
@@ -111,7 +111,7 @@ export const useMeetings = create<MeetingState>()(
         fetchAllReq: async () => {
           try {
             set({ isLoading: true, error: null });
-            const { data } = await axiosInstance.get("/protected/get-all-reqs");
+            const { data } = await axiosInstance.get("/meetings/get-all-reqs");
             set({ meetings: data?.allMettings });
           } catch (err: any) {
             const errorMessage = getErrorMessage(err);
@@ -125,7 +125,7 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.get(
-              `/protected/get-reqs-by-roles/${userId}`
+              `/meetings/get-reqs-by-roles/${userId}`
             );
             set({
               meetings: data?.mettings,

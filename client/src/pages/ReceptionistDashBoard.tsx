@@ -44,10 +44,11 @@ const ReceptionistDashBoard = () => {
   const { user } = useAuth();
   const { meetings } = useMeetings();
 
-  const getStatusCount = (status: string): number =>
-    meetings.filter((request) =>
-      status === "all" ? true : request.status === status
-    ).length;
+  // const getStatusCount = (status: string): number =>4
+    // meetings?.filter((request) =>
+    //   status === "all" ? true : request.status === status
+    // ).length;
+console.log(meetings);
 
   return (
     <OneSignalWrapper>
@@ -79,7 +80,7 @@ const ReceptionistDashBoard = () => {
                 key={i}
                 title={val.title}
                 Icon={val.Icon}
-                length={getStatusCount(val.lengthName ?? "all")}
+                // length={getStatusCount(val.lengthName ?? "all")}
               />
             ))}
           </div>
@@ -100,7 +101,8 @@ const StatsCards = ({ title, length, Icon }: StatsCardsType) => {
         <Icon className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{length}</div>
+        {/* <p className="text-2xl font-bold">{length}</p> */}
+        <p className="text-2xl font-bold">{5}</p>
       </CardContent>
     </Card>
   );

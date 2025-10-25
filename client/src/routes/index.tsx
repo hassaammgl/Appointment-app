@@ -9,57 +9,58 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
 // import GMDashBoard from "@/pages/GMDashBoard";
 import SettingsPage from "@/pages/SettingsPage";
+import Dashboards from "@/pages/Dashboards";
 // import RenewalPage from "@/pages/RenewalPage";
 
 const routes = [
-	{
-		path: "/",
-		loader: () => redirect("/login"),
+  {
+    path: "/",
+    loader: () => redirect("/login"),
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
+  {
+    path: "/settings",
+    element: <SettingsPage />,
+  },
+  {
+    path: "/ceo-dashboard",
+    element: <Dashboards role="ceo" />,
+  },
+  {
+    path: "/cto-dashboard",
+    element: <Dashboards role="cto" />,
+  },
+  {
+    path: "/cfo-dashboard",
+    element: <Dashboards role="cfo" />,
+  },
+  {
+	  path: "/gm-dashboard",
+	  element: <Dashboards role="gm" />,
 	},
-	{
-		path: "/login",
-		element: <LoginPage />,
-	},
-	{
-		path: "/signup",
-		element: <SignupPage />,
-	},
-	{
-		path: "/profile",
-		element: <ProfilePage />,
-	},
-	{
-		path: "/settings",
-		element: <SettingsPage />,
-	},
-	// {
-	//   path: "/ceo-dashboard",
-	//   element: <CEODashBoard />,
-	// },
-	// {
-	//   path: "/cto-dashboard",
-	//   element: <CTODashBoard />,
-	// },
-	// {
-	//   path: "/cfo-dashboard",
-	//   element: <CFODashBoard />,
-	// },
 	{
 	  path: "/receptionist-dashboard",
 	  element: <ReceptionistDashBoard />,
 	},
-	// {
-	//   path: "/gm-dashboard",
-	//   element: <GMDashBoard />,
-	// },
-	// {
-	//   path: "/dev/:id/renew",
-	//   element: <RenewalPage />,
-	// },
-	{
-		path: "*",
-		element: <NotFoundPage />,
-	},
+  // {
+  //   path: "/dev/:id/renew",
+  //   element: <RenewalPage />,
+  // },
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ];
 
 export default routes;
