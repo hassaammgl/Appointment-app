@@ -8,7 +8,7 @@ const NotFoundPage = () => {
 		<div className="min-h-screen flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-md w-full space-y-8 text-center">
 				<div>
-					<h1 className="text-6xl font-extrabold text-green-primary">
+					<h1 className="text-6xl font-extrabold text-primary">
 						404
 					</h1>
 					<h2 className="mt-6 text-3xl font-bold">Page not found</h2>
@@ -26,7 +26,7 @@ const NotFoundPage = () => {
 					</Button>
 					<Button
 						onClick={() => navigate("/")}
-						className="bg-green-primary hover:bg-green-dark"
+						className="bg-primary hover:bg-dark"
 					>
 						Go Home
 					</Button>

@@ -27,7 +27,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 
   const getNavIconClass = (path: string) => {
     const isActive = location.pathname === path;
-    return cn("", isActive ? "text-white" : "text-green-500");
+    return cn("", isActive ? "text-white" : "text-primary");
   };
 
   const dashboardLink = user?.role ? `/${user.role}-dashboard` : "/login";
@@ -46,7 +46,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
           )}
         >
           <h1 className="text-3xl font-bold">
-            <span className="text-green-500">Smart</span> Visitors
+            <span className="text-primary">Smart</span> Visitors
           </h1>
         </div>
         <button

@@ -47,7 +47,7 @@ const LoginPage = () => {
 			<div className="max-w-md w-full space-y-8">
 				<div className="text-center">
 					<h1 className="text-3xl font-bold">
-						<span className="text-green-500">Smart</span> Visitors
+						<span className="text-primary">Smart</span> Visitors
 					</h1>
 					<p className="mt-2 text-muted-foreground">
 						Login to your account
@@ -91,7 +91,7 @@ const LoginPage = () => {
 						<CardFooter className="flex flex-col space-y-4">
 							<Button
 								type="submit"
-								className="w-full bg-green-500 hover:bg-green-600"
+								className="w-full bg-primary hover:bg-secondary hover:text-white"
 								disabled={isLoading}
 							>
 								{isLoading ? "Loging in account..." : "Login"}
@@ -100,7 +100,7 @@ const LoginPage = () => {
 								Don't have an account?{" "}
 								<NavLink
 									to="/signup"
-									className="text-green-500 hover:underline"
+									className="text-primary hover:underline"
 								>
 									Sign In
 								</NavLink>

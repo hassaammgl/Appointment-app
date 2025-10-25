@@ -16,8 +16,8 @@ const PremiumInfo = () => {
     })();
 
     return organization?.isPremium
-        ? <p>✨ Premium active. <span className="text-primary">{remainingDays}</span> days remaining.</p>
+        ? <p>✨ Premium active. <span className="text-green-500">{remainingDays}</span> days remaining.</p>
         : <p>⚠️ Premium expired. Please renew. <br /> Please contact to Developers</p>;
 };
 
-export default PremiumInfo;
+export default PremiumInfo

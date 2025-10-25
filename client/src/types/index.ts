@@ -89,7 +89,6 @@ export type StatsArrType = {
 
 export type ScheduleMeetingsProps = {
   userId?: string;
-  setTabValue: (data: string) => void;
 };
 
 type Settings = {
