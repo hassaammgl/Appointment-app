@@ -20,7 +20,9 @@ export const useMeetings = create<MeetingState>()(
         getAllRoles: async () => {
           try {
             set({ isLoading: true, error: null });
-            const { data } = await axiosInstance.get("/meetings/roles");
+            const { data } = await axiosInstance.get("/meetings/roles", {
+              headers: { "Cache-Control": "no-cache" },
+            });
 
             set({ isLoading: false, allRoles: data?.roles });
           } catch (err) {
@@ -111,7 +113,9 @@ export const useMeetings = create<MeetingState>()(
         fetchAllReq: async () => {
           try {
             set({ isLoading: true, error: null });
-            const { data } = await axiosInstance.get("/meetings/get-all-reqs");
+            const { data } = await axiosInstance.get("/meetings/get-all-reqs", {
+              headers: { "Cache-Control": "no-cache" },
+            });
             set({ meetings: data?.allMettings });
           } catch (err: any) {
             const errorMessage = getErrorMessage(err);

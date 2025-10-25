@@ -3,9 +3,9 @@ import OneSignal from "react-onesignal";
 import { useAuth } from "@/store/auth";
 
 export const useOneSignal = () => {
-  const { user, saveUserDevice } = useAuth();
-  console.log(user?.id);
-
+  // const { user, saveUserDevice } = useAuth();
+  const { user } = useAuth();
+  
   useEffect(() => {
     const initOneSignal = async () => {
       try {
@@ -62,7 +62,8 @@ export const useOneSignal = () => {
               "userId:",
               user?.id
             );
-            await saveUserDevice(user?.id as string, id as string);
+            // [TODO]: Save user device id
+            // await saveUserDevice(user?.id as string, id as string);
           }
         }
 

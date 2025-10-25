@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import type { StatsArrType, StatsCardsType } from "@/types";
 import Loader from "@/components/Loader";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import OneSignalWrapper from "@/layout/OneSignalWrapper";
 import { AppLayout } from "@/layout/AppLayout";
@@ -45,10 +45,10 @@ const ReceptionistDashBoard = () => {
   const { meetings } = useMeetings();
 
   // const getStatusCount = (status: string): number =>4
-    // meetings?.filter((request) =>
-    //   status === "all" ? true : request.status === status
-    // ).length;
-console.log(meetings);
+  // meetings?.filter((request) =>
+  //   status === "all" ? true : request.status === status
+  // ).length;
+  console.log(meetings);
 
   return (
     <OneSignalWrapper>
@@ -68,9 +68,7 @@ console.log(meetings);
                 <DialogTrigger className="bg-primary p-1 rounded-md">
                   <PlusIcon />
                 </DialogTrigger>
-                <DialogContent>
-                  <ScheduleMeetings userId={user?.id} />
-                </DialogContent>
+                <ScheduleMeetings userId={user?.id} />
               </Dialog>
             </div>
           </div>

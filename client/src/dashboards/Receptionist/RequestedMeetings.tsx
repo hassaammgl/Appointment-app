@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import MettingCards from "@/components/shared/MettingCards";
 import type { ScheduleMeetingsProps } from "@/types";
- 
+
 const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
   const [isFetchAgain, setIsFetchAgain] = useState(false);
   const [layout, setLayout] = useState<"grid" | "list">("grid");
@@ -39,7 +39,7 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
           </Button>
         </span>
       </div>
-
+      {meetings?.length}
       {/* Render Cards */}
       {meetings?.length > 0 ? (
         <div

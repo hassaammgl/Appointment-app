@@ -20,7 +20,7 @@ router.get(
   isAuthenticated,
   checkOrgPremium,
   authorize("receptionist"),
-  MeetingController.getAllRoles
+  MeetingController.getAllRoles,
 );
 router.post(
   "/met-req",
@@ -28,14 +28,14 @@ router.post(
   checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateReqMeeting),
-  MeetingController.createMettingReq
+  MeetingController.createMettingReq,
 );
 router.get(
   "/get-all-reqs",
   isAuthenticated,
   checkOrgPremium,
   authorize("receptionist", "ceo", "cfo", "cto", "gm"),
-  MeetingController.getAllMeetingsReq
+  MeetingController.getAllMeetingsReq,
 );
 router.delete(
   "/cancel-req/:id",
@@ -43,7 +43,7 @@ router.delete(
   checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateCancelReq, true),
-  MeetingController.cancelMeetingReq
+  MeetingController.cancelMeetingReq,
 );
 router.put(
   "/approve-req/:id",
@@ -51,7 +51,7 @@ router.put(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
-  MeetingController.approveMeetingReq
+  MeetingController.approveMeetingReq,
 );
 router.put(
   "/reject-req/:id",
@@ -59,7 +59,7 @@ router.put(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
-  MeetingController.rejectMeetingReq
+  MeetingController.rejectMeetingReq,
 );
 router.put(
   "/update-priority/:id",
@@ -68,7 +68,7 @@ router.put(
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateUpdatePriorityParams, true),
   validateRequest(validateUpdatePriorityBody),
-  MeetingController.updatePriorityOfReq
+  MeetingController.updatePriorityOfReq,
 );
 router.get(
   "/get-reqs-by-roles/:id",
@@ -76,7 +76,7 @@ router.get(
   checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateGetReqsByRole, true),
-  MeetingController.getReqsByRolesWithPagination
+  MeetingController.getReqsByRolesWithPagination,
 );
 
 router.get(
@@ -84,7 +84,7 @@ router.get(
   isAuthenticated,
   checkOrgPremium,
   authorize("receptionist", "ceo", "cfo", "cto", "gm"),
-  authController.getOrganization
+  authController.getOrganization,
 );
 router.post("/renew/:id/org", isAuthenticated, authController.renewOrg);
 

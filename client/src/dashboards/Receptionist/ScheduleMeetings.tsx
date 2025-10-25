@@ -1,12 +1,4 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,6 +15,13 @@ import {
 import { AxiosError } from "axios";
 import { useSettings } from "@/store/settings";
 import type { ScheduleMeetingsProps } from "@/types";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
   const { isLoading, getAllRoles, allRoles, createMeetingReq } = useMeetings();
@@ -80,100 +79,98 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
   };
 
   return (
-    <div>
-      <Card className="w-full xl:w-1/2 mx-auto">
-        <CardHeader>
-          <CardTitle>Schedule Appointment</CardTitle>
-          <CardDescription>
-            Schedule all the appointments from here
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4 mb-4">
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Schedule Appointment</DialogTitle>
+        <DialogDescription>
+          Schedule all the appointments from here
+        </DialogDescription>
+      </DialogHeader>
+      <form onSubmit={handleSubmit}>
+        <div className="space-y-4 mb-4">
+          <div className="space-y-2">
+            <Label htmlFor="visitor-name">Visitor Name:</Label>
+            <Input
+              id="visitor-name"
+              type="text"
+              placeholder="John Doe"
+              value={visitorName}
+              onChange={(e) => setVisitorName(e.target.value)}
+              required
+            />
+          </div>
+          {settings.addPersonContact && (
             <div className="space-y-2">
-              <Label htmlFor="visitor-name">Visitor Name:</Label>
+              <Label htmlFor="visitor-no">Phone Number:</Label>
+              <PhoneNumberInput value={visitorNo} onChange={setVisitorNo} />
+            </div>
+          )}
+          {settings.addPersonCnic && (
+            <div className="space-y-2">
+              <Label htmlFor="visitor-cnic">CNIC:</Label>
+              <CNICInput value={visitorCNIC} onChange={setVisitorCNIC} />
+            </div>
+          )}
+          {settings.addPurpose && (
+            <div className="space-y-2">
+              <Label htmlFor="visitor-purpose">Purpose:</Label>
               <Input
-                id="visitor-name"
+                id="visitor-purpose"
                 type="text"
-                placeholder="John Doe"
-                value={visitorName}
-                onChange={(e) => setVisitorName(e.target.value)}
+                placeholder="e.g. Meeting with HR"
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
                 required
               />
             </div>
-            {settings.addPersonContact && (
-              <div className="space-y-2">
-                <Label htmlFor="visitor-no">Phone Number:</Label>
-                <PhoneNumberInput value={visitorNo} onChange={setVisitorNo} />
-              </div>
-            )}
-            {settings.addPersonCnic && (
-              <div className="space-y-2">
-                <Label htmlFor="visitor-cnic">CNIC:</Label>
-                <CNICInput value={visitorCNIC} onChange={setVisitorCNIC} />
-              </div>
-            )}
-            {settings.addPurpose && (
-              <div className="space-y-2">
-                <Label htmlFor="visitor-purpose">Purpose:</Label>
-                <Input
-                  id="visitor-purpose"
-                  type="text"
-                  placeholder="e.g. Meeting with HR"
-                  value={purpose}
-                  onChange={(e) => setPurpose(e.target.value)}
-                  required
-                />
-              </div>
-            )}
-            {settings.addNotes && (
-              <div className="space-y-2">
-                <Label htmlFor="visitor-notes">Notes:</Label>
-                <Textarea
-                  id="visitor-notes"
-                  placeholder="Optional notes or details"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                />
-              </div>
-            )}
+          )}
+          {settings.addNotes && (
             <div className="space-y-2">
-              <Label htmlFor="to">To:</Label>
-              <Select value={to} onValueChange={setTo}>
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Select recipient" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allRoles && allRoles.length > 0 ? (
-                    allRoles.map((r, i) => (
-                      <SelectItem
-                        key={r._id ?? i}
-                        value={`${r.username}-${r._id}`}
-                      >
-                        ({r.role}) - {r.username}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="none" disabled>
-                      No roles found
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="visitor-notes">Notes:</Label>
+              <Textarea
+                id="visitor-notes"
+                placeholder="Optional notes or details"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-accent hover:text-white"
-              disabled={isLoading}
-            >
-              {isLoading ? "Scheduling..." : "Schedule Meeting"}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    </div>
+          )}
+          <div className="space-y-2">
+            <Label htmlFor="to">To:</Label>
+            <Select value={to} onValueChange={setTo}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select recipient" />
+              </SelectTrigger>
+              <SelectContent>
+                {allRoles && allRoles.length > 0 ? (
+                  allRoles.map((r, i) => (
+                    <SelectItem
+                      key={r._id ?? i}
+                      value={`${r.username}-${r._id}`}
+                    >
+                      ({r.role}) - {r.username}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="none" disabled>
+                    No roles found
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <DialogFooter className="flex flex-col space-y-4">
+          <Button
+            type="submit"
+            className="w-full bg-primary hover:bg-accent hover:text-white"
+            disabled={isLoading}
+          >
+            {isLoading ? "Scheduling..." : "Schedule Meeting"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </DialogContent>
   );
 };
 

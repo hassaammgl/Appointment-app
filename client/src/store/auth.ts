@@ -97,7 +97,7 @@ export const useAuth = create<AuthState>()(
         try {
           set({ isLoading: true, error: null });
           const { data } = await axiosInstance.get(
-            "/protected/get-organization",
+            "/meetings/get-organization",
           );
           set({ organization: data.organization });
         } catch (err: any) {
@@ -113,7 +113,7 @@ export const useAuth = create<AuthState>()(
         try {
           set({ isLoading: true, error: null });
           const { data } = await axiosInstance.post(
-            `/protected/renew/${id}/org`,
+            `/meetings/renew/${id}/org`,
           );
           set({ organization: data.organization });
         } catch (err: any) {

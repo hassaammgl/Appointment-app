@@ -30,6 +30,10 @@ app.get("/api/ping", (_, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/meetings", meetingRoutes);
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 app.use(errorHandler);
 
