@@ -44,7 +44,23 @@ class Auth {
 			next(dbError);
 		}
 	}
-	async logout(req, res, next) {}
+	async logout(req, res, next) {
+		try {
+			await new Promise((resolve, reject) => {
+				req.session.destroy((err) => {
+					if (err) return reject(err);
+					res.clearCookie("connect.sid");
+					resolve();
+				});
+			});
+		} catch (error) {
+			console.error(error);
+			console.error("Failed to log out");
+			next(error);
+		}
+
+		res.json({ message: "Logged out 👋" });
+	}
 }
 
 export const auth = new Auth();

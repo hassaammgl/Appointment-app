@@ -127,7 +127,7 @@ export const useAuth = create<AuthState>()(
       saveUserDevice: async (userId, onesignalId) => {
         try {
           set({ isLoading: true, error: null });
-          const { data } = await axiosInstance.put("/auth/add-user-device-id", {
+          await axiosInstance.put("/auth/add-user-device-id", {
             deviceId: onesignalId,
             userId,
           });

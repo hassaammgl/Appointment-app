@@ -42,7 +42,6 @@ class AuthService {
 		await user.save();
 		return user;
 	}
-	async logout() {}
 }
 
 export const authservice = new AuthService();
