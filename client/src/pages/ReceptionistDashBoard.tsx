@@ -11,7 +11,7 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import OneSignalWrapper from "@/layout/OneSignalWrapper";
 import { AppLayout } from "@/layout/AppLayout";
-import { useState, Suspense } from "react";
+import { Suspense } from "react";
 import { useAuth } from "@/store/auth";
 import { useMeetings } from "@/store/mettings";
 import RequestedMeetings from "@/dashboards/Receptionist/RequestedMeetings";
@@ -41,7 +41,6 @@ const StatsArr: StatsArrType[] = [
 ];
 
 const ReceptionistDashBoard = () => {
-  const [tabValue, setTabValue] = useState("requests");
   const { user } = useAuth();
   const { meetings } = useMeetings();
 

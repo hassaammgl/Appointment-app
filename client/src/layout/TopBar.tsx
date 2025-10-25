@@ -46,7 +46,7 @@ export const TopBar = () => {
 	const dashboardLink = user?.role ? `/${user.role}-dashboard` : "/login";
 
 	return (
-		<header className="bg-card sticky top-0 z-10 border-b border-border px-4 py-3 md:py-2 flex items-center justify-between">
+		<header className="bg-card sticky h-18 top-0 z-10 border-b border-border px-4 py-3 md:py-2 flex items-center justify-between">
 			<div className="flex items-center justify-center">
 				<Sheet >
 					<SheetTrigger asChild>

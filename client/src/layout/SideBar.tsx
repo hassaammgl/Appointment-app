@@ -38,7 +38,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
         isOpen ? "w-64" : "w-16"
       } h-screen sticky top-0 z-20 flex flex-col`}
     >
-      <div className="flex items-center justify-between p-4 border-b border-border">
+      <div className="flex items-center justify-between p-4 border-b border-border h-18">
         <div
           className={cn(
             "font-semibold text-lg whitespace-nowrap",
