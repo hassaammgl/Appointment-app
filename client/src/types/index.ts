@@ -80,6 +80,7 @@ export type StatsCardsType = {
   title: string;
   length?: number;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  lengthName?: string;
 };
 export type StatsArrType = {
   title: string;
@@ -133,7 +134,6 @@ export type AuthState = {
     organization: string
   ) => Promise<void>;
   logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
   getOrganization: () => Promise<void>;
   renewOrganization: (id: string | undefined) => Promise<void>;
   saveUserDevice: (userId: string, onesignalId: string) => Promise<void>;

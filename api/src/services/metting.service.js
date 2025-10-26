@@ -71,9 +71,31 @@ class MeetingService {
     return true;
   }
 
-  async approveRejectMeetingReq(_id, type) {}
+  async approveRejectMeetingReq(_id, type) {
+    const validStatus = ["approved", "rejected"];
+    logger.debug(type);
+    if (!validStatus.includes(type))
+      throw new Error(
+        `Invalid status type: ${type}. Must be one of ${validStatus.join(", ")}`
+      );
 
-  async updateAppointmentPriority(_id, value) {}
+    await Appointment.findByIdAndUpdate(_id, { status: type });
+    return true;
+  }
+
+  async updateAppointmentPriority(_id, value) {
+    const updatedMeeting = await Appointment.findByIdAndUpdate(
+      _id,
+      { priority: value, updatedAt: new Date() },
+      { new: true, runValidators: true, select: "priority status title" }
+    );
+
+    if (!updatedMeeting) {
+      throw new Error(`Meeting not found with ID: ${_id}`);
+    }
+
+    return updatedMeeting;
+  }
 
   async getReqsWithUserRole(userId) {
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {

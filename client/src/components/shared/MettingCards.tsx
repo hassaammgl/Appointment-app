@@ -77,7 +77,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
             variant={"outline"}
             className={`${
               priorityColors[meeting.priority]
-            } border-[1px] rounded-full uppercase`}
+            } border rounded-full uppercase`}
           >
             {meeting.priority === 0
               ? "Normal"
@@ -90,7 +90,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
               statusColors[
                 (meeting?.status as keyof typeof statusColors) || "pending"
               ]
-            } border-[1px] rounded-full uppercase`}
+            } border rounded-full uppercase`}
           >
             {meeting.status}
           </Badge>
@@ -124,19 +124,19 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
             <Button
               variant="link"
               size="sm"
-              className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
+              className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-white hover:bg-primary"
               onClick={() => setShowDetails(!showDetails)}
             >
               {showDetails ? (
-                <>
+                <span className="flex gap-2 justify-center items-center">
                   {"Hide "}
                   <EyeClosed />
-                </>
+                </span>
               ) : (
-                <>
+                <span className="flex gap-2 justify-center items-center">
                   {"Show "}
                   <Eye />
-                </>
+                </span>
               )}
             </Button>
           )}
@@ -147,7 +147,7 @@ const MettingCards = ({ meeting, toggleFetchAgain }: MeetingCardInterface) => {
         <div className="text-sm space-y-1">
           <p>
             <b>With:</b>{" "}
-            <span className="text-green-500">({meeting?.to?.role})</span>{" "}
+            <span className="text-primary">({meeting?.to?.role})</span>{" "}
             {meeting?.to?.username}
           </p>
         </div>

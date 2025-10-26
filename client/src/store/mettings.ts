@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import axios from "axios";
 import { persist, devtools } from "zustand/middleware";

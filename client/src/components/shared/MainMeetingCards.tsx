@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMeetings } from "@/store/mettings";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,164 +15,247 @@ import { EyeClosed, Eye } from "lucide-react";
 import type { MeetingCardInterface } from "@/types";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/store/settings";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const priorityColors = {
+  0: "text-green-500 border-green-500",
+  1: "text-orange-500 border-orange-500",
+  2: "text-red-500 border-red-500",
+};
+
+const statusColors: Record<string, string> = {
+  pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
+  approved: "bg-green-100 text-green-800 border-green-300",
+  rejected: "bg-red-100 text-red-800 border-red-300",
+};
 
 const MainMeetingCards = ({
   meeting,
   toggleFetchAgain,
 }: MeetingCardInterface) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [priority, setPriority] = useState(meeting.priority);
 
-  const { cancelMeetingReq } = useMeetings();
+  const { approveMeetingReq, rejectMeetingReq, updatePriority } = useMeetings();
   const { settings } = useSettings();
+  const { info, success, error: errToast, removeAllToasts } = useToast();
 
-  const { info, removeAllToasts, success, error: errToast } = useToast();
+  // Sync priority when meeting updates
+  useEffect(() => {
+    setPriority(meeting.priority);
+  }, [meeting.priority]);
 
-  const priorityColors = {
-    0: "text-green-500 border-green-500",
-    1: "text-orange-500 border-orange-500",
-    2: "text-red-500 border-red-500",
-  };
+  const maskCnic = (cnic: string) =>
+    cnic ? `${cnic.slice(0, 3)}*****${cnic.slice(-3)}` : "";
+  const maskPhone = (phone: string) =>
+    phone ? `${phone.slice(0, 3)}****${phone.slice(-3)}` : "";
 
-  const statusColors = {
-    pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
-    approved: "bg-green-100 text-green-800 border-green-300",
-    rejected: "bg-red-100 text-red-800 border-red-300",
-  };
+  const safeStatus = meeting.status ?? "pending";
+  const isPending = safeStatus === "pending";
 
-  const maskCnic = (cnic: string) => {
-    return `${cnic.slice(0, 3)}*****${cnic.slice(-3)}`;
-  };
+  const hasContactInfo =
+    (settings.addPersonContact && meeting.visitorNo) ||
+    (settings.addPersonCnic && meeting.visitorCnic);
 
-  const maskPhone = (phone: string) => {
-    return `${phone.slice(0, 3)}****${phone.slice(-3)}`;
-  };
-
-  const handleCancelMeeting = async () => {
+  // Handlers
+  const handleApprove = async () => {
     try {
-      info("cancelling Schedule...");
-      await cancelMeetingReq(meeting._id);
+      info("Approving Schedule...");
+      await approveMeetingReq(meeting._id);
       removeAllToasts();
-      success("Request Removed");
+      success("Request Approved");
       toggleFetchAgain();
     } catch (err) {
+      removeAllToasts();
       const message =
         (err as AxiosError<{ message?: string }>)?.response?.data?.message ??
         (err as Error)?.message ??
-        "Requesting Schedule failed 😵";
+        "Approval failed";
+      errToast(message);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      info("Rejecting Schedule...");
+      await rejectMeetingReq(meeting._id);
+      removeAllToasts();
+      success("Request Rejected");
+      toggleFetchAgain();
+    } catch (err) {
+      removeAllToasts();
+      const message =
+        (err as AxiosError<{ message?: string }>)?.response?.data?.message ??
+        (err as Error)?.message ??
+        "Rejection failed";
+      errToast(message);
+    }
+  };
+
+  const handlePriority = async (val: string) => {
+    const numVal = Number(val);
+    if (numVal === priority) return;
+
+    try {
+      info("Updating priority...");
+      await updatePriority(meeting._id, numVal);
+      setPriority(Number(numVal) as 0 | 1 | 2);
+      removeAllToasts();
+      success("Priority updated");
+      toggleFetchAgain();
+    } catch (err) {
+      removeAllToasts();
+      const message =
+        (err as AxiosError<{ message?: string }>)?.response?.data?.message ??
+        (err as Error)?.message ??
+        "Priority update failed";
       errToast(message);
     }
   };
 
   return (
-    <Card className="h-full flex flex-col w-full">
-      <CardHeader className="flex flex-row items-start gap-4">
-        {settings.addPurpose && meeting.purpose && (
-          <div className="flex-1 flex w-1/2">
-            <CardTitle>{meeting.purpose}</CardTitle>
-          </div>
-        )}
-        <div
-          className={`flex flex-row justify-end ${
-            settings.addPurpose === true ? "w-1/2" : "w-full"
-          } gap-4`}
-        >
+    <Card className="flex h-full w-full flex-col">
+      {/* Header */}
+      <CardHeader className="flex flex-row items-center justify-between gap-3">
+        <CardTitle className="truncate text-base">
+          {meeting.visitorName}
+        </CardTitle>
+
+        <div className="flex gap-2">
           <Badge
-            variant={"outline"}
-            className={`${
-              priorityColors[meeting.priority]
-            } border-[1px] rounded-full uppercase`}
+            variant="outline"
+            className={`rounded-full border px-2.5 py-0.5 text-xs font-medium uppercase ${
+              priorityColors[priority] ?? ""
+            }`}
           >
-            {meeting.priority === 0
-              ? "Normal"
-              : meeting.priority === 1
-              ? "High"
-              : "Urgent"}
+            {priority === 0 ? "Normal" : priority === 1 ? "High" : "Urgent"}
           </Badge>
+
           <Badge
-            className={`${
-              statusColors[
-                (meeting?.status as keyof typeof statusColors) || "pending"
-              ]
-            } border-[1px] rounded-full uppercase`}
+            className={`rounded-full border px-2.5 py-0.5 text-xs font-medium uppercase ${
+              statusColors[safeStatus] ?? statusColors.pending
+            }`}
           >
-            {meeting.status}
+            {safeStatus}
           </Badge>
         </div>
       </CardHeader>
+
       <Separator />
-      <CardContent className="flex-1 space-y-2 relative">
-        <div className="text-sm space-y-1">
-          <p>
-            <strong>Visitor:</strong> {meeting.visitorName}
-          </p>
-        </div>
-        <Separator />
-        <div className="text-sm space-y-1">
-          {settings.addPersonContact && meeting.visitorNo && (
-            <p>
-              <strong>Contact:</strong>{" "}
-              {showDetails ? meeting.visitorNo : maskPhone(meeting.visitorNo)}
-            </p>
-          )}
-          {settings.addPersonCnic && meeting.visitorCnic && (
-            <p>
-              <strong>ID No:</strong>{" "}
-              {showDetails
-                ? meeting.visitorCnic
-                : maskCnic(meeting.visitorCnic)}
-            </p>
-          )}
-          {((settings.addPersonContact && meeting.visitorNo) ||
-            (settings.addPersonCnic && meeting.visitorCnic)) && (
+
+      {/* Content */}
+      <CardContent className="flex-1 space-y-3 text-sm">
+        {settings.addPurpose && (
+          <p className="leading-relaxed">{meeting.purpose}</p>
+        )}
+
+        {settings.addNotes && meeting.notes && (
+          <p className="text-muted-foreground">{meeting.notes}</p>
+        )}
+
+        {hasContactInfo && (
+          <>
+            <Separator />
+            <div className="space-y-1">
+              {settings.addPersonContact && meeting.visitorNo && (
+                <p>
+                  <strong>Contact:</strong>{" "}
+                  {showDetails
+                    ? meeting.visitorNo
+                    : maskPhone(meeting.visitorNo)}
+                </p>
+              )}
+              {settings.addPersonCnic && meeting.visitorCnic && (
+                <p>
+                  <strong>ID No:</strong>{" "}
+                  {showDetails
+                    ? meeting.visitorCnic
+                    : maskCnic(meeting.visitorCnic)}
+                </p>
+              )}
+            </div>
+
             <Button
               variant="link"
               size="sm"
-              className="text-muted-foreground transition-colors bg-accent ease-in-out duration-500 hover:text-green-500 hover:bg-green-900"
-              onClick={() => setShowDetails(!showDetails)}
+              className="h-auto p-0 font-normal text-muted-foreground hover:text-primary"
+              onClick={() => setShowDetails((v) => !v)}
             >
               {showDetails ? (
                 <>
-                  {"Hide "}
-                  <EyeClosed />
+                  Hide <EyeClosed className="ml-1 h-3.5 w-3.5" />
                 </>
               ) : (
                 <>
-                  {"Show "}
-                  <Eye />
+                  Show <Eye className="ml-1 h-3.5 w-3.5" />
                 </>
               )}
             </Button>
+          </>
+        )}
+
+        {hasContactInfo && <Separator />}
+
+        <p>
+          <strong>With:</strong>{" "}
+          <span className="text-primary">({meeting?.to?.role})</span>{" "}
+          {meeting?.to?.username}
+        </p>
+      </CardContent>
+
+      <Separator />
+
+      {/* Footer: Actions */}
+      <CardFooter className="flex flex-col gap-3 text-xs">
+        <div className="flex w-full items-center justify-between">
+          <span className="text-muted-foreground">
+            {new Date(meeting.createdAt).toLocaleDateString()}
+          </span>
+
+          {/* Priority Selector */}
+          <Select value={String(priority)} onValueChange={handlePriority}>
+            <SelectTrigger className="h-8 w-[110px] text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">Normal</SelectItem>
+              <SelectItem value="1">High</SelectItem>
+              <SelectItem value="2">Urgent</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex w-full justify-between gap-2">
+          {isPending ? (
+            <>
+              <Button
+                size="sm"
+                className="flex-1 bg-green-100 text-green-700 hover:bg-green-200"
+                onClick={handleApprove}
+              >
+                Approve
+              </Button>
+              <Button
+                size="sm"
+                className="flex-1 bg-red-100 text-red-700 hover:bg-red-200"
+                onClick={handleReject}
+              >
+                Reject
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="flex-1" />
+            </>
           )}
         </div>
-        {((settings.addPersonContact && meeting.visitorNo) ||
-          (settings.addPersonCnic && meeting.visitorCnic)) && <Separator />}
-
-        <div className="text-sm space-y-1">
-          <p>
-            <b>With:</b>{" "}
-            <span className="text-green-500">({meeting?.to?.role})</span>{" "}
-            {meeting?.to?.username}
-          </p>
-        </div>
-
-        {settings.addNotes && <Separator />}
-        {settings.addNotes && meeting.notes && (
-          <div className="pt-2">
-            <p className="text-sm font-medium">Notes:</p>
-            <p className="text-sm text-muted-foreground">{meeting.notes}</p>
-          </div>
-        )}
-      </CardContent>
-      <Separator />
-      <CardFooter className="text-sm flex justify-between text-muted-foreground">
-        <span>{new Date(meeting.createdAt).toLocaleString()}</span>
-        <Button
-          disabled={meeting.status !== "pending" ? true : false}
-          onClick={handleCancelMeeting}
-          variant={"destructive"}
-        >
-          Cancel Meeting
-        </Button>
       </CardFooter>
     </Card>
   );

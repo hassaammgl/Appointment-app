@@ -32,7 +32,7 @@ import { useState, useEffect } from "react";
 import { useSettings } from "@/store/settings";
 
 const RequestsTable = ({
-  requests,
+  requests, 
   toggleFetchAgain,
 }: {
   requests: Appointment[];
@@ -160,7 +160,7 @@ const T_Row = ({
       <TableCell>
         <Badge
           variant="outline"
-          className={`${priorityColors[priority]} border-[1px] rounded-full uppercase`}
+          className={`${priorityColors[priority]} border rounded-full uppercase`}
         >
           {priority === 0 ? "Normal" : priority === 1 ? "High" : "Urgent"}
         </Badge>
@@ -169,7 +169,7 @@ const T_Row = ({
         <Badge
           className={`${
             statusColors[data.status as keyof typeof statusColors]
-          } border-[1px] rounded-full uppercase`}
+          } border rounded-full uppercase`}
         >
           {data.status}
         </Badge>
@@ -177,10 +177,10 @@ const T_Row = ({
       <TableCell>
         {data.status === "pending" ? (
           <div className="flex gap-2">
-            <Button onClick={handleApprove} size="sm">
+            <Button className="bg-green-300 hover:bg-green-400" onClick={handleApprove} size="sm">
               Approve
             </Button>
-            <Button onClick={handleReject} size="sm" variant="destructive">
+            <Button className="bg-red-300 hover:bg-red-400" onClick={handleReject} size="sm">
               Reject
             </Button>
           </div>

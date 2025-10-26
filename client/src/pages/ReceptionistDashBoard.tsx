@@ -5,10 +5,9 @@ import {
   XCircle,
   PlusIcon,
 } from "lucide-react";
-import type { StatsArrType, StatsCardsType } from "@/types";
+import type { StatsArrType } from "@/types";
 import Loader from "@/components/Loader";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import OneSignalWrapper from "@/layout/OneSignalWrapper";
 import { AppLayout } from "@/layout/AppLayout";
 import { Suspense } from "react";
@@ -16,25 +15,26 @@ import { useAuth } from "@/store/auth";
 import { useMeetings } from "@/store/mettings";
 import RequestedMeetings from "@/dashboards/Receptionist/RequestedMeetings";
 import ScheduleMeetings from "@/dashboards/Receptionist/ScheduleMeetings";
+import StatsCards from "@/dashboards/others/StatsCards";
 
 const StatsArr: StatsArrType[] = [
   {
-    title: "Total Requests",
+    title: "Total",
     lengthName: "all",
     Icon: Clock,
   },
   {
-    title: "Pending Requests",
+    title: "Pending",
     lengthName: "pending",
     Icon: AlertCircle,
   },
   {
-    title: "Approved Requests",
+    title: "Approved",
     lengthName: "approved",
     Icon: CheckCircle2,
   },
   {
-    title: "Rejected Requests",
+    title: "Rejected",
     lengthName: "rejected",
     Icon: XCircle,
   },
@@ -71,13 +71,14 @@ const ReceptionistDashBoard = () => {
               </Dialog>
             </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="flex flex-wrap items-center gap-3 md:gap-6 text-sm font-medium">
             {StatsArr.map((val, i) => (
               <StatsCards
                 key={i}
                 title={val.title}
                 Icon={val.Icon}
                 length={getStatusCount(val.lengthName ?? "all")}
+                lengthName={val.lengthName}
               />
             ))}
           </div>
@@ -87,20 +88,6 @@ const ReceptionistDashBoard = () => {
         </div>
       </AppLayout>
     </OneSignalWrapper>
-  );
-};
-
-const StatsCards = ({ title, length, Icon }: StatsCardsType) => {
-  return (
-    <Card className="">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="size-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <p className="text-2xl font-bold">{length}</p>
-      </CardContent>
-    </Card>
   );
 };
 

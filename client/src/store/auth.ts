@@ -24,7 +24,7 @@ const getErrorMessage = (err: any): string => {
 
 export const useAuth = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       isAuthenticated: false,
       isLoading: false,
@@ -78,18 +78,6 @@ export const useAuth = create<AuthState>()(
           console.error("Logout error:", err);
         } finally {
           set({ user: null, isAuthenticated: false });
-        }
-      },
-
-      checkAuth: async () => {
-        try {
-          set({ isLoading: true });
-          const { data } = await axiosInstance.get("/auth/me");
-          set({ user: data.user, isAuthenticated: true });
-        } catch {
-          await get().logout(); // logout clears state too
-        } finally {
-          set({ isLoading: false });
         }
       },
 

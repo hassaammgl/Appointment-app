@@ -78,18 +78,19 @@ const UserDashBoard = () => {
 
   const getStatusCount = (status: string): number =>
     meetings.filter((request) =>
-      status === "all" ? true : request.status === status,
+      status === "all" ? true : request.status === status
     ).length;
 
   return (
     <div className="w-full h-fit border p-4 rounded-xl">
-      <div className="hidden sm:grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-wrap items-center gap-3 md:gap-6 text-sm font-medium">
         {StatsArr.map((val, i) => (
           <StatsCards
             key={i}
             title={val.title}
             Icon={val.Icon}
             length={getStatusCount(val.lengthName ?? "all")}
+            lengthName={val.lengthName}
           />
         ))}
       </div>
@@ -136,7 +137,7 @@ const UserDashBoard = () => {
         />
 
         <Tabs
-          className="hidden sm:block"
+          className="hidden xl:block"
           value={mainTabValue}
           onValueChange={setMainTabValue}
         >
