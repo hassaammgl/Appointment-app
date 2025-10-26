@@ -1,6 +1,7 @@
 import { authservice } from "../services/auth.service.js";
 import StatusCode from "http-status-codes";
 import { handleDbError } from "../utils/handleDbError.js";
+import { ENVS } from "../utils/constants.js";
 
 class Auth {
   async register(req, res, next) {
@@ -77,6 +78,32 @@ class Auth {
 
       res.status(200).json({
         message: "Org data fetched 🎉",
+        organization: org,
+      });
+    } catch (dbError) {
+      handleDbError(dbError);
+      next(dbError);
+    }
+  }
+  async renewOrganization(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        throw new ValidationError("Developer Secret ID is required");
+      }
+      if (id !== ENVS.DEVELOPER_SECRET) {
+        throw new ValidationError("Invalid Developer Secret ID");
+      }
+
+      const org = await authservice.renewOrganization();
+
+      if (!org) {
+        throw new AppError("Organization not found", 404);
+      }
+
+      res.status(StatusCode.OK).json({
+        message: "Org data renewed 🎉",
         organization: org,
       });
     } catch (dbError) {

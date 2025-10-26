@@ -24,7 +24,7 @@ router.post(
   meeting.createMettingReq
 );
 
-// router.post("/renew/:id/org", () => {});
+router.post("/renew/:id/org", isAuthenticated, auth.renewOrganization);
 
 router.get(
   "/roles",

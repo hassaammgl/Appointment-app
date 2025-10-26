@@ -1,16 +1,16 @@
+import { Suspense, lazy } from "react";
 import { redirect } from "react-router";
-import LoginPage from "@/pages/LoginPage";
-import SignupPage from "@/pages/SignupPage";
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const SignupPage = lazy(() => import("@/pages/SignupPage"));
 import ProfilePage from "@/pages/ProfilePage";
-import NotFoundPage from "@/pages/NotFoundPage";
-// import CEODashBoard from "@/pages/CEODashBoard";
-// import CTODashBoard from "@/pages/CTODashBoard";
-// import CFODashBoard from "@/pages/CFODashBoard";
-import ReceptionistDashBoard from "@/pages/ReceptionistDashBoard";
-// import GMDashBoard from "@/pages/GMDashBoard";
-import SettingsPage from "@/pages/SettingsPage";
-import Dashboards from "@/pages/Dashboards";
-// import RenewalPage from "@/pages/RenewalPage";
+const ReceptionistDashBoard = lazy(
+  () => import("@/pages/ReceptionistDashBoard")
+);
+const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
+const Dashboards = lazy(() => import("@/pages/Dashboards"));
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+import Loader from "@/components/Loader";
+import RenewalPage from "@/pages/RenewalPage";
 
 const routes = [
   {
@@ -19,11 +19,19 @@ const routes = [
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <LoginPage />
+      </Suspense>
+    ),
   },
   {
     path: "/signup",
-    element: <SignupPage />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <SignupPage />
+      </Suspense>
+    ),
   },
   {
     path: "/profile",
@@ -31,32 +39,56 @@ const routes = [
   },
   {
     path: "/settings",
-    element: <SettingsPage />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <SettingsPage />
+      </Suspense>
+    ),
   },
   {
     path: "/ceo-dashboard",
-    element: <Dashboards role="ceo" />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Dashboards role="ceo" />
+      </Suspense>
+    ),
   },
   {
     path: "/cto-dashboard",
-    element: <Dashboards role="cto" />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Dashboards role="cto" />
+      </Suspense>
+    ),
   },
   {
     path: "/cfo-dashboard",
-    element: <Dashboards role="cfo" />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Dashboards role="cfo" />
+      </Suspense>
+    ),
   },
   {
-	  path: "/gm-dashboard",
-	  element: <Dashboards role="gm" />,
-	},
-	{
-	  path: "/receptionist-dashboard",
-	  element: <ReceptionistDashBoard />,
-	},
-  // {
-  //   path: "/dev/:id/renew",
-  //   element: <RenewalPage />,
-  // },
+    path: "/gm-dashboard",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Dashboards role="gm" />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/receptionist-dashboard",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <ReceptionistDashBoard />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/dev/:id/renew",
+    element: <RenewalPage />,
+  },
   {
     path: "*",
     element: <NotFoundPage />,

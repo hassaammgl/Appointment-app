@@ -51,6 +51,28 @@ class AuthService {
     }
     return org;
   }
+
+  async renewOrganization() {
+    const orgs = await Organization.find().limit(1);
+
+    if (!orgs.length) {
+      throw new Error("Organization not found");
+    }
+
+    const org = orgs[0];
+    const now = new Date();
+
+    const baseDate = org.premiumExpiresAt > now ? org.premiumExpiresAt : now;
+
+    org.premiumStartedAt = baseDate;
+    org.premiumExpiresAt = new Date(
+      baseDate.getTime() + 365 * 24 * 60 * 60 * 1000
+    );
+    org.isPremium = true;
+
+    await org.save();
+    return org;
+  }
 }
 
 export const authservice = new AuthService();
