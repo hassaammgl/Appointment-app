@@ -60,7 +60,7 @@ class MeetingService {
 
   async cancelMeetingReq(_id) {
     const met = await Meeting.findOneAndDelete({ _id })
-      .populate({ path: "to", select: "_id username role fcmTokens" })
+      .populate({ path: "to", select: "_id username role" })
       .populate({
         path: "createdBy",
         select: "_id username role fcmTokens",

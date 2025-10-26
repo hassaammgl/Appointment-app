@@ -10,10 +10,10 @@ import meetingRoutes from "./routes/meeting.routes.js";
 
 const app = express();
 app.use(
-	cors({
-		origin: "http://localhost:5173",
-		credentials: true,
-	})
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -22,10 +22,10 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/ping", (_, res) => {
-	res.status(200).json({
-		success: true,
-		message: "Hello World",
-	});
+  res.status(200).json({
+    success: true,
+    message: "Hello World",
+  });
 });
 
 app.use("/api/auth", authRoutes);

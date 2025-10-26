@@ -15,6 +15,8 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
   useEffect(() => {
     if (userId) fetchAllReq();
+    console.log(meetings);
+
     setTimeout(toggleFetchAgain, 60000);
   }, [isFetchAgain]);
 
@@ -39,7 +41,6 @@ const RequestedMeetings = ({ userId }: ScheduleMeetingsProps) => {
           </Button>
         </span>
       </div>
-      {meetings?.length}
       {/* Render Cards */}
       {meetings?.length > 0 ? (
         <div

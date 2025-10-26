@@ -116,7 +116,7 @@ export const useMeetings = create<MeetingState>()(
             const { data } = await axiosInstance.get("/meetings/get-all-reqs", {
               headers: { "Cache-Control": "no-cache" },
             });
-            set({ meetings: data?.allMettings });
+            set({ meetings: data?.allMeetings });
           } catch (err: any) {
             const errorMessage = getErrorMessage(err);
             set({ error: errorMessage });
@@ -129,7 +129,10 @@ export const useMeetings = create<MeetingState>()(
           try {
             set({ isLoading: true, error: null });
             const { data } = await axiosInstance.get(
-              `/meetings/get-reqs-by-roles/${userId}`
+              `/meetings/get-reqs-by-roles/${userId}`,
+              {
+                headers: { "Cache-Control": "no-cache" },
+              }
             );
             set({
               meetings: data?.mettings,

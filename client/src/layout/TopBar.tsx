@@ -39,13 +39,13 @@ export const TopBar = () => {
 
   const getNavIconClass = (path: string) => {
     const isActive = location.pathname === path;
-    return cn("", isActive ? "text-white" : "text-green-500");
+    return cn("", isActive ? "text-white" : "text-primary");
   };
 
   const dashboardLink = user?.role ? `/${user.role}-dashboard` : "/login";
 
   return (
-    <header className="bg-card sticky h-18 top-0 z-10 border-b border-border px-4 py-3 md:py-2 flex items-center justify-between">
+    <header className="bg-card sticky h-18 top-0 z-10 border-b border-border px-4 py-3 md:py-2 flex items-center justify-between rounded-2xl mx-2 my-2">
       <div className="flex items-center justify-center">
         <Sheet>
           <SheetTrigger asChild>

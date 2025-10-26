@@ -67,9 +67,8 @@ class Auth {
       if (!req.session.user) {
         throw new AuthenticationError("Not authenticated");
       }
-
       const org = await authservice.getOrg({
-        _id: req.session.user.organization,
+        _id: req.session.user.organization._id,
       });
 
       if (!org) {

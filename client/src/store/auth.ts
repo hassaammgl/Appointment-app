@@ -98,6 +98,9 @@ export const useAuth = create<AuthState>()(
           set({ isLoading: true, error: null });
           const { data } = await axiosInstance.get(
             "/meetings/get-organization",
+            {
+              headers: { "Cache-Control": "no-cache" },
+            }
           );
           set({ organization: data.organization });
         } catch (err: any) {
@@ -113,7 +116,7 @@ export const useAuth = create<AuthState>()(
         try {
           set({ isLoading: true, error: null });
           const { data } = await axiosInstance.post(
-            `/meetings/renew/${id}/org`,
+            `/meetings/renew/${id}/org`
           );
           set({ organization: data.organization });
         } catch (err: any) {
@@ -148,6 +151,6 @@ export const useAuth = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    },
-  ),
+    }
+  )
 );

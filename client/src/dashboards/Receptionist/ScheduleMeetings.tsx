@@ -37,7 +37,6 @@ const ScheduleMeetings = ({ userId }: ScheduleMeetingsProps) => {
 
   useEffect(() => {
     getAllRoles();
-    console.table(allRoles);
   }, [getAllRoles]);
 
   const handleSubmit = async (e: React.FormEvent) => {

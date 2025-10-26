@@ -9,7 +9,7 @@ import {
   validateApproveAndRej,
   validateUpdatePriorityBody,
   validateUpdatePriorityParams,
-  validateCancelReq
+  validateCancelReq,
 } from "../validations/auth.validation.js";
 import { auth } from "../controllers/auth.controller.js";
 
