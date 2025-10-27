@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 import axios from "axios";
 import type { AuthState } from "@/types";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL! as string;
 if (!apiUrl) {
   throw new Error("VITE_API_URL is not defined");
 }

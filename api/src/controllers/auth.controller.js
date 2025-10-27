@@ -16,6 +16,7 @@ class Auth {
       next(error);
     }
   }
+
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
@@ -45,6 +46,7 @@ class Auth {
       next(dbError);
     }
   }
+
   async logout(req, res, next) {
     try {
       await new Promise((resolve, reject) => {
@@ -85,6 +87,7 @@ class Auth {
       next(dbError);
     }
   }
+
   async renewOrganization(req, res, next) {
     try {
       const { id } = req.params;
@@ -109,6 +112,34 @@ class Auth {
     } catch (dbError) {
       handleDbError(dbError);
       next(dbError);
+    }
+  }
+
+  async saveDeviceID(req, res, next) {
+    try {
+      const { userId, deviceId } = req.body;
+
+      if (!userId || !deviceId) {
+        return res.status(StatusCode.BAD_REQUEST).json({
+          success: false,
+          message: "userId and deviceId are required",
+        });
+      }
+
+      const newlySaved = await authservice.saveDeviceId(userId, deviceId);
+
+      const message = newlySaved
+        ? "DeviceID saved successfully"
+        : "DeviceID already saved";
+
+      return res.status(StatusCode.OK).json({
+        success: true,
+        message,
+        newlySaved,
+      });
+    } catch (err) {
+      handleDbError(err);
+      next(err);
     }
   }
 }

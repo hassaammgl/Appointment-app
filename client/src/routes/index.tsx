@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
 import { redirect } from "react-router";
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
@@ -9,8 +9,8 @@ const ReceptionistDashBoard = lazy(
 const SettingsPage = lazy(() => import("@/pages/SettingsPage"));
 const Dashboards = lazy(() => import("@/pages/Dashboards"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
-import Loader from "@/components/Loader";
-import RenewalPage from "@/pages/RenewalPage";
+const RenewalPage = lazy(() => import("@/pages/RenewalPage"));
+import MySuspense from "./MySuspense";
 
 const routes = [
   {
@@ -20,17 +20,17 @@ const routes = [
   {
     path: "/login",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <LoginPage />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/signup",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <SignupPage />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
@@ -40,54 +40,58 @@ const routes = [
   {
     path: "/settings",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <SettingsPage />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/ceo-dashboard",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <Dashboards role="ceo" />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/cto-dashboard",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <Dashboards role="cto" />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/cfo-dashboard",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <Dashboards role="cfo" />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/gm-dashboard",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <Dashboards role="gm" />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/receptionist-dashboard",
     element: (
-      <Suspense fallback={<Loader />}>
+      <MySuspense>
         <ReceptionistDashBoard />
-      </Suspense>
+      </MySuspense>
     ),
   },
   {
     path: "/dev/:id/renew",
-    element: <RenewalPage />,
+    element: (
+      <MySuspense>
+        <RenewalPage />
+      </MySuspense>
+    ),
   },
   {
     path: "*",

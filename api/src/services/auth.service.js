@@ -1,6 +1,7 @@
 import argon from "argon2";
 import Organization from "../models/org.model.js";
 import User from "../models/user.model.js";
+import { logger } from "../config/logger.js";
 
 class AuthService {
   async register({ username, email, password, role, organization }) {
@@ -72,6 +73,32 @@ class AuthService {
 
     await org.save();
     return org;
+  }
+
+  async saveDeviceId(userId, deviceId) {
+    if (!userId || !deviceId)
+      throw new Error("userId and deviceId are required");
+
+    const user = await User.findById(userId).select("deviceIds");
+
+    if (!user) {
+      const err = new Error("User not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    logger.debug({ userId, deviceId, current: user.deviceIds });
+
+    const alreadyExists = user.deviceIds.includes(deviceId);
+
+    if (alreadyExists) {
+      return false;
+    }
+
+    user.deviceIds.push(deviceId);
+    await user.save();
+
+    return true;
   }
 }
 

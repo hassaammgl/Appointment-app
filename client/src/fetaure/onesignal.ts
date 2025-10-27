@@ -1,11 +1,15 @@
+import { redirect } from "react-router";
 import { useEffect } from "react";
 import OneSignal from "react-onesignal";
 import { useAuth } from "@/store/auth";
 
 export const useOneSignal = () => {
-  // const { user, saveUserDevice } = useAuth();
-  const { user } = useAuth();
-  
+  const { user, saveUserDevice } = useAuth();
+
+  if (!user?.id) {
+    redirect("/login");
+  }
+
   useEffect(() => {
     const initOneSignal = async () => {
       try {
@@ -33,13 +37,13 @@ export const useOneSignal = () => {
               showCredit: false,
               text: {
                 "tip.state.unsubscribed": "Click to subscribe for updates!",
-                "tip.state.subscribed": "You’re subscribed 🔔",
+                "tip.state.subscribed": "You're subscribed 🔔",
                 "tip.state.blocked": "Notifications are blocked 😢",
                 "message.prenotify": "Click to get appointment alerts!",
                 "message.action.subscribing": "Subscribing...",
-                "message.action.subscribed": "You’re now subscribed 🎉",
+                "message.action.subscribed": "You're now subscribed 🎉",
                 "message.action.resubscribed": "Welcome back!",
-                "message.action.unsubscribed": "You’ve unsubscribed 😔",
+                "message.action.unsubscribed": "You've unsubscribed 😔",
                 "dialog.main.title": "Stay Updated!",
                 "dialog.main.button.subscribe":
                   "Subscribe to Appointment Alerts",
@@ -62,8 +66,7 @@ export const useOneSignal = () => {
               "userId:",
               user?.id
             );
-            // [TODO]: Save user device id
-            // await saveUserDevice(user?.id as string, id as string);
+            await saveUserDevice(user?.id as string, id as string);
           }
         }
 
