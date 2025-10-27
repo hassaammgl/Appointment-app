@@ -39,11 +39,7 @@ const routes = [
   },
   {
     path: "/settings",
-    element: (
-      <MySuspense>
-        <SettingsPage />
-      </MySuspense>
-    ),
+    element: <SettingsPage />,
   },
   {
     path: "/ceo-dashboard",

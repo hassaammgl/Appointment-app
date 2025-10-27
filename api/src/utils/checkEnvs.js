@@ -1,5 +1,5 @@
 import { ENVS } from "./constants.js";
-import { logger } from "../config/logger.js";
+import { logger } from "./logger.js";
 import { envSchema } from "../validations/env.schema.js";
 
 export const checkEnv = () => {

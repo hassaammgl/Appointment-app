@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated, authorize } from "../middlewares/auth.middlewares.js";
-// import { checkOrgPremium } from "../middlewares/checkPremium.middleware.js";
+import { checkOrgPremium } from "../middlewares/checkPremium.middleware.js";
 import { meeting } from "../controllers/meeting.controller.js";
 import { validateRequest } from "../middlewares/validation.middleware.js";
 import {
@@ -18,7 +18,7 @@ const router = Router();
 router.post(
   "/met-req",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateReqMeeting),
   meeting.createMettingReq
@@ -29,7 +29,7 @@ router.post("/renew/:id/org", isAuthenticated, auth.renewOrganization);
 router.get(
   "/roles",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("receptionist"),
   meeting.getAllRoles
 );
@@ -37,7 +37,7 @@ router.get(
 router.get(
   "/get-all-reqs",
   isAuthenticated,
-  //   checkOrgPremium
+    checkOrgPremium,
   authorize("receptionist", "ceo", "cfo", "cto", "gm"),
   meeting.getAllMeetingsReq
 );
@@ -45,7 +45,7 @@ router.get(
 router.get(
   "/get-organization",
   isAuthenticated,
-  //   checkOrgPremium
+    checkOrgPremium,
   authorize("receptionist", "ceo", "cfo", "cto", "gm"),
   auth.getOrganization
 );
@@ -53,7 +53,7 @@ router.get(
 router.get(
   "/get-reqs-by-roles/:id",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateGetReqsByRole, true),
   meeting.getReqsByRoles
@@ -62,7 +62,7 @@ router.get(
 router.put(
   "/approve-req/:id",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
   meeting.approveMeetingReq
@@ -71,7 +71,7 @@ router.put(
 router.put(
   "/reject-req/:id",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateApproveAndRej, true),
   meeting.rejectMeetingReq
@@ -80,7 +80,7 @@ router.put(
 router.put(
   "/update-priority/:id",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("ceo", "cfo", "cto", "gm"),
   validateRequest(validateUpdatePriorityParams, true),
   validateRequest(validateUpdatePriorityBody),
@@ -90,7 +90,7 @@ router.put(
 router.delete(
   "/cancel-req/:id",
   isAuthenticated,
-  // checkOrgPremium,
+  checkOrgPremium,
   authorize("receptionist"),
   validateRequest(validateCancelReq, true),
   meeting.cancelMeetingReq

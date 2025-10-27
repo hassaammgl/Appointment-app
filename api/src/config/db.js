@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { ENVS } from "../utils/constants.js";
-import { logger } from "../config/logger.js";
+import { logger } from "../utils/logger.js";
 
 const connectDB = async () => {
   try {
@@ -11,7 +11,7 @@ const connectDB = async () => {
       console.error(colors.red(`MongoDB Connection Error: ${error.message}`));
     } else {
       console.error(
-        colors.red("An unknown error occurred while connecting to MongoDB"),
+        colors.red("An unknown error occurred while connecting to MongoDB")
       );
     }
     process.exit(1);

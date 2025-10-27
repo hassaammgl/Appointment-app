@@ -1,7 +1,7 @@
 import argon from "argon2";
 import Organization from "../models/org.model.js";
 import User from "../models/user.model.js";
-import { logger } from "../config/logger.js";
+import { logger } from "../utils/logger.js";
 
 class AuthService {
   async register({ username, email, password, role, organization }) {

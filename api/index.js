@@ -1,4 +1,4 @@
-import { logger } from "./src/config/logger.js";
+import { logger } from "./src/utils/logger.js";
 import { ENVS } from "./src/utils/constants.js";
 import app from "./src/app.js";
 import connectDB from "./src/config/db.js";

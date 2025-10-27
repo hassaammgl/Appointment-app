@@ -1,6 +1,6 @@
 import Users from "../models/user.model.js";
 import Appointment from "../models/appointments.model.js";
-import { logger } from "../config/logger.js";
+import { logger } from "../utils/logger.js";
 import mongoose from "mongoose";
 
 class MeetingService {

@@ -1,5 +1,5 @@
 import colors from "colors";
-import { ENVS } from "../utils/constants.js";
+import { ENVS } from "./constants.js";
 
 class Logger {
   constructor(scope = "APP") {

@@ -146,7 +146,7 @@ export const TopBar = () => {
                     </AvatarFallback>
                   </Avatar>
                   <span className="ml-2 flex justify-center items-start flex-col">
-                    <p className="text-sm font-medium leading-none">
+                    <p className="text-sm font-medium leading-none mb-1">
                       {user?.username}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
@@ -159,19 +159,19 @@ export const TopBar = () => {
             <DropdownMenuSeparator />
             <NavLink to="/profile">
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
+                <User className="mr-2 size-4 text-primary" />
                 <span>Profile</span>
               </DropdownMenuItem>
             </NavLink>
             <NavLink to="/settings">
               <DropdownMenuItem>
-                <Settings2 className="mr-2 h-4 w-4" />
+                <Settings2 className="mr-2 size-4 text-primary"  />
                 <span>Settings</span>
               </DropdownMenuItem>
             </NavLink>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="mr-2 size-4 text-primary"  />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
