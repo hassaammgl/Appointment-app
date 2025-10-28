@@ -1,18 +1,76 @@
-name: 🚀 Deploy to Appointment-app VPS
+# name: 🚀 Deploy to Appointment-app VPS
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+
+#       - name: Debug SSH connection
+#         uses: appleboy/ssh-action@v1.1.0
+#         with:
+#           host: ${{ secrets.VPS_HOST }}
+#           username: ${{ secrets.VPS_USER }}
+#           key: ${{ secrets.VPS_SSH_KEY }}
+#           script: whoami
+
+#       - name: Deploy via SSH
+#         uses: appleboy/ssh-action@v1.1.0
+#         with:
+#           host: ${{ secrets.VPS_HOST }}
+#           username: ${{ secrets.VPS_USER }}
+#           key: ${{ secrets.VPS_SSH_KEY }}
+#           script: |
+#             sudo apt update
+#             sudo apt upgrade
+#             cd ${{ secrets.VPS_APP_PATH }}
+#             git pull origin main
+#             cd client && npm install && npm run build && sudo rsync -a --delete ./dist/ /var/www/smart-visitors && cd ..
+#             pm2 describe smart-visitors > /dev/null \
+#             && pm2 restart smart-visitors --update-env \
+#             || pm2 start index.js --name "smart-visitors"
+#             pm2 save
+
+#             sudo systemctl reload nginx
+
+#       - name: Notify Discord on success
+#         if: success()
+#         run: |
+#           curl -H "Content-Type: application/json" \
+#             -d '{"username":"DeployBot 🤖","embeds":[{"title":"✅ Deployment Successful","description":"The **Appointment App** has been successfully deployed to the VPS!","color":5763719,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
+#             ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+#       - name: Notify Discord on failure
+#         if: failure()
+#         run: |
+#           curl -H "Content-Type: application/json" \
+#             -d '{"username":"DeployBot 🤖","embeds":[{"title":"❌ Deployment Failed","description":"The deployment for **Appointment App** failed 😭 Check GitHub Actions logs for details.","color":15548997,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
+#             ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+name: 🚀 Deploy Smart Visitors App to VPS
 
 on:
   push:
     branches:
-      - main  # or master if that’s your branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      # Step 1: Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Debug SSH (optional sanity check)
       - name: Debug SSH connection
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -21,17 +79,61 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: whoami
 
-      - name: Deploy via SSH
+      # Step 3: Deploy backend + frontend
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            sudo apt update
-            sudo apt upgrade
+            echo "🚀 Starting deployment on VPS..."
+
+            # Update server packages
+            sudo apt update -y && sudo apt upgrade -y
+
+            # Go to app directory
             cd ${{ secrets.VPS_APP_PATH }}
+
+            # Pull latest changes
             git pull origin main
-            cd client && npm install && npm run build && rm -rf /var/www/smart-visitors/ && mv ./dist/ /var/www/smart-visitors/ && cd ..
-            pm2 restart smart-visitors || pm2 start index.js --name "smart-visitors"
+
+            # Build frontend
+            cd client
+            npm install --legacy-peer-deps
+            npm run build
+
+            # Move build to Nginx directory
+            sudo rsync -a --delete ./dist/ /var/www/smart-visitors/dist/
+            cd ..
+
+            # Restart backend with PM2
+            if pm2 list | grep -q "smart-visitors"; then
+              echo "🔁 Restarting PM2 process..."
+              pm2 restart smart-visitors --update-env
+            else
+              echo "🔥 Starting new PM2 process..."
+              pm2 start index.js --name "smart-visitors" --port 5000
+            fi
+
+            # Save PM2 state and reload Nginx
+            pm2 save
             sudo systemctl reload nginx
+
+            echo "✅ Deployment complete!"
+
+      # Step 4: Notify Discord on success
+      - name: Notify Discord (Success)
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{"username":"DeployBot 🤖","embeds":[{"title":"✅ Smart Visitors Deployed!","description":"The app is live on **visitor.sapps.site** 🚀","color":5763719,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # Step 5: Notify Discord on failure
+      - name: Notify Discord (Failure)
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{"username":"DeployBot 🤖","embeds":[{"title":"❌ Deployment Failed","description":"Something went wrong during deployment 😭 Check GitHub logs!","color":15548997,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
