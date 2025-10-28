@@ -4,13 +4,22 @@ A full-stack appointment booking application with a React frontend and a Node.js
 
 ## Features
 
--   User authentication (registration, login, logout)
--   Role-based access control (RBAC) for different user types (receptionist, ceo, cto, gm, cfo)
--   Appointment scheduling and management
--   Premium subscription feature for organizations
--   Real-time notifications with OneSignal
+-   **User Authentication:** Secure user registration, login, and logout functionality.
+-   **Role-Based Access Control (RBAC):** Different user roles (`receptionist`, `ceo`, `cto`, `gm`, `cfo`) with specific permissions.
+-   **Appointment Management:** Create, view, approve, reject, and cancel appointments.
+-   **Priority System:** Assign priority levels to appointments.
+-   **Organization Management:** Group users into organizations.
+-   **Premium Subscription:** A premium subscription model for organizations to unlock features.
+-   **Real-time Notifications:** Push notifications using OneSignal.
 
-## Technologies Used
+## Architecture
+
+The project is a monorepo with two main components:
+
+-   **`client/`**: A React single-page application (SPA) built with Vite. It provides the user interface for interacting with the application.
+-   **`api/`**: A Node.js/Express backend that provides a RESTful API for the client. It handles business logic, data storage, and user authentication.
+
+## Tech Stack
 
 **Frontend:**
 
@@ -18,104 +27,108 @@ A full-stack appointment booking application with a React frontend and a Node.js
 -   Vite
 -   TypeScript
 -   Tailwind CSS
--   Radix UI
+-   shadcn/ui
 -   Zustand (for state management)
--   Axios (for API communication)
--   OneSignal (for push notifications)
+-   React Router
+-   Axios
+-   OneSignal
 
 **Backend:**
 
 -   Node.js
 -   Express
--   TypeScript
 -   MongoDB
 -   Mongoose
--   Express Session (for session management)
+-   Express Session
 -   Argon2 (for password hashing)
--   JWT (for token-based authentication)
+-   Joi (for validation)
+-   OneSignal
 
-## Setup
+## Getting Started
 
 ### Prerequisites
 
 -   Node.js (v18 or higher)
--   npm or yarn
+-   Bun
 -   MongoDB
 
-### Backend Setup
+### Installation
 
-1.  Navigate to the `api` directory:
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/hassaammgl/Appointment-app.git
+    cd Appointment-app
+    ```
+
+2.  **Backend Setup:**
 
     ```bash
     cd api
+    bun install
     ```
 
-2.  Install dependencies:
+    Create a `.env` file in the `api` directory and add the following environment variables:
+
+    ```env
+    MONGO_URI="your_mongodb_connection_string"
+    SESSION_SECRET="your_session_secret"
+    DEVELOPER_SECRET="your_developer_secret"
+    ```
+
+3.  **Frontend Setup:**
 
     ```bash
-    npm install
+    cd ../client
+    bun install
     ```
 
-3.  Create a `.env` file by copying the `example.env` file:
+    Create a `.env` file in the `client` directory and add the following environment variables:
+
+    ```env
+    VITE_API_URL="http://localhost:5500/api"
+    ```
+
+### Running the Application
+
+1.  **Start the backend server:**
 
     ```bash
-    cp example.env .env
+    cd api
+    bun dev
     ```
 
-4.  Update the `.env` file with your environment variables:
-
-    -   `MONGO_URI`: Your MongoDB connection string
-    -   `SESSION_SECRET`: A secret string for session management
-    -   `DEVELOPER_SECRET`: A secret string for developer-related actions
-
-5.  Start the development server:
+2.  **Start the frontend development server:**
 
     ```bash
-    npm run dev
+    cd ../client
+    bun dev
     ```
 
-### Frontend Setup
-
-1.  Navigate to the `client` directory:
-
-    ```bash
-    cd client
-    ```
-
-2.  Install dependencies:
-
-    ```bash
-    npm install
-    ```
-
-3.  Start the development server:
-
-    ```bash
-    npm run dev
-    ```
+The application will be available at `http://localhost:5173`.
 
 ## API Endpoints
 
-| Method | Endpoint                             | Description                                  | Roles                           |
-| ------ | ------------------------------------ | -------------------------------------------- | ------------------------------- |
-| POST   | /api/auth/register                   | Register a new user                          | All                             |
-| POST   | /api/auth/login                      | Login a user                                 | All                             |
-| POST   | /api/auth/logout                     | Logout a user                                | Authenticated                   |
-| GET    | /api/protected/roles                 | Get all roles                                | receptionist                    |
-| POST   | /api/protected/met-req               | Create a meeting request                     | receptionist                    |
-| GET    | /api/protected/get-all-reqs          | Get all meeting requests                     | receptionist, ceo, cfo, cto, gm |
-| DELETE | /api/protected/cancel-req/:id        | Cancel a meeting request                     | receptionist                    |
-| PUT    | /api/protected/approve-req/:id       | Approve a meeting request                    | ceo, cfo, cto, gm               |
-| PUT    | /api/protected/reject-req/:id        | Reject a meeting request                     | ceo, cfo, cto, gm               |
-| PUT    | /api/protected/update-priority/:id   | Update the priority of a meeting request     | ceo, cfo, cto, gm               |
-| GET    | /api/protected/get-reqs-by-roles/:id | Get meeting requests by role with pagination | ceo, cfo, cto, gm               |
-| GET    | /api/protected/get-organization      | Get organization details                     | receptionist, ceo, cfo, cto, gm |
-| POST   | /api/protected/renew/:id/org         | Renew organization's premium subscription    | Authenticated                   |
+### Authentication
 
+-   `POST /api/auth/register`: Register a new user.
+-   `POST /api/auth/login`: Log in a user.
+-   `POST /api/auth/logout`: Log out a user.
+-   `PUT /api/auth/add-user-device-id`: Save a user's OneSignal device ID.
 
+### Meetings
 
-<!-- 
-hassaammgl
-oIJSUhDhxX9DXr0U
-mongodb+srv://hassaammgl:oIJSUhDhxX9DXr0U@cluster0.rmlp1aw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
- -->
+-   `POST /api/meetings/met-req`: Create a new meeting request (receptionist only).
+-   `GET /api/meetings/roles`: Get all user roles (receptionist only).
+-   `GET /api/meetings/get-all-reqs`: Get all meeting requests.
+-   `GET /api/meetings/get-organization`: Get organization details.
+-   `GET /api/meetings/get-reqs-by-roles/:id`: Get meeting requests for a specific role.
+-   `PUT /api/meetings/approve-req/:id`: Approve a meeting request.
+-   `PUT /api/meetings/reject-req/:id`: Reject a meeting request.
+-   `PUT /api/meetings/update-priority/:id`: Update the priority of a meeting request.
+-   `DELETE /api/meetings/cancel-req/:id`: Cancel a meeting request (receptionist only).
+-   `POST /api/meetings/renew/:id/org`: Renew an organization's premium subscription.
+
+## License
+
+This project is licensed under the ISC License.
