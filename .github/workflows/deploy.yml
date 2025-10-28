@@ -127,7 +127,7 @@ jobs:
         if: success()
         run: |
           curl -H "Content-Type: application/json" \
-            -d '{"username":"DeployBot 🤖","embeds":[{"title":"✅ Smart Visitors Deployed!","description":"The app is live on **visitor.sapps.site** 🚀","color":5763719,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
+            -d '{"username":"DeployBot 🤖","embeds":[{"title":"✅ Smart Visitors Deployed!","description":"The app is live on **https://visitor.sapps.site** 🚀 and api on **https://visitor.sapps.site/api/ping**","color":5763719,"timestamp":"'"$(date -u +%FT%T.%3NZ)"'"}]}' \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       # Step 5: Notify Discord on failure
